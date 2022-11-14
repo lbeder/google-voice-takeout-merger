@@ -1,0 +1,32 @@
+{
+  "name": "google-voice-merger",
+  "version": "0.1.0",
+  "description": "Google Voice Merger tool",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "lint": "tslint --project tsconfig.json",
+    "format": "prettier --check --write src/**/* --config .prettierrc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^3.4.0",
+    "@types/node": "^18.11.9",
+    "@types/underscore": "^1.11.4",
+    "@types/yargs": "^17.0.13",
+    "prettier": "^2.7.1",
+    "prettier-package-json": "^2.7.0",
+    "prettier-tslint": "^0.4.2",
+    "tslint": "^6.1.3",
+    "tslint-config-airbnb": "^5.11.2",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^4.8.4"
+  },
+  "dependencies": {
+    "ts-node": "^10.9.1",
+    "yargs": "^17.6.2"
+  }
+}
