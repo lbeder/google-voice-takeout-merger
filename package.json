@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "merge": "ts-node src/index.ts merge",
     "lint": "tslint --project tsconfig.json",
     "format": "prettier --check --write src/**/* --config .prettierrc",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -26,6 +26,8 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
+    "chalk": "^4.1.2",
+    "console-stamp": "^3.1.0",
     "ts-node": "^10.9.1",
     "yargs": "^17.6.2"
   }
