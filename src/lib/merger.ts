@@ -1,23 +1,26 @@
-import Logger from "../utils/logger";
+import Record from "./record";
+import Logger from "./utils/logger";
 import fs from "fs";
-
-export interface MergeOptions {
-  inputDir: string;
-  outputDir: string;
-}
+import glob from "glob";
 
 export default class Merger {
-  private options: MergeOptions;
+  private inputDir: string;
+  private outputDir: string;
 
-  constructor(options: MergeOptions) {
-    this.options = options;
+  constructor(inputDir: string, outputDir: string) {
+    this.inputDir = inputDir;
+    this.outputDir = outputDir;
   }
 
   public async merge() {
-    const { inputDir, outputDir } = this.options;
+    Logger.info(`Merging Google Voice calls from "${this.inputDir}" to "${this.outputDir}"`);
 
-    Logger.info(`Merging Google Voice calls from "${inputDir}" to "${outputDir}"...`);
+    Logger.info(`Making sure that "${this.outputDir}" exists`);
+    fs.mkdirSync(this.outputDir, { recursive: true });
 
-    fs.mkdirSync(outputDir, { recursive: true });
+    const files = glob.sync(`${this.inputDir}/*`, { ignore: ["desktop.ini"] });
+    for (const f of files) {
+      const r = Record.fromFile(f);
+    }
   }
 }

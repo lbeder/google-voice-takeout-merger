@@ -1,20 +1,21 @@
+/* eslint-disable no-console */
 import chalk from "chalk";
 import consoleStamp from "console-stamp";
 
 consoleStamp(console, { format: ":date(yyyy/mm/dd HH:MM:ss.l)" });
 
 export default class Logger {
-  public static verbose: boolean = false;
+  public static verbose: boolean;
 
   public static setVerbose(verbose: boolean) {
     this.verbose = verbose;
   }
 
-  public static info(...args: any[]) {
+  public static info(...args: unknown[]) {
     console.log(chalk.cyanBright(...args));
   }
 
-  public static debug(...args: any[]) {
+  public static debug(...args: unknown[]) {
     if (!this.verbose) {
       return;
     }
@@ -22,11 +23,11 @@ export default class Logger {
     console.debug(chalk.gray(...args));
   }
 
-  public static error(...args: any[]) {
-    console.error(chalk.bold.red(...args));
+  public static error(...args: unknown[]) {
+    console.log(chalk.bold.red(...args));
   }
 
-  public static warning(...args: any[]) {
+  public static warning(...args: unknown[]) {
     console.warn(chalk.hex("#FFA500")(...args));
   }
 }
