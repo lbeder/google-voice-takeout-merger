@@ -1,5 +1,5 @@
-import Logger from "./logger";
-import Merger from "./merger";
+import Merger from "./lib/merger";
+import Logger from "./utils/logger";
 import yargs from "yargs";
 
 const main = async () => {
