@@ -1,5 +1,5 @@
 import Merger from "./lib/merger";
-import Logger from "./utils/logger";
+import Logger from "./lib/utils/logger";
 import yargs from "yargs";
 
 const main = async () => {
@@ -32,12 +32,20 @@ const main = async () => {
         "Merge all logs",
         () => {},
         async ({ inputDir, outputDir }) => {
-          const merger = new Merger({ inputDir, outputDir });
-          await merger.merge();
+          try {
+            const merger = new Merger(inputDir, outputDir);
+
+            await merger.merge();
+          } catch (e) {
+            Logger.error(e);
+
+            process.exit(1);
+          }
         }
       )
       .demandCommand()
       .help()
+      .showHelpOnFail(false)
       .parse();
   } catch (e) {
     Logger.error(e);
