@@ -2,10 +2,12 @@
 import chalk from "chalk";
 import consoleStamp from "console-stamp";
 
-consoleStamp(console, { format: ":date(yyyy/mm/dd HH:MM:ss.l)" });
-
 export default class Logger {
   public static verbose: boolean;
+
+  public static init() {
+    consoleStamp(console, { format: ":date(yyyy/mm/dd HH:MM:ss.l)" });
+  }
 
   public static setVerbose(verbose: boolean) {
     this.verbose = verbose;

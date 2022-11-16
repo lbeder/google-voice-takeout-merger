@@ -15,6 +15,8 @@ export default class Merger {
     this.force = force;
   }
 
+  // Merges Google Voice export history and groups it by participants' phone numbers, as well as fixes various Google
+  // Voice embedding and styling issues
   public async merge() {
     Logger.info(`Merging Google Voice calls from "${this.inputDir}" to "${this.outputDir}"`);
 

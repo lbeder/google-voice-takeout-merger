@@ -6,18 +6,18 @@ import { parse, HTMLElement } from "node-html-parser";
 import path from "path";
 
 export default class HTMLEntry extends Entry {
-  constructor(name: string, phoneNumbers: string[], date: Moment, fullPath: string) {
+  constructor(name: string, phoneNumbers: string[], timestamp: Moment, fullPath: string) {
     if (!name.startsWith("Group Conversation") && phoneNumbers.length === 0) {
       throw new Error("Unexpected empty phones numbers");
     }
 
-    super(EntryType.HTML, name, phoneNumbers, date, fullPath);
+    super(EntryType.HTML, name, phoneNumbers, timestamp, fullPath);
 
     // If this is a group conversation entry, make sure to parse (and sort) the phone numbers of all of its participants
     this.load();
   }
 
-  // Lazily loads the HTML of
+  // Lazily loads the contents of the entry
   public load() {
     if (!this.html) {
       this.html = parse(fs.readFileSync(this.fullPath, "utf-8"), { blockTextElements: { style: true } });
@@ -48,10 +48,11 @@ export default class HTMLEntry extends Entry {
     return senderPhoneNumbers.map((s) => s?.split("tel:")[1]).sort() as string[];
   }
 
+  // Saves the entry in the specified output directory
   public save(outputDir: string) {
     this.load();
 
-    const outputName = `${this.date.format("YYYY-MM-DDTHH_mm_ss")} ${this.phoneNumbers.join(",")}.html`;
+    const outputName = `${this.timestamp.format("YYYY-MM-DDTHH_mm_ss")} ${this.phoneNumbers.join(",")}.html`;
     const outputPath = path.join(outputDir, outputName);
 
     Logger.debug(`Saving entry "${this.name}" to "${outputPath}"`);
@@ -62,6 +63,7 @@ export default class HTMLEntry extends Entry {
     this.savedPath = outputPath;
   }
 
+  // Merges this entry with the provided entry
   public merge(entry: Entry) {
     this.load();
 

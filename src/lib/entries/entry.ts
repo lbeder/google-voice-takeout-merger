@@ -12,16 +12,16 @@ export default abstract class Entry {
   public type: EntryType;
   public name: string;
   public phoneNumbers: string[];
-  public date: Moment;
+  public timestamp: Moment;
   public fullPath: string;
   public savedPath?: string;
   protected html?: HTMLElement;
 
-  constructor(type: EntryType, name: string, phoneNumbers: string[], date: Moment, fullPath: string) {
+  constructor(type: EntryType, name: string, phoneNumbers: string[], timestamp: Moment, fullPath: string) {
     this.type = type;
     this.name = name;
     this.phoneNumbers = phoneNumbers.sort();
-    this.date = date;
+    this.timestamp = timestamp;
     this.fullPath = fullPath;
   }
 
@@ -29,8 +29,10 @@ export default abstract class Entry {
     return this.type === EntryType.Media;
   }
 
+  // Merges multiple entries and saves them in the provided output directory. Please note that this method requires all
+  // the entries to belong to the same set of phone numbers (and will gracefully terminate if this isn't the case)
   public static merge(entries: Entry[], outputDir: string) {
-    const sortedEntries = sortBy(entries, [(r) => r.date.unix()]);
+    const sortedEntries = sortBy(entries, [(r) => r.timestamp.unix()]);
 
     let found = false;
     let firstEntry: Entry | undefined;
@@ -39,12 +41,14 @@ export default abstract class Entry {
     Logger.debug(`Merging entries: ${sortedEntries.map((r) => r.name)}`);
 
     for (const entry of sortedEntries) {
+      // Ensure that all the entries belong to the same set of phone numbers
       if (firstEntry && firstEntry.phoneNumbers.length !== entry.phoneNumbers.length) {
         throw new Error(
           `Unexpected phone numbers during merge: expected=${firstEntry?.phoneNumbers}, actual=${entry.phoneNumbers}`
         );
       }
 
+      // Postpone processing of media entries after finishing processing all the HTML entries
       if (entry.isMedia()) {
         mediaEntries.push(entry);
 
@@ -84,7 +88,12 @@ export default abstract class Entry {
     firstEntry.save(outputDir);
   }
 
-  abstract load(): void;
-  abstract merge(_entry: Entry): void;
+  // Saves the entry in the specified output directory
   abstract save(_outputDir: string): void;
+
+  // Lazily loads the contents of the entry (if supported)
+  abstract load(): void;
+
+  // Merges this entry with the provided entry (if supported)
+  abstract merge(_entry: Entry): void;
 }
