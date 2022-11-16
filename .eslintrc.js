@@ -8,7 +8,14 @@ module.exports = {
     semi: "error",
     quotes: ["error", "double"],
     "no-console": "error",
+    "object-shorthand-properties-first": "off",
+    "no-unused-vars": "off",
     "@typescript-eslint/no-empty-function": "off",
-    "object-shorthand-properties-first": "off"
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        argsIgnorePattern: "^_"
+      }
+    ]
   }
 };

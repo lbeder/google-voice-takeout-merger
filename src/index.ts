@@ -24,6 +24,12 @@ const main = async () => {
         default: false,
         description: "Verbose mode"
       })
+      .option("force", {
+        type: "boolean",
+        alias: "f",
+        default: false,
+        description: "Overwrite output directory"
+      })
       .middleware(({ verbose }) => {
         Logger.setVerbose(verbose);
       })
@@ -31,9 +37,9 @@ const main = async () => {
         "merge",
         "Merge all logs",
         () => {},
-        async ({ inputDir, outputDir }) => {
+        async ({ inputDir, outputDir, force }) => {
           try {
-            const merger = new Merger(inputDir, outputDir);
+            const merger = new Merger(inputDir, outputDir, force);
 
             await merger.merge();
           } catch (e) {
