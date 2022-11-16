@@ -51,7 +51,7 @@ export default class HTMLEntry extends Entry {
   public save(outputDir: string) {
     this.load();
 
-    const outputName = `${this.date.format("YYYY-MM-DDTHH_mm_ss")} - ${this.phoneNumbers.join(",")}.html`;
+    const outputName = `${this.date.format("YYYY-MM-DDTHH_mm_ss")} ${this.phoneNumbers.join(",")}.html`;
     const outputPath = path.join(outputDir, outputName);
 
     Logger.debug(`Saving entry "${this.name}" to "${outputPath}"`);
