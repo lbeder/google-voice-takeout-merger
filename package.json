@@ -15,6 +15,7 @@
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^3.4.0",
     "@types/glob": "^8.0.0",
+    "@types/lodash": "^4.14.189",
     "@types/node": "^18.11.9",
     "@types/underscore": "^1.11.4",
     "@types/yargs": "^17.0.13",
@@ -31,7 +32,9 @@
     "chalk": "^4.1.2",
     "console-stamp": "^3.1.0",
     "glob": "^8.0.3",
+    "lodash": "^4.17.21",
     "moment": "^2.29.4",
+    "node-html-parser": "^6.1.4",
     "ts-node": "^10.9.1",
     "yargs": "^17.6.2"
   }

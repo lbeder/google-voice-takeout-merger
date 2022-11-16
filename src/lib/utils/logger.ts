@@ -20,7 +20,7 @@ export default class Logger {
       return;
     }
 
-    console.debug(chalk.gray(...args));
+    console.debug(chalk.yellow(...args));
   }
 
   public static error(...args: unknown[]) {
