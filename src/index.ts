@@ -31,11 +31,12 @@ const main = async () => {
         description: "Overwrite output directory"
       })
       .middleware(({ verbose }) => {
+        Logger.init();
         Logger.setVerbose(verbose);
       })
       .command(
         "merge",
-        "Merge all logs",
+        "Merge all records",
         () => {},
         async ({ inputDir, outputDir, force }) => {
           try {

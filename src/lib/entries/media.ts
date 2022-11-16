@@ -5,16 +5,8 @@ import { Moment } from "moment";
 import path from "path";
 
 export default class MediaEntry extends Entry {
-  constructor(name: string, phoneNumbers: string[], date: Moment, fullPath: string) {
-    super(EntryType.Media, name, phoneNumbers, date, fullPath);
-  }
-
-  public load() {
-    throw new Error("Unsupported operation");
-  }
-
-  public merge(_entry: Entry) {
-    throw new Error("Unsupported operation");
+  constructor(name: string, phoneNumbers: string[], timestamp: Moment, fullPath: string) {
+    super(EntryType.Media, name, phoneNumbers, timestamp, fullPath);
   }
 
   public save(outputDir: string) {
@@ -28,5 +20,13 @@ export default class MediaEntry extends Entry {
     fs.copyFileSync(this.fullPath, outputPath);
 
     this.savedPath = outputPath;
+  }
+
+  public load() {
+    throw new Error("Unsupported operation");
+  }
+
+  public merge(_entry: Entry) {
+    throw new Error("Unsupported operation");
   }
 }
