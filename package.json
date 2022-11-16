@@ -7,7 +7,7 @@
   "scripts": {
     "merge": "ts-node src/index.ts merge",
     "cli": "ts-node src/index.ts --help",
-    "lint": "eslint -c .eslintrc.js --ext .ts src",
+    "lint": "eslint -c .eslintrc --ext .ts src",
     "format": "prettier --check --write src/**/* --config .prettierrc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
