@@ -10,6 +10,10 @@ export default class Merger {
   private force: boolean;
 
   constructor(inputDir: string, outputDir: string, force: boolean) {
+    if (!fs.existsSync(inputDir)) {
+      throw new Error(`Input dir "${inputDir}" does not exist`);
+    }
+
     this.inputDir = inputDir;
     this.outputDir = outputDir;
     this.force = force;
