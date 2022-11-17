@@ -128,6 +128,19 @@ export default class HTMLEntry extends Entry {
           return;
         }
 
+        case EntryFormats.THREEGP: {
+          Logger.warning(`WARNING: ${EntryFormats.THREEGP} playback in HTML5 isn't currently supported`);
+
+          const media = mediaName;
+          const video = this.querySelector(`a.video[href="${media}"]`);
+          if (!video) {
+            throw new Error(`Unable to find video element for "${media}"`);
+          }
+          video.replaceWith(HTMLEntry.videoElement(entry.savedPath));
+
+          return;
+        }
+
         case EntryFormats.AMR: {
           Logger.warning(`WARNING: ${EntryFormats.AMR} playback in HTML5 isn't currently supported`);
 

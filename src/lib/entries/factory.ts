@@ -59,8 +59,9 @@ export default class Factory {
       case EntryFormats.JPG:
       case EntryFormats.GIF:
       case EntryFormats.MP3:
-      case EntryFormats.MP4:
       case EntryFormats.AMR:
+      case EntryFormats.MP4:
+      case EntryFormats.THREEGP:
         return new MediaEntry(entryAction, format, name, phoneNumbers, Factory.parseTimestamp(timestampStr), fullPath);
 
       case EntryFormats.HTML:
