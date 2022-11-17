@@ -79,7 +79,8 @@ export default class HTMLEntry extends Entry {
       const mediaName = path.basename(entry.name, path.extname(entry.name));
 
       switch (entry.format) {
-        case EntryFormats.JPG: {
+        case EntryFormats.JPG:
+        case EntryFormats.GIF: {
           const media = mediaName;
           const image = this.querySelector(`img[src="${mediaName}"]`);
           if (!image) {

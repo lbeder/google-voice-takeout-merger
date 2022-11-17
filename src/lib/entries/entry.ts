@@ -5,6 +5,7 @@ import { HTMLElement } from "node-html-parser";
 
 export enum MediaFormat {
   JPG = "JPG",
+  GIF = "GIF",
   MP3 = "MP3",
   MP4 = "MP4",
   AMR = "AMR"
