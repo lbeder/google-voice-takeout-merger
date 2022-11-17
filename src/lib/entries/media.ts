@@ -1,12 +1,12 @@
 import Logger from "../utils/logger";
-import Entry, { EntryType } from "./entry";
+import Entry, { EntryType, MediaFormat } from "./entry";
 import fs from "fs";
 import { Moment } from "moment";
 import path from "path";
 
 export default class MediaEntry extends Entry {
-  constructor(name: string, phoneNumbers: string[], timestamp: Moment, fullPath: string) {
-    super(EntryType.Media, name, phoneNumbers, timestamp, fullPath);
+  constructor(format: MediaFormat, name: string, phoneNumbers: string[], timestamp: Moment, fullPath: string) {
+    super(EntryType.Media, format, name, phoneNumbers, timestamp, fullPath);
   }
 
   public save(outputDir: string) {
