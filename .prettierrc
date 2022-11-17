@@ -6,5 +6,7 @@
   "singleQuote": false,
   "trailingComma": "none",
   "arrowParens": "always",
-  "bracketSpacing": true
+  "bracketSpacing": true,
+  "importOrderSortSpecifiers": true,
+  "importOrderCaseInsensitive": true
 }
