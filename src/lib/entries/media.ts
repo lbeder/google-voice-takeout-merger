@@ -10,12 +10,13 @@ export default class MediaEntry extends Entry {
   }
 
   public save(outputDir: string) {
-    const outputName = this.name;
-    const outputMediaDir = path.join(outputDir, "media");
-    const outputPath = path.join(outputMediaDir, outputName);
+    const key = this.phoneNumbers.join(",");
+    const outputMediaDir = path.join(outputDir, key, "media");
+    const outputPath = path.join(outputMediaDir, this.name);
 
     Logger.debug(`Saving media entry "${this.name}" to "${outputPath}"`);
 
+    fs.mkdirSync(outputMediaDir, { recursive: true });
     fs.mkdirSync(outputMediaDir, { recursive: true });
     fs.copyFileSync(this.fullPath, outputPath);
 
