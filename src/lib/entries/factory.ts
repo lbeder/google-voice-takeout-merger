@@ -1,14 +1,9 @@
 import Logger from "../utils/logger";
-import Entry from "./entry";
+import Entry, { EntryActions, EntryFormats } from "./entry";
 import HTMLEntry from "./html";
 import MediaEntry from "./media";
 import moment from "moment";
 import path from "path";
-
-export enum EntryType {
-  HTML = "HTML",
-  Media = "Media"
-}
 
 export default class Factory {
   // Processes and constructors an entry from the specified file
@@ -16,17 +11,17 @@ export default class Factory {
     Logger.info(`Processing ${path.basename(fullPath)}`);
 
     const name = path.basename(fullPath);
-    let typeStr: string;
+    let action: string;
     let phoneNumbers: string[];
     let timestampStr: string;
 
     Logger.info(`Processing ${name}`);
 
     const components = name.split(" - ");
-    const gcTypeStr = "Group Conversation";
+    const gcAction = "Group Conversation";
 
     // Group conversations don't include timestamps in their file names, thus require a special processing
-    if (name.startsWith(gcTypeStr)) {
+    if (name.startsWith(gcAction)) {
       Logger.debug("Detected a group conversation");
 
       if (components.length !== 2) {
@@ -39,7 +34,7 @@ export default class Factory {
       const fileName = nameComponents.length > 1 ? `${nameComponents[0]}Z.html` : nameComponents[0];
       const groupConversationPath = path.join(inputDir, fileName);
 
-      typeStr = gcTypeStr;
+      action = gcAction;
       phoneNumbers = HTMLEntry.queryPhoneNumbers(groupConversationPath);
       timestampStr = components[1];
     } else {
@@ -47,35 +42,36 @@ export default class Factory {
         throw new Error(`Invalid or unsupported entry="${name}"`);
       }
 
-      typeStr = components[1];
+      action = components[1];
       phoneNumbers = [components[0]];
       timestampStr = components[2];
     }
 
-    const ext = path.extname(name);
-    switch (ext) {
-      case ".jpg":
-      case ".mp3":
-      case ".mp4":
-        return new MediaEntry(name, phoneNumbers, Factory.parseTimestamp(timestampStr), fullPath);
+    const ext = path.extname(name).slice(1);
+    const format = ext.toUpperCase();
+    switch (format) {
+      case EntryFormats.JPG:
+      case EntryFormats.MP3:
+      case EntryFormats.MP4:
+        return new MediaEntry(format, name, phoneNumbers, Factory.parseTimestamp(timestampStr), fullPath);
 
-      case ".html": {
-        switch (typeStr) {
-          case "Received":
-          case "Placed":
-          case "Missed":
-          case "Text":
-          case "Voicemail":
-          case gcTypeStr:
+      case EntryFormats.HTML: {
+        switch (action) {
+          case EntryActions.Received:
+          case EntryActions.Placed:
+          case EntryActions.Missed:
+          case EntryActions.Text:
+          case EntryActions.Voicemail:
+          case EntryActions.GroupConversation:
             return new HTMLEntry(name, phoneNumbers, Factory.parseTimestamp(timestampStr), fullPath);
 
           default:
-            throw new Error(`Unknown entry type: ${typeStr}`);
+            throw new Error(`Unknown entry action: ${action}`);
         }
       }
 
       default:
-        throw new Error(`Unknown entry extension: ${ext}`);
+        throw new Error(`Unknown entry format: ${ext}`);
     }
   }
 

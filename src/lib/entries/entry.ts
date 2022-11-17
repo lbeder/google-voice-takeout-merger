@@ -3,13 +3,38 @@ import { sortBy } from "lodash";
 import { Moment } from "moment";
 import { HTMLElement } from "node-html-parser";
 
+export enum MediaFormat {
+  JPG = "JPG",
+  MP3 = "MP3",
+  MP4 = "MP4"
+}
+
+export enum DocumentFormat {
+  HTML = "HTML"
+}
+
+export type EntryFormat = MediaFormat | DocumentFormat;
+export const EntryFormats = { ...MediaFormat, ...DocumentFormat };
+
 export enum EntryType {
   HTML = "HTML",
   Media = "Media"
 }
 
+export enum EntryAction {
+  Received = "Received",
+
+  Placed = "Placed",
+  Missed = "Missed",
+  Text = "Text",
+  Voicemail = "Voicemail",
+  GroupConversation = "Group Conversation"
+}
+export const EntryActions = { ...EntryAction };
+
 export default abstract class Entry {
   public type: EntryType;
+  public format: EntryFormat;
   public name: string;
   public phoneNumbers: string[];
   public timestamp: Moment;
@@ -17,8 +42,16 @@ export default abstract class Entry {
   public savedPath?: string;
   protected html?: HTMLElement;
 
-  constructor(type: EntryType, name: string, phoneNumbers: string[], timestamp: Moment, fullPath: string) {
+  constructor(
+    type: EntryType,
+    format: EntryFormat,
+    name: string,
+    phoneNumbers: string[],
+    timestamp: Moment,
+    fullPath: string
+  ) {
     this.type = type;
+    this.format = format;
     this.name = name;
     this.phoneNumbers = phoneNumbers.sort();
     this.timestamp = timestamp;
@@ -26,7 +59,7 @@ export default abstract class Entry {
   }
 
   public isMedia(): boolean {
-    return this.type === EntryType.Media;
+    return this.type == EntryType.Media;
   }
 
   // Merges multiple entries and saves them in the provided output directory. Please note that this method requires all

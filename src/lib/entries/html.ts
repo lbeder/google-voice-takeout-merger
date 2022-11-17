@@ -1,8 +1,8 @@
 import Logger from "../utils/logger";
-import Entry, { EntryType } from "./entry";
+import Entry, { EntryFormats, EntryType } from "./entry";
 import fs from "fs";
 import { Moment } from "moment";
-import { parse, HTMLElement } from "node-html-parser";
+import { HTMLElement, parse } from "node-html-parser";
 import path from "path";
 
 export default class HTMLEntry extends Entry {
@@ -11,7 +11,7 @@ export default class HTMLEntry extends Entry {
       throw new Error("Unexpected empty phones numbers");
     }
 
-    super(EntryType.HTML, name, phoneNumbers, timestamp, fullPath);
+    super(EntryType.HTML, EntryFormats.HTML, name, phoneNumbers, timestamp, fullPath);
 
     // If this is a group conversation entry, make sure to parse (and sort) the phone numbers of all of its participants
     this.load();
