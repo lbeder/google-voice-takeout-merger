@@ -9,7 +9,8 @@ export enum MediaFormat {
   MP3 = "MP3",
   MP4 = "MP4",
   THREEGP = "3GP",
-  AMR = "AMR"
+  AMR = "AMR",
+  VCF = "VCF"
 }
 
 export enum DocumentFormat {

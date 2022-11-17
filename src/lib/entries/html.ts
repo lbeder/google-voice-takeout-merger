@@ -117,6 +117,19 @@ export default class HTMLEntry extends Entry {
           }
         }
 
+        case EntryFormats.AMR: {
+          Logger.warning(`WARNING: ${EntryFormats.AMR} playback in HTML5 isn't currently supported`);
+
+          const media = mediaName;
+          const audio = this.querySelector(`audio[src="${media}"]`);
+          if (!audio) {
+            throw new Error(`Unable to find audio element for "${mediaName}"`);
+          }
+          audio.replaceWith(HTMLEntry.audioElement(entry.savedPath));
+
+          return;
+        }
+
         case EntryFormats.MP4: {
           const media = mediaName;
           const video = this.querySelector(`a.video[href="${media}"]`);
@@ -141,15 +154,13 @@ export default class HTMLEntry extends Entry {
           return;
         }
 
-        case EntryFormats.AMR: {
-          Logger.warning(`WARNING: ${EntryFormats.AMR} playback in HTML5 isn't currently supported`);
-
+        case EntryFormats.VCF: {
           const media = mediaName;
-          const audio = this.querySelector(`audio[src="${media}"]`);
-          if (!audio) {
-            throw new Error(`Unable to find audio element for "${mediaName}"`);
+          const vcard = this.querySelector(`a.vcard[href="${mediaName}"]`);
+          if (!vcard) {
+            throw new Error(`Unable to find vcard element for "${media}"`);
           }
-          audio.replaceWith(HTMLEntry.audioElement(entry.savedPath));
+          vcard.replaceWith(HTMLEntry.vcardElement(entry.savedPath));
 
           return;
         }
@@ -197,5 +208,9 @@ export default class HTMLEntry extends Entry {
         <a rel="enclosure" href="${videoPath}">Video</a>
       </video>`
     );
+  }
+
+  private static vcardElement(vcardPath: string): HTMLElement {
+    return parse(`<a class="vcard" href="${vcardPath}">Contact card attachment</a>`);
   }
 }
