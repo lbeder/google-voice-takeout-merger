@@ -128,7 +128,7 @@ export default class HTMLEntry extends Entry {
         }
 
         case EntryFormats.AMR: {
-          Logger.warning(`${EntryFormats.AMR} playback in HTML5 isn't currently supported`);
+          Logger.warning(`WARNING: ${EntryFormats.AMR} playback in HTML5 isn't currently supported`);
 
           const media = mediaName;
           const audio = this.querySelector(`audio[src="${media}"]`);
