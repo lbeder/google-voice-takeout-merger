@@ -8,6 +8,7 @@ export enum MediaFormat {
   GIF = "GIF",
   MP3 = "MP3",
   MP4 = "MP4",
+  THREEGP = "3GP",
   AMR = "AMR"
 }
 
