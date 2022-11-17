@@ -57,6 +57,7 @@ export default class Factory {
 
     switch (format) {
       case EntryFormats.JPG:
+      case EntryFormats.GIF:
       case EntryFormats.MP3:
       case EntryFormats.MP4:
       case EntryFormats.AMR:
