@@ -6,7 +6,8 @@ import { HTMLElement } from "node-html-parser";
 export enum MediaFormat {
   JPG = "JPG",
   MP3 = "MP3",
-  MP4 = "MP4"
+  MP4 = "MP4",
+  AMR = "AMR"
 }
 
 export enum DocumentFormat {
@@ -23,7 +24,6 @@ export enum EntryType {
 
 export enum EntryAction {
   Received = "Received",
-
   Placed = "Placed",
   Missed = "Missed",
   Text = "Text",
@@ -33,6 +33,7 @@ export enum EntryAction {
 export const EntryActions = { ...EntryAction };
 
 export default abstract class Entry {
+  public action: EntryAction;
   public type: EntryType;
   public format: EntryFormat;
   public name: string;
@@ -43,6 +44,7 @@ export default abstract class Entry {
   protected html?: HTMLElement;
 
   constructor(
+    action: EntryAction,
     type: EntryType,
     format: EntryFormat,
     name: string,
@@ -50,6 +52,8 @@ export default abstract class Entry {
     timestamp: Moment,
     fullPath: string
   ) {
+    this.action = action;
+    this.type = type;
     this.type = type;
     this.format = format;
     this.name = name;

@@ -1,5 +1,5 @@
 import Logger from "../utils/logger";
-import Entry, { EntryActions, EntryFormats } from "./entry";
+import Entry, { EntryAction, EntryActions, EntryFormats } from "./entry";
 import HTMLEntry from "./html";
 import MediaEntry from "./media";
 import moment from "moment";
@@ -49,26 +49,21 @@ export default class Factory {
 
     const ext = path.extname(name).slice(1);
     const format = ext.toUpperCase();
+
+    const entryAction = action as EntryAction;
+    if (!Object.values(EntryActions).includes(entryAction)) {
+      throw new Error(`Unknown action: ${action}`);
+    }
+
     switch (format) {
       case EntryFormats.JPG:
       case EntryFormats.MP3:
       case EntryFormats.MP4:
-        return new MediaEntry(format, name, phoneNumbers, Factory.parseTimestamp(timestampStr), fullPath);
+      case EntryFormats.AMR:
+        return new MediaEntry(entryAction, format, name, phoneNumbers, Factory.parseTimestamp(timestampStr), fullPath);
 
-      case EntryFormats.HTML: {
-        switch (action) {
-          case EntryActions.Received:
-          case EntryActions.Placed:
-          case EntryActions.Missed:
-          case EntryActions.Text:
-          case EntryActions.Voicemail:
-          case EntryActions.GroupConversation:
-            return new HTMLEntry(name, phoneNumbers, Factory.parseTimestamp(timestampStr), fullPath);
-
-          default:
-            throw new Error(`Unknown entry action: ${action}`);
-        }
-      }
+      case EntryFormats.HTML:
+        return new HTMLEntry(entryAction, name, phoneNumbers, Factory.parseTimestamp(timestampStr), fullPath);
 
       default:
         throw new Error(`Unknown entry format: ${ext}`);
