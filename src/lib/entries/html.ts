@@ -50,7 +50,7 @@ export default class HTMLEntry extends Entry {
 
   // Saves the entry in the specified output directory
   public save(outputDir: string) {
-    this.load();
+    this.fix();
 
     const key = this.phoneNumbers.join(",");
     const outputHTMLDir = path.join(outputDir, key);
@@ -63,6 +63,15 @@ export default class HTMLEntry extends Entry {
     fs.writeFileSync(outputPath, this.html?.toString() ?? "");
 
     this.savedPath = outputPath;
+  }
+
+  // Fixes and patches the HTML of the entry
+  private fix() {
+    this.load();
+
+    // Remove all tags and deleted status containers
+    this.querySelector(".tags")?.remove();
+    this.querySelector(".deletedStatusContainer")?.remove();
   }
 
   // Merges this entry with the provided entry
