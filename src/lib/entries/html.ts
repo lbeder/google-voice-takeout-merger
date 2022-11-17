@@ -24,12 +24,6 @@ export default class HTMLEntry extends Entry {
     }
   }
 
-  public querySelector(selector: string): HTMLElement | null | undefined {
-    this.load();
-
-    return this.html?.querySelector(selector);
-  }
-
   public static queryPhoneNumbers(fullPath: string): string[] {
     if (!fs.existsSync(fullPath)) {
       throw new Error(`Unable to find entry HTML file: "${fullPath}"`);
@@ -65,6 +59,18 @@ export default class HTMLEntry extends Entry {
     this.savedPath = outputPath;
   }
 
+  private querySelector(selector: string): HTMLElement | null | undefined {
+    this.load();
+
+    return this.html?.querySelector(selector);
+  }
+
+  private querySelectorAll(selector: string): HTMLElement[] {
+    this.load();
+
+    return this.html?.querySelectorAll(selector) || [];
+  }
+
   // Fixes and patches the HTML of the entry
   private fix() {
     this.load();
@@ -72,6 +78,25 @@ export default class HTMLEntry extends Entry {
     // Remove all tags and deleted status containers
     this.querySelector(".tags")?.remove();
     this.querySelector(".deletedStatusContainer")?.remove();
+
+    // Fix all missing phone numbers
+    for (const tel of this.querySelectorAll("a.tel")) {
+      const span = tel.querySelector("span.fn");
+      const abbr = tel.querySelector("abbr.fn");
+      const element = span ?? abbr;
+
+      if (!element) {
+        throw new Error("Unable to parse sender entry");
+      }
+
+      if (!element.text || element.text === "Me") {
+        const phoneNumber = tel.getAttribute("href")?.split("tel:")[1];
+        if (!phoneNumber) {
+          throw new Error("Unable to retrieve the phone number from the sender entry");
+        }
+        element.replaceWith(parse(`<span class="fn">${phoneNumber}</span>`));
+      }
+    }
   }
 
   // Merges this entry with the provided entry
