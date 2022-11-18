@@ -1,5 +1,5 @@
 import Logger from '../utils/logger';
-import Entry, { EntryAction, EntryFormats, EntryType } from './entry';
+import Entry, { EntryAction, EntryActions, EntryFormats, EntryType } from './entry';
 import fs from 'fs';
 import { Moment } from 'moment';
 import { HTMLElement, parse } from 'node-html-parser';
@@ -46,14 +46,20 @@ export default class HTMLEntry extends Entry {
   public save(outputDir: string) {
     this.fix();
 
-    const key = this.phoneNumbers.join(',');
+    const timestamp = this.timestamp.format('YYYY-MM-DDTHH_mm_ss');
+    let key: string;
+    if (this.action === EntryActions.GroupConversation) {
+      key = `${EntryActions.GroupConversation} #${++Entry.gcCount}`;
+    } else {
+      key = this.phoneNumbers.join(',');
+    }
+
     const outputHTMLDir = path.join(outputDir, key);
-    const outputPath = path.join(outputHTMLDir, 'conversation.html');
+    const outputPath = path.join(outputHTMLDir, `${timestamp} ${key}.html`);
 
     Logger.debug(`Saving entry "${this.name}" to "${outputPath}"`);
 
     fs.mkdirSync(outputHTMLDir, { recursive: true });
-    fs.mkdirSync(outputDir, { recursive: true });
     fs.writeFileSync(outputPath, this.html?.toString() ?? '');
 
     this.savedPath = outputPath;
