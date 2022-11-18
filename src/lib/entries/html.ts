@@ -49,7 +49,7 @@ export default class HTMLEntry extends Entry {
     const timestamp = this.timestamp.format('YYYY-MM-DDTHH_mm_ss');
     let key: string;
     if (this.action === EntryActions.GroupConversation) {
-      key = `${EntryActions.GroupConversation} #${++Entry.gcCount}`;
+      key = `${EntryActions.GroupConversation} ${++Entry.gcCount}`;
     } else {
       key = this.phoneNumbers.join(',');
     }
@@ -81,6 +81,16 @@ export default class HTMLEntry extends Entry {
   private fix() {
     this.load();
 
+    // Add a list of all participants
+    if (this.action !== EntryActions.GroupConversation) {
+      const body = this.querySelector('body');
+      if (!body) {
+        throw new Error(`Unable to get the body of entry "${this.name}"`);
+      }
+
+      body.insertAdjacentHTML('beforebegin', HTMLEntry.participantsElement(this.phoneNumbers).toString());
+    }
+
     // Remove all tags and deleted status containers
     this.querySelector('.tags')?.remove();
     this.querySelector('.deletedStatusContainer')?.remove();
@@ -95,7 +105,7 @@ export default class HTMLEntry extends Entry {
     // If we're merging a media entry, just make sure to patch its URL
     if (entry.isMedia()) {
       if (!entry.savedPath) {
-        throw new Error(`Unable to merge unsaved entry=${entry.name}`);
+        throw new Error(`Unable to merge unsaved entry "${entry.name}"`);
       }
       const mediaName = path.basename(entry.name, path.extname(entry.name));
 
@@ -193,7 +203,7 @@ export default class HTMLEntry extends Entry {
 
     const body = this.querySelector('body');
     if (!body) {
-      throw new Error(`Unable to get the body of entry=${this.name}`);
+      throw new Error(`Unable to get the body of entry "${this.name}"`);
     }
 
     // Override the existing style with a combine style of all the artifacts
@@ -205,7 +215,7 @@ export default class HTMLEntry extends Entry {
 
     const otherBody = (entry as HTMLEntry).querySelector('body');
     if (!otherBody) {
-      throw new Error(`Unable to get the body of entry=${entry.name}`);
+      throw new Error(`Unable to get the body of entry "${entry.name}"`);
     }
     body.insertAdjacentHTML('beforeend', otherBody.toString());
   }
@@ -223,7 +233,6 @@ export default class HTMLEntry extends Entry {
   }
 
   private static videoElement(videoPath: string): HTMLElement {
-    // return parse(`<a class="video" href="${videoPath}" />`);
     return parse(
       `<video controls="controls" src="${videoPath}" width="50%">
         <a rel="enclosure" href="${videoPath}">Video</a>
@@ -233,5 +242,24 @@ export default class HTMLEntry extends Entry {
 
   private static vcardElement(vcardPath: string): HTMLElement {
     return parse(`<a class="vcard" href="${vcardPath}">Contact card attachment</a>`);
+  }
+
+  private static participantsElement(phoneNumbers: string[]): HTMLElement {
+    const participants = phoneNumbers
+      .map((p) =>
+        parse(`<cite class="sender vcard">
+              <a class="tel" href="tel:${p}">
+                <span class="fn">${p}</span>
+              </a>
+            </cite>`).toString()
+      )
+      .join(', ');
+
+    return parse(
+      `<div class="participants hChatLog">
+        Conversation with:
+        ${participants.toString()}
+      </div>`
+    );
   }
 }
