@@ -6,7 +6,7 @@
   "rules": {
     "sort-imports": "off",
     "semi": "error",
-    "quotes": ["error", "double"],
+    "quotes": ["error", "single"],
     "no-console": "error",
     "object-shorthand-properties-first": "off",
     "no-unused-vars": "off",

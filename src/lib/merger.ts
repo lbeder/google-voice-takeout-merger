@@ -1,8 +1,8 @@
-import Entry from "./entries/entry";
-import Factory from "./entries/factory";
-import Logger from "./utils/logger";
-import fs from "fs";
-import glob from "glob";
+import Entry from './entries/entry';
+import Factory from './entries/factory';
+import Logger from './utils/logger';
+import fs from 'fs';
+import glob from 'glob';
 
 export default class Merger {
   private inputDir: string;
@@ -28,14 +28,14 @@ export default class Merger {
       fs.rmSync(this.outputDir, { recursive: true, force: true });
     }
 
-    const files = glob.sync(`${this.inputDir}/*`, { ignore: ["desktop.ini"] });
+    const files = glob.sync(`${this.inputDir}/*`, { ignore: ['desktop.ini'] });
     const pendingEntries: Record<string, Entry[]> = {};
 
     // Parse all entries and index them by phone numbers
     for (const f of files) {
       const entry = Factory.fromFile(f);
 
-      const key = entry.phoneNumbers.join(",");
+      const key = entry.phoneNumbers.join(',');
       if (!pendingEntries[key]) {
         pendingEntries[key] = [];
       }

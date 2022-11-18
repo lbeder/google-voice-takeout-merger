@@ -1,42 +1,42 @@
-import Merger from "./lib/merger";
-import Logger from "./lib/utils/logger";
-import yargs from "yargs";
+import Merger from './lib/merger';
+import Logger from './lib/utils/logger';
+import yargs from 'yargs';
 
 const main = async () => {
   try {
     await yargs(process.argv.slice(2))
-      .parserConfiguration({ "parse-numbers": false })
-      .option("input-dir", {
-        type: "string",
-        alias: "i",
+      .parserConfiguration({ 'parse-numbers': false })
+      .option('input-dir', {
+        type: 'string',
+        alias: 'i',
         required: true,
-        description: "Input directory"
+        description: 'Input directory'
       })
-      .option("output-dir", {
-        type: "string",
-        alias: "o",
+      .option('output-dir', {
+        type: 'string',
+        alias: 'o',
         required: true,
-        description: "Output directory"
+        description: 'Output directory'
       })
-      .option("verbose", {
-        type: "boolean",
-        alias: "v",
+      .option('verbose', {
+        type: 'boolean',
+        alias: 'v',
         default: false,
-        description: "Verbose mode"
+        description: 'Verbose mode'
       })
-      .option("force", {
-        type: "boolean",
-        alias: "f",
+      .option('force', {
+        type: 'boolean',
+        alias: 'f',
         default: false,
-        description: "Overwrite output directory"
+        description: 'Overwrite output directory'
       })
       .middleware(({ verbose }) => {
         Logger.init();
         Logger.setVerbose(verbose);
       })
       .command(
-        "merge",
-        "Merge all records",
+        'merge',
+        'Merge all records',
         () => {},
         async ({ inputDir, outputDir, force }) => {
           try {

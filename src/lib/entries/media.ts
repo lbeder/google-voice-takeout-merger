@@ -1,8 +1,8 @@
-import Logger from "../utils/logger";
-import Entry, { EntryAction, EntryType, MediaFormat } from "./entry";
-import fs from "fs";
-import { Moment } from "moment";
-import path from "path";
+import Logger from '../utils/logger';
+import Entry, { EntryAction, EntryType, MediaFormat } from './entry';
+import fs from 'fs';
+import { Moment } from 'moment';
+import path from 'path';
 
 export default class MediaEntry extends Entry {
   constructor(
@@ -17,8 +17,8 @@ export default class MediaEntry extends Entry {
   }
 
   public save(outputDir: string) {
-    const key = this.phoneNumbers.join(",");
-    const outputMediaDir = path.join(outputDir, key, "media");
+    const key = this.phoneNumbers.join(',');
+    const outputMediaDir = path.join(outputDir, key, 'media');
     const outputPath = path.join(outputMediaDir, this.name);
 
     Logger.debug(`Saving media entry "${this.name}" to "${outputPath}"`);
@@ -31,10 +31,10 @@ export default class MediaEntry extends Entry {
   }
 
   public load() {
-    throw new Error("Unsupported operation");
+    throw new Error('Unsupported operation');
   }
 
   public merge(_entry: Entry) {
-    throw new Error("Unsupported operation");
+    throw new Error('Unsupported operation');
   }
 }

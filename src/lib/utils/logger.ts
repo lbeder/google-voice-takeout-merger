@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
-import chalk from "chalk";
-import consoleStamp from "console-stamp";
+import chalk from 'chalk';
+import consoleStamp from 'console-stamp';
 
 export default class Logger {
   public static verbose: boolean;
 
   public static init() {
-    consoleStamp(console, { format: ":date(yyyy/mm/dd HH:MM:ss.l)" });
+    consoleStamp(console, { format: ':date(yyyy/mm/dd HH:MM:ss.l)' });
   }
 
   public static setVerbose(verbose: boolean) {
@@ -30,6 +30,6 @@ export default class Logger {
   }
 
   public static warning(...args: unknown[]) {
-    console.warn(chalk.hex("#FFA500")(...args));
+    console.warn(chalk.hex('#FFA500')(...args));
   }
 }
