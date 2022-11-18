@@ -1,5 +1,5 @@
 import Logger from '../utils/logger';
-import Entry, { EntryAction, EntryType, MediaFormat } from './entry';
+import Entry, { EntryAction, EntryActions, EntryType, MediaFormat } from './entry';
 import fs from 'fs';
 import { Moment } from 'moment';
 import path from 'path';
@@ -17,7 +17,11 @@ export default class MediaEntry extends Entry {
   }
 
   public save(outputDir: string) {
-    const key = this.phoneNumbers.join(',');
+    const key =
+      this.action === EntryActions.GroupConversation
+        ? `${EntryActions.GroupConversation} #${Entry.gcCount + 1}`
+        : this.phoneNumbers.join(',');
+
     const outputMediaDir = path.join(outputDir, key, 'media');
     const outputPath = path.join(outputMediaDir, this.name);
 

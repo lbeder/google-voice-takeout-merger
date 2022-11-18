@@ -46,6 +46,9 @@ export default abstract class Entry {
   public savedPath?: string;
   protected html?: HTMLElement;
 
+  // A running index of the currently processed number of group conversations.
+  protected static gcCount = 0;
+
   constructor(
     action: EntryAction,
     type: EntryType,
