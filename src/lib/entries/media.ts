@@ -19,7 +19,7 @@ export default class MediaEntry extends Entry {
   public save(outputDir: string) {
     const key =
       this.action === EntryActions.GroupConversation
-        ? `${EntryActions.GroupConversation} #${Entry.gcCount + 1}`
+        ? `${EntryActions.GroupConversation} ${Entry.gcCount + 1}`
         : this.phoneNumbers.join(',');
 
     const outputMediaDir = path.join(outputDir, key, 'media');
