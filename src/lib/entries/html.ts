@@ -1,14 +1,14 @@
-import Logger from "../utils/logger";
-import Entry, { EntryAction, EntryFormats, EntryType } from "./entry";
-import fs from "fs";
-import { Moment } from "moment";
-import { HTMLElement, parse } from "node-html-parser";
-import path from "path";
+import Logger from '../utils/logger';
+import Entry, { EntryAction, EntryFormats, EntryType } from './entry';
+import fs from 'fs';
+import { Moment } from 'moment';
+import { HTMLElement, parse } from 'node-html-parser';
+import path from 'path';
 
 export default class HTMLEntry extends Entry {
   constructor(action: EntryAction, name: string, phoneNumbers: string[], timestamp: Moment, fullPath: string) {
-    if (!name.startsWith("Group Conversation") && phoneNumbers.length === 0) {
-      throw new Error("Unexpected empty phones numbers");
+    if (!name.startsWith('Group Conversation') && phoneNumbers.length === 0) {
+      throw new Error('Unexpected empty phones numbers');
     }
 
     super(action, EntryType.HTML, EntryFormats.HTML, name, phoneNumbers, timestamp, fullPath);
@@ -20,7 +20,7 @@ export default class HTMLEntry extends Entry {
   // Lazily loads the contents of the entry
   public load() {
     if (!this.html) {
-      this.html = parse(fs.readFileSync(this.fullPath, "utf-8"), { blockTextElements: { style: true } });
+      this.html = parse(fs.readFileSync(this.fullPath, 'utf-8'), { blockTextElements: { style: true } });
     }
   }
 
@@ -29,32 +29,32 @@ export default class HTMLEntry extends Entry {
       throw new Error(`Unable to find entry HTML file: "${fullPath}"`);
     }
 
-    const html = parse(fs.readFileSync(fullPath, "utf-8"));
-    const senders = html.querySelectorAll(".participants .sender.vcard a");
+    const html = parse(fs.readFileSync(fullPath, 'utf-8'));
+    const senders = html.querySelectorAll('.participants .sender.vcard a');
     if (senders.length === 0) {
-      throw new Error("Unable to find any senders in the entry");
+      throw new Error('Unable to find any senders in the entry');
     }
-    const senderPhoneNumbers = senders.map((e) => e.getAttribute("href"));
+    const senderPhoneNumbers = senders.map((e) => e.getAttribute('href'));
     if (senderPhoneNumbers.length === 0) {
-      throw new Error("Unable to parse phone numbers from the senders in the entry");
+      throw new Error('Unable to parse phone numbers from the senders in the entry');
     }
 
-    return senderPhoneNumbers.map((s) => s?.split("tel:")[1]).sort() as string[];
+    return senderPhoneNumbers.map((s) => s?.split('tel:')[1]).sort() as string[];
   }
 
   // Saves the entry in the specified output directory
   public save(outputDir: string) {
     this.fix();
 
-    const key = this.phoneNumbers.join(",");
+    const key = this.phoneNumbers.join(',');
     const outputHTMLDir = path.join(outputDir, key);
-    const outputPath = path.join(outputHTMLDir, "conversation.html");
+    const outputPath = path.join(outputHTMLDir, 'conversation.html');
 
     Logger.debug(`Saving entry "${this.name}" to "${outputPath}"`);
 
     fs.mkdirSync(outputHTMLDir, { recursive: true });
     fs.mkdirSync(outputDir, { recursive: true });
-    fs.writeFileSync(outputPath, this.html?.toString() ?? "");
+    fs.writeFileSync(outputPath, this.html?.toString() ?? '');
 
     this.savedPath = outputPath;
   }
@@ -76,23 +76,23 @@ export default class HTMLEntry extends Entry {
     this.load();
 
     // Remove all tags and deleted status containers
-    this.querySelector(".tags")?.remove();
-    this.querySelector(".deletedStatusContainer")?.remove();
+    this.querySelector('.tags')?.remove();
+    this.querySelector('.deletedStatusContainer')?.remove();
 
     // Fix all missing phone numbers
-    for (const tel of this.querySelectorAll("a.tel")) {
-      const span = tel.querySelector("span.fn");
-      const abbr = tel.querySelector("abbr.fn");
+    for (const tel of this.querySelectorAll('a.tel')) {
+      const span = tel.querySelector('span.fn');
+      const abbr = tel.querySelector('abbr.fn');
       const element = span ?? abbr;
 
       if (!element) {
-        throw new Error("Unable to parse sender entry");
+        throw new Error('Unable to parse sender entry');
       }
 
-      if (!element.text || element.text === "Me") {
-        const phoneNumber = tel.getAttribute("href")?.split("tel:")[1];
+      if (!element.text || element.text === 'Me') {
+        const phoneNumber = tel.getAttribute('href')?.split('tel:')[1];
         if (!phoneNumber) {
-          throw new Error("Unable to retrieve the phone number from the sender entry");
+          throw new Error('Unable to retrieve the phone number from the sender entry');
         }
         element.replaceWith(parse(`<span class="fn">${phoneNumber}</span>`));
       }
@@ -129,7 +129,7 @@ export default class HTMLEntry extends Entry {
           switch (this.action) {
             case EntryAction.Voicemail: {
               const media = `${mediaName}.mp3`;
-              const duration = this.querySelector("abbr.duration");
+              const duration = this.querySelector('abbr.duration');
               if (!duration) {
                 throw new Error(`Unable to find the duration element for "${media}"`);
               }
@@ -204,23 +204,23 @@ export default class HTMLEntry extends Entry {
       }
     }
 
-    const body = this.querySelector("body");
+    const body = this.querySelector('body');
     if (!body) {
       throw new Error(`Unable to get the body of entry=${this.name}`);
     }
 
     // Override the existing style with a combine style of all the artifacts
-    const style = fs.readFileSync(path.resolve(path.join(__dirname, "./templates/style.html")), "utf-8");
-    body.insertAdjacentHTML("beforebegin", style);
+    const style = fs.readFileSync(path.resolve(path.join(__dirname, './templates/style.html')), 'utf-8');
+    body.insertAdjacentHTML('beforebegin', style);
 
     // Add a nice horizontal separator
-    body.insertAdjacentHTML("beforeend", "<hr/>");
+    body.insertAdjacentHTML('beforeend', '<hr/>');
 
-    const otherBody = (entry as HTMLEntry).querySelector("body");
+    const otherBody = (entry as HTMLEntry).querySelector('body');
     if (!otherBody) {
       throw new Error(`Unable to get the body of entry=${entry.name}`);
     }
-    body.insertAdjacentHTML("beforeend", otherBody.toString());
+    body.insertAdjacentHTML('beforeend', otherBody.toString());
   }
 
   private static imageElement(imagePath: string): HTMLElement {

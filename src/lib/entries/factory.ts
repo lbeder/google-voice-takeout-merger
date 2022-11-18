@@ -1,9 +1,9 @@
-import Logger from "../utils/logger";
-import Entry, { EntryAction, EntryActions, EntryFormats } from "./entry";
-import HTMLEntry from "./html";
-import MediaEntry from "./media";
-import moment from "moment";
-import path from "path";
+import Logger from '../utils/logger';
+import Entry, { EntryAction, EntryActions, EntryFormats } from './entry';
+import HTMLEntry from './html';
+import MediaEntry from './media';
+import moment from 'moment';
+import path from 'path';
 
 export default class Factory {
   // Processes and constructors an entry from the specified file
@@ -17,12 +17,12 @@ export default class Factory {
 
     Logger.info(`Processing ${name}`);
 
-    const components = name.split(" - ");
-    const gcAction = "Group Conversation";
+    const components = name.split(' - ');
+    const gcAction = 'Group Conversation';
 
     // Group conversations don't include timestamps in their file names, thus require a special processing
     if (name.startsWith(gcAction)) {
-      Logger.debug("Detected a group conversation");
+      Logger.debug('Detected a group conversation');
 
       if (components.length !== 2) {
         throw new Error(`Invalid or unsupported group conversation entry="${name}"`);
@@ -30,7 +30,7 @@ export default class Factory {
 
       // Load the group conversation corresponding to its timestamp and get the phone numbers from it
       const inputDir = path.dirname(fullPath);
-      const nameComponents = name.split("Z-");
+      const nameComponents = name.split('Z-');
       const fileName = nameComponents.length > 1 ? `${nameComponents[0]}Z.html` : nameComponents[0];
       const groupConversationPath = path.join(inputDir, fileName);
 
@@ -75,6 +75,6 @@ export default class Factory {
 
   // Parses Google Voice timestamp format
   private static parseTimestamp(timestamp: string) {
-    return moment(timestamp, "YYYY-MM-DDTHH_mm_ssZ*");
+    return moment(timestamp, 'YYYY-MM-DDTHH_mm_ssZ*');
   }
 }

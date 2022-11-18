@@ -1,37 +1,37 @@
-import Logger from "../utils/logger";
-import { sortBy } from "lodash";
-import { Moment } from "moment";
-import { HTMLElement } from "node-html-parser";
+import Logger from '../utils/logger';
+import { sortBy } from 'lodash';
+import { Moment } from 'moment';
+import { HTMLElement } from 'node-html-parser';
 
 export enum MediaFormat {
-  JPG = "JPG",
-  GIF = "GIF",
-  MP3 = "MP3",
-  MP4 = "MP4",
-  THREEGP = "3GP",
-  AMR = "AMR",
-  VCF = "VCF"
+  JPG = 'JPG',
+  GIF = 'GIF',
+  MP3 = 'MP3',
+  MP4 = 'MP4',
+  THREEGP = '3GP',
+  AMR = 'AMR',
+  VCF = 'VCF'
 }
 
 export enum DocumentFormat {
-  HTML = "HTML"
+  HTML = 'HTML'
 }
 
 export type EntryFormat = MediaFormat | DocumentFormat;
 export const EntryFormats = { ...MediaFormat, ...DocumentFormat };
 
 export enum EntryType {
-  HTML = "HTML",
-  Media = "Media"
+  HTML = 'HTML',
+  Media = 'Media'
 }
 
 export enum EntryAction {
-  Received = "Received",
-  Placed = "Placed",
-  Missed = "Missed",
-  Text = "Text",
-  Voicemail = "Voicemail",
-  GroupConversation = "Group Conversation"
+  Received = 'Received',
+  Placed = 'Placed',
+  Missed = 'Missed',
+  Text = 'Text',
+  Voicemail = 'Voicemail',
+  GroupConversation = 'Group Conversation'
 }
 export const EntryActions = { ...EntryAction };
 
@@ -106,14 +106,14 @@ export default abstract class Entry {
       }
 
       if (!firstEntry) {
-        throw new Error("Unable to find the first entry");
+        throw new Error('Unable to find the first entry');
       }
 
       firstEntry.merge(entry);
     }
 
     if (!firstEntry) {
-      throw new Error("Unable to find the first entry");
+      throw new Error('Unable to find the first entry');
     }
 
     // Merge all media entries full entry
