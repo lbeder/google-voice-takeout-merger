@@ -15,8 +15,6 @@ export default class Factory {
     let phoneNumbers: string[];
     let timestampStr: string;
 
-    Logger.info(`Processing ${name}`);
-
     const components = name.split(' - ');
     const gcAction = 'Group Conversation';
 
