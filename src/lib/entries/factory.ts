@@ -36,7 +36,11 @@ export default class Factory {
       phoneNumbers = HTMLEntry.queryPhoneNumbers(groupConversationPath);
       timestampStr = components[1];
     } else {
-      if (components.length === 2) {
+      if (components.length === 3) {
+        action = components[1];
+        phoneNumbers = [components[0]];
+        timestampStr = components[2];
+      } else if (components.length === 2) {
         action = EntryAction.Unknown;
 
         phoneNumbers = [components[0]];
@@ -44,10 +48,6 @@ export default class Factory {
       } else {
         throw new Error(`Invalid or unsupported entry "${name}"`);
       }
-
-      action = components[1];
-      phoneNumbers = [components[0]];
-      timestampStr = components[2];
     }
 
     const ext = path.extname(name).slice(1);
