@@ -31,7 +31,8 @@ export enum EntryAction {
   Missed = 'Missed',
   Text = 'Text',
   Voicemail = 'Voicemail',
-  GroupConversation = 'Group Conversation'
+  GroupConversation = 'Group Conversation',
+  Unknown = 'Unknown'
 }
 export const EntryActions = { ...EntryAction };
 
