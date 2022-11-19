@@ -81,13 +81,22 @@ export default class HTMLEntry extends Entry {
   private fix() {
     this.load();
 
+    const body = this.querySelector('body');
+    if (!body) {
+      throw new Error(`Unable to get the body of entry "${this.name}"`);
+    }
+
+    // Override the existing style with a combine style of all the artifacts
+    const style = this.querySelector('#custom-style');
+    if (!style) {
+      body.insertAdjacentHTML(
+        'beforebegin',
+        fs.readFileSync(path.resolve(path.join(__dirname, './templates/style.html')), 'utf-8')
+      );
+    }
+
     // Add a list of all participants
     if (this.action !== EntryActions.GroupConversation) {
-      const body = this.querySelector('body');
-      if (!body) {
-        throw new Error(`Unable to get the body of entry "${this.name}"`);
-      }
-
       body.insertAdjacentHTML('beforebegin', HTMLEntry.participantsElement(this.phoneNumbers).toString());
     }
 
@@ -211,10 +220,6 @@ export default class HTMLEntry extends Entry {
     if (!body) {
       throw new Error(`Unable to get the body of entry "${this.name}"`);
     }
-
-    // Override the existing style with a combine style of all the artifacts
-    const style = fs.readFileSync(path.resolve(path.join(__dirname, './templates/style.html')), 'utf-8');
-    body.insertAdjacentHTML('beforebegin', style);
 
     // Add a nice horizontal separator
     body.insertAdjacentHTML('beforeend', '<hr/>');
