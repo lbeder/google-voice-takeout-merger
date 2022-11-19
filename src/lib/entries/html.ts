@@ -112,10 +112,10 @@ export default class HTMLEntry extends Entry {
       switch (entry.format) {
         case EntryFormats.JPG:
         case EntryFormats.GIF: {
-          const media = mediaName;
+          const mediaKey = mediaName;
           const image = this.querySelector(`img[src="${mediaName}"]`);
           if (!image) {
-            throw new Error(`Unable to find image element for "${media}"`);
+            throw new Error(`Unable to find image element for "${mediaKey}"`);
           }
           image.replaceWith(HTMLEntry.imageElement(entry.savedPath));
 
@@ -125,21 +125,27 @@ export default class HTMLEntry extends Entry {
         case EntryFormats.MP3: {
           switch (this.action) {
             case EntryAction.Voicemail: {
-              const media = `${mediaName}.mp3`;
-              const duration = this.querySelector('abbr.duration');
-              if (!duration) {
-                throw new Error(`Unable to find the duration element for "${media}"`);
+              const mediaKey = `${entry.hasUnknownPhoneNumber() ? ' ' : ''}${mediaName}.mp3`;
+
+              const audio = this.querySelector(`audio[src="${mediaKey}"]`);
+              if (audio) {
+                audio.replaceWith(HTMLEntry.audioElement(entry.savedPath));
+              } else {
+                const duration = this.querySelector('abbr.duration');
+                if (!duration) {
+                  throw new Error(`Unable to find the duration element for "${mediaKey}"`);
+                }
+                duration.replaceWith(HTMLEntry.audioElement(entry.savedPath), duration);
               }
-              duration.replaceWith(HTMLEntry.audioElement(entry.savedPath), duration);
 
               return;
             }
 
             default: {
-              const media = `${mediaName}.mp3`;
-              const audio = this.querySelector(`audio[src="${media}"]`);
+              const mediaKey = `${entry.hasUnknownPhoneNumber() ? ' ' : ''}${mediaName}.mp3`;
+              const audio = this.querySelector(`audio[src="${mediaKey}"]`);
               if (!audio) {
-                throw new Error(`Unable to find audio element for "${media}"`);
+                throw new Error(`Unable to find audio element for "${mediaKey}"`);
               }
               audio.replaceWith(HTMLEntry.audioElement(entry.savedPath));
 
@@ -151,8 +157,8 @@ export default class HTMLEntry extends Entry {
         case EntryFormats.AMR: {
           Logger.warning(`WARNING: ${EntryFormats.AMR} playback in HTML5 isn't currently supported`);
 
-          const media = mediaName;
-          const audio = this.querySelector(`audio[src="${media}"]`);
+          const mediaKey = mediaName;
+          const audio = this.querySelector(`audio[src="${mediaKey}"]`);
           if (!audio) {
             throw new Error(`Unable to find audio element for "${mediaName}"`);
           }
@@ -162,10 +168,10 @@ export default class HTMLEntry extends Entry {
         }
 
         case EntryFormats.MP4: {
-          const media = mediaName;
-          const video = this.querySelector(`a.video[href="${media}"]`);
+          const mediaKey = mediaName;
+          const video = this.querySelector(`a.video[href="${mediaKey}"]`);
           if (!video) {
-            throw new Error(`Unable to find video element for "${media}"`);
+            throw new Error(`Unable to find video element for "${mediaKey}"`);
           }
           video.replaceWith(HTMLEntry.videoElement(entry.savedPath));
 

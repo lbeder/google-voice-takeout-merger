@@ -15,7 +15,7 @@ export default class Factory {
     let phoneNumbers: string[];
     let timestampStr: string;
 
-    const components = name.split(' - ');
+    const components = name.split('- ').map((c) => c.trim());
     const gcAction = 'Group Conversation';
 
     // Group conversations don't include timestamps in their file names, thus require a special processing
@@ -37,12 +37,17 @@ export default class Factory {
       timestampStr = components[1];
     } else {
       if (components.length === 3) {
+        let phoneNumber = components[0];
+        if (!phoneNumber) {
+          Logger.warning(`Unknown phone number for entry "${name}". Defaulting to ${Entry.UNKNOWN_PHONE_NUMBER}`);
+
+          phoneNumber = Entry.UNKNOWN_PHONE_NUMBER;
+        }
+        phoneNumbers = [phoneNumber];
         action = components[1];
-        phoneNumbers = [components[0]];
         timestampStr = components[2];
       } else if (components.length === 2) {
         action = EntryAction.Unknown;
-
         phoneNumbers = [components[0]];
         timestampStr = components[1];
       } else {
