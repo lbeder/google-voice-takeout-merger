@@ -51,6 +51,8 @@ export default abstract class Entry {
   // A running index of the currently processed number of group conversations.
   protected static gcCount = 0;
 
+  public static UNKNOWN_PHONE_NUMBER = '+00000000000';
+
   constructor(
     action: EntryAction,
     type: EntryType,
@@ -70,8 +72,12 @@ export default abstract class Entry {
     this.fullPath = fullPath;
   }
 
-  public isMedia(): boolean {
+  public isMedia() {
     return this.type == EntryType.Media;
+  }
+
+  public hasUnknownPhoneNumber() {
+    return this.phoneNumbers.length === 1 && this.phoneNumbers[0] === Entry.UNKNOWN_PHONE_NUMBER;
   }
 
   // Merges multiple entries and saves them in the provided output directory. Please note that this method requires all
