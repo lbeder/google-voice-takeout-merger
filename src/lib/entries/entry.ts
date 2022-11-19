@@ -31,6 +31,7 @@ export enum EntryAction {
   Missed = 'Missed',
   Text = 'Text',
   Voicemail = 'Voicemail',
+  Recorded = 'Recorded',
   GroupConversation = 'Group Conversation',
   Unknown = 'Unknown'
 }
