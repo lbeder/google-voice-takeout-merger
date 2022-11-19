@@ -5,6 +5,10 @@ import { Moment } from 'moment';
 import path from 'path';
 
 export default class MediaEntry extends Entry {
+  public relativePath?: string;
+
+  private static MEDIA_DIR = 'media';
+
   constructor(
     action: EntryAction,
     format: MediaFormat,
@@ -22,12 +26,13 @@ export default class MediaEntry extends Entry {
         ? `${EntryActions.GroupConversation} ${Entry.gcCount + 1}`
         : this.phoneNumbers.join(',');
 
-    const outputMediaDir = path.join(outputDir, key, 'media');
+    this.relativePath = path.join(MediaEntry.MEDIA_DIR, this.name);
+
+    const outputMediaDir = path.join(outputDir, key, MediaEntry.MEDIA_DIR);
     const outputPath = path.join(outputMediaDir, this.name);
 
     Logger.debug(`Saving media entry "${this.name}" to "${outputPath}"`);
 
-    fs.mkdirSync(outputMediaDir, { recursive: true });
     fs.mkdirSync(outputMediaDir, { recursive: true });
     fs.copyFileSync(this.fullPath, outputPath);
 

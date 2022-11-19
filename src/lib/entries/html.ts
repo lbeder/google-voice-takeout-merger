@@ -1,5 +1,6 @@
 import Logger from '../utils/logger';
 import Entry, { EntryAction, EntryActions, EntryFormats, EntryType } from './entry';
+import MediaEntry from './media';
 import fs from 'fs';
 import { Moment } from 'moment';
 import { HTMLElement, parse } from 'node-html-parser';
@@ -117,12 +118,13 @@ export default class HTMLEntry extends Entry {
 
     // If we're merging a media entry, just make sure to patch its URL
     if (entry.isMedia()) {
-      if (!entry.savedPath) {
-        throw new Error(`Unable to merge unsaved entry "${entry.name}"`);
+      const mediaEntry = entry as MediaEntry;
+      if (!mediaEntry.relativePath) {
+        throw new Error(`Unable to merge unsaved entry "${mediaEntry.name}"`);
       }
-      const mediaName = path.basename(entry.name, path.extname(entry.name));
+      const mediaName = path.basename(mediaEntry.name, path.extname(mediaEntry.name));
 
-      switch (entry.format) {
+      switch (mediaEntry.format) {
         case EntryFormats.JPG:
         case EntryFormats.GIF: {
           const mediaKey = mediaName;
@@ -130,7 +132,7 @@ export default class HTMLEntry extends Entry {
           if (!image) {
             throw new Error(`Unable to find image element for "${mediaKey}"`);
           }
-          image.replaceWith(HTMLEntry.imageElement(entry.savedPath));
+          image.replaceWith(HTMLEntry.imageElement(mediaEntry.relativePath));
 
           return;
         }
@@ -138,29 +140,30 @@ export default class HTMLEntry extends Entry {
         case EntryFormats.MP3: {
           switch (this.action) {
             case EntryAction.Voicemail: {
-              const mediaKey = `${entry.hasUnknownPhoneNumber() ? ' ' : ''}${mediaName}.mp3`;
+              const mediaKey = `${mediaEntry.hasUnknownPhoneNumber() ? ' ' : ''}${mediaName}.mp3`;
 
               const audio = this.querySelector(`audio[src="${mediaKey}"]`);
               if (audio) {
-                audio.replaceWith(HTMLEntry.audioElement(entry.savedPath));
+                audio.replaceWith(HTMLEntry.audioElement(mediaEntry.relativePath));
               } else {
                 const duration = this.querySelector('abbr.duration');
                 if (!duration) {
                   throw new Error(`Unable to find the duration element for "${mediaKey}"`);
                 }
-                duration.replaceWith(HTMLEntry.audioElement(entry.savedPath), duration);
+                duration.replaceWith(HTMLEntry.audioElement(mediaEntry.relativePath), duration);
               }
+              console.log('RELATIVE', mediaEntry.relativePath);
 
               return;
             }
 
             default: {
-              const mediaKey = `${entry.hasUnknownPhoneNumber() ? ' ' : ''}${mediaName}.mp3`;
+              const mediaKey = `${mediaEntry.hasUnknownPhoneNumber() ? ' ' : ''}${mediaName}.mp3`;
               const audio = this.querySelector(`audio[src="${mediaKey}"]`);
               if (!audio) {
                 throw new Error(`Unable to find audio element for "${mediaKey}"`);
               }
-              audio.replaceWith(HTMLEntry.audioElement(entry.savedPath));
+              audio.replaceWith(HTMLEntry.audioElement(mediaEntry.relativePath));
 
               return;
             }
@@ -175,7 +178,7 @@ export default class HTMLEntry extends Entry {
           if (!audio) {
             throw new Error(`Unable to find audio element for "${mediaName}"`);
           }
-          audio.replaceWith(HTMLEntry.audioElement(entry.savedPath));
+          audio.replaceWith(HTMLEntry.audioElement(mediaEntry.relativePath));
 
           return;
         }
@@ -186,7 +189,7 @@ export default class HTMLEntry extends Entry {
           if (!video) {
             throw new Error(`Unable to find video element for "${mediaKey}"`);
           }
-          video.replaceWith(HTMLEntry.videoElement(entry.savedPath));
+          video.replaceWith(HTMLEntry.videoElement(mediaEntry.relativePath));
 
           return;
         }
@@ -199,7 +202,7 @@ export default class HTMLEntry extends Entry {
           if (!video) {
             throw new Error(`Unable to find video element for "${media}"`);
           }
-          video.replaceWith(HTMLEntry.videoElement(entry.savedPath));
+          video.replaceWith(HTMLEntry.videoElement(mediaEntry.relativePath));
 
           return;
         }
@@ -210,13 +213,13 @@ export default class HTMLEntry extends Entry {
           if (!vcard) {
             throw new Error(`Unable to find vcard element for "${media}"`);
           }
-          vcard.replaceWith(HTMLEntry.vcardElement(entry.savedPath));
+          vcard.replaceWith(HTMLEntry.vcardElement(mediaEntry.relativePath));
 
           return;
         }
 
         default:
-          throw new Error(`Unknown media format: ${entry.format}`);
+          throw new Error(`Unknown media format: ${mediaEntry.format}`);
       }
     }
 
