@@ -3,6 +3,7 @@ import Factory from './entries/factory';
 import Logger from './utils/logger';
 import fs from 'fs';
 import glob from 'glob';
+import path from 'path';
 
 export default class Merger {
   private inputDir: string;
@@ -14,8 +15,8 @@ export default class Merger {
       throw new Error(`Input dir "${inputDir}" does not exist`);
     }
 
-    this.inputDir = inputDir;
-    this.outputDir = outputDir;
+    this.inputDir = path.resolve(inputDir);
+    this.outputDir = path.resolve(outputDir);
     this.force = force;
   }
 
