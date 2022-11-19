@@ -23,7 +23,7 @@ export default class Factory {
       Logger.debug('Detected a group conversation');
 
       if (components.length !== 2) {
-        throw new Error(`Invalid or unsupported group conversation entry="${name}"`);
+        throw new Error(`Invalid or unsupported group conversation entry "${name}"`);
       }
 
       // Load the group conversation corresponding to its timestamp and get the phone numbers from it
@@ -36,8 +36,13 @@ export default class Factory {
       phoneNumbers = HTMLEntry.queryPhoneNumbers(groupConversationPath);
       timestampStr = components[1];
     } else {
-      if (components.length !== 3) {
-        throw new Error(`Invalid or unsupported entry="${name}"`);
+      if (components.length === 2) {
+        action = EntryAction.Unknown;
+
+        phoneNumbers = [components[0]];
+        timestampStr = components[1];
+      } else {
+        throw new Error(`Invalid or unsupported entry "${name}"`);
       }
 
       action = components[1];
