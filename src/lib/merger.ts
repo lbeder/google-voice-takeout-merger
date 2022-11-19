@@ -29,7 +29,7 @@ export default class Merger {
       fs.rmSync(this.outputDir, { recursive: true, force: true });
     }
 
-    const files = glob.sync(`${this.inputDir}/*`, { ignore: ['desktop.ini'] });
+    const files = glob.sync(`${this.inputDir}/*`.replace(/\\/g, '/'), { ignore: ['desktop.ini'] });
     const pendingEntries: Record<string, Entry[]> = {};
 
     // Parse all entries and index them by phone numbers
