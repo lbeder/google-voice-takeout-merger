@@ -101,8 +101,12 @@ export default class HTMLEntry extends Entry {
     }
 
     // Remove all tags and deleted status containers
-    this.querySelector('.tags')?.remove();
-    this.querySelector('.deletedStatusContainer')?.remove();
+    for (const tag of this.querySelectorAll('.tags')) {
+      tag.remove();
+    }
+    for (const deletedStatus of this.querySelectorAll('.deletedStatusContainer')) {
+      deletedStatus.remove();
+    }
   }
 
   // Merges this entry with the provided entry
