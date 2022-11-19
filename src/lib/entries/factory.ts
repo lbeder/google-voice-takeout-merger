@@ -8,7 +8,7 @@ import path from 'path';
 export default class Factory {
   // Processes and constructors an entry from the specified file
   public static fromFile(fullPath: string): Entry {
-    Logger.info(`Processing ${path.basename(fullPath)}`);
+    Logger.info(`Preprocessing ${path.basename(fullPath)}`);
 
     const name = path.basename(fullPath);
     let action: string;
