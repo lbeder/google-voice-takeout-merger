@@ -152,7 +152,6 @@ export default class HTMLEntry extends Entry {
                 }
                 duration.replaceWith(HTMLEntry.audioElement(mediaEntry.relativePath), duration);
               }
-              console.log('RELATIVE', mediaEntry.relativePath);
 
               return;
             }
