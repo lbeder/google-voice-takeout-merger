@@ -10,7 +10,7 @@ export default class Factory {
   public static fromFile(fullPath: string): Entry {
     Logger.info(`Preprocessing ${path.basename(fullPath)}`);
 
-    const name = path.basename(fullPath);
+    let name = path.basename(fullPath).trim();
     let action: string;
     let phoneNumbers: string[];
     let timestampStr: string;
@@ -42,6 +42,7 @@ export default class Factory {
           Logger.warning(`Unknown phone number for entry "${name}". Defaulting to ${Entry.UNKNOWN_PHONE_NUMBER}`);
 
           phoneNumber = Entry.UNKNOWN_PHONE_NUMBER;
+          name = `${phoneNumber} ${name}`;
         }
         phoneNumbers = [phoneNumber];
         action = components[1];

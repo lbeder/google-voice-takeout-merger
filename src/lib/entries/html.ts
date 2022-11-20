@@ -126,12 +126,12 @@ export default class HTMLEntry extends Entry {
         throw new Error(`Unable to merge unsaved entry "${mediaEntry.name}"`);
       }
       const mediaName = path.basename(mediaEntry.name, path.extname(mediaEntry.name));
+      const mediaKey = mediaEntry.hasUnknownPhoneNumber() ? mediaName.split('+00000000000')[1].trim() : mediaName;
 
       switch (mediaEntry.format) {
         case EntryFormats.JPG:
         case EntryFormats.GIF: {
-          const mediaKey = mediaName;
-          const image = this.querySelector(`img[src="${mediaName}"]`);
+          const image = this.querySelector(`img[src$="${mediaKey}"]`);
           if (!image) {
             throw new Error(`Unable to find image element for "${mediaKey}"`);
           }
@@ -143,9 +143,7 @@ export default class HTMLEntry extends Entry {
         case EntryFormats.MP3: {
           switch (this.action) {
             case EntryAction.Voicemail: {
-              const mediaKey = `${mediaEntry.hasUnknownPhoneNumber() ? ' ' : ''}${mediaName}.mp3`;
-
-              const audio = this.querySelector(`audio[src="${mediaKey}"]`);
+              const audio = this.querySelector(`audio[src$="${mediaKey}.mp3"]`);
               if (audio) {
                 audio.replaceWith(HTMLEntry.audioElement(mediaEntry.relativePath));
               } else {
@@ -160,8 +158,7 @@ export default class HTMLEntry extends Entry {
             }
 
             default: {
-              const mediaKey = `${mediaEntry.hasUnknownPhoneNumber() ? ' ' : ''}${mediaName}.mp3`;
-              const audio = this.querySelector(`audio[src="${mediaKey}"]`);
+              const audio = this.querySelector(`audio[src$="${mediaKey}.mp3"]`);
               if (!audio) {
                 throw new Error(`Unable to find audio element for "${mediaKey}"`);
               }
@@ -175,10 +172,9 @@ export default class HTMLEntry extends Entry {
         case EntryFormats.AMR: {
           Logger.warning(`WARNING: ${EntryFormats.AMR} playback in HTML5 isn't currently supported`);
 
-          const mediaKey = mediaName;
-          const audio = this.querySelector(`audio[src="${mediaKey}"]`);
+          const audio = this.querySelector(`audio[src$="${mediaKey}"]`);
           if (!audio) {
-            throw new Error(`Unable to find audio element for "${mediaName}"`);
+            throw new Error(`Unable to find audio element for "${mediaKey}"`);
           }
           audio.replaceWith(HTMLEntry.audioElement(mediaEntry.relativePath));
 
@@ -186,8 +182,7 @@ export default class HTMLEntry extends Entry {
         }
 
         case EntryFormats.MP4: {
-          const mediaKey = mediaName;
-          const video = this.querySelector(`a.video[href="${mediaKey}"]`);
+          const video = this.querySelector(`a.video[href$="${mediaKey}"]`);
           if (!video) {
             throw new Error(`Unable to find video element for "${mediaKey}"`);
           }
@@ -199,10 +194,9 @@ export default class HTMLEntry extends Entry {
         case EntryFormats.THREEGP: {
           Logger.warning(`WARNING: ${EntryFormats.THREEGP} playback in HTML5 isn't currently supported`);
 
-          const media = mediaName;
-          const video = this.querySelector(`a.video[href="${media}"]`);
+          const video = this.querySelector(`a.video[href$="${mediaKey}"]`);
           if (!video) {
-            throw new Error(`Unable to find video element for "${media}"`);
+            throw new Error(`Unable to find video element for "${mediaKey}"`);
           }
           video.replaceWith(HTMLEntry.videoLinkElement(mediaEntry.relativePath));
 
@@ -210,10 +204,9 @@ export default class HTMLEntry extends Entry {
         }
 
         case EntryFormats.VCF: {
-          const media = mediaName;
-          const vcard = this.querySelector(`a.vcard[href="${mediaName}"]`);
+          const vcard = this.querySelector(`a.vcard[href$="${mediaKey}"]`);
           if (!vcard) {
-            throw new Error(`Unable to find vcard element for "${media}"`);
+            throw new Error(`Unable to find vcard element for "${mediaKey}"`);
           }
           vcard.replaceWith(HTMLEntry.vcardElement(mediaEntry.relativePath));
 
