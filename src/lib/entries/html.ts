@@ -101,12 +101,15 @@ export default class HTMLEntry extends Entry {
       body.insertAdjacentHTML('beforebegin', HTMLEntry.participantsElement(this.phoneNumbers).toString());
     }
 
-    // Remove all tags and deleted status containers
+    // Remove all unnecessary elements
     for (const tag of this.querySelectorAll('.tags')) {
       tag.remove();
     }
     for (const deletedStatus of this.querySelectorAll('.deletedStatusContainer')) {
       deletedStatus.remove();
+    }
+    for (const album of this.querySelectorAll('.album')) {
+      album.remove();
     }
   }
 
