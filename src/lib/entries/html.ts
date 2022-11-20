@@ -201,7 +201,7 @@ export default class HTMLEntry extends Entry {
           if (!video) {
             throw new Error(`Unable to find video element for "${media}"`);
           }
-          video.replaceWith(HTMLEntry.videoElement(mediaEntry.relativePath));
+          video.replaceWith(HTMLEntry.videoLinkElement(mediaEntry.relativePath));
 
           return;
         }
@@ -255,6 +255,10 @@ export default class HTMLEntry extends Entry {
         <a rel="enclosure" href="${videoPath}">Video</a>
       </video>`
     );
+  }
+
+  private static videoLinkElement(videoPath: string): HTMLElement {
+    return parse(`<a href="${videoPath}">Video attachtment</a>`);
   }
 
   private static vcardElement(vcardPath: string): HTMLElement {
