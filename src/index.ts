@@ -18,6 +18,12 @@ const main = async () => {
         required: true,
         description: 'Output directory'
       })
+      .option('contacts', {
+        type: 'string',
+        alias: 'c',
+        required: false,
+        description: 'Contacts file (in VCF format)'
+      })
       .option('verbose', {
         type: 'boolean',
         alias: 'v',
@@ -38,9 +44,9 @@ const main = async () => {
         'merge',
         'Merge all records',
         () => {},
-        async ({ inputDir, outputDir, force }) => {
+        async ({ inputDir, outputDir, force, contacts }) => {
           try {
-            const merger = new Merger(inputDir, outputDir, force);
+            const merger = new Merger(inputDir, outputDir, force, contacts);
 
             await merger.merge();
           } catch (e) {

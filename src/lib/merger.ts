@@ -1,9 +1,10 @@
-import Entry, { EntryAction, EntryFormat, EntryType } from './entries/entry';
+import Entry, { EntryAction, EntryFormat, EntryType, PhoneBook } from './entries/entry';
 import Factory from './entries/factory';
 import Logger from './utils/logger';
 import fs from 'fs';
 import glob from 'glob';
 import path from 'path';
+import vCard from 'vcf';
 
 interface Stats {
   total: number;
@@ -16,16 +17,50 @@ export default class Merger {
   private inputDir: string;
   private outputDir: string;
   private force: boolean;
+  private phoneBook: PhoneBook;
   private stats: Stats;
 
-  constructor(inputDir: string, outputDir: string, force: boolean) {
+  constructor(inputDir: string, outputDir: string, force: boolean, contacts?: string) {
     if (!fs.existsSync(inputDir)) {
-      throw new Error(`Input dir "${inputDir}" does not exist`);
+      throw new Error(`Input directory "${inputDir}" does not exist`);
     }
 
     this.inputDir = path.resolve(inputDir);
     this.outputDir = path.resolve(outputDir);
     this.force = force;
+
+    this.phoneBook = {};
+
+    if (contacts) {
+      if (!fs.existsSync(contacts)) {
+        throw new Error(`Contacts VCF file "${contacts}" does not exist`);
+      }
+
+      const vcfCards = vCard.parse(fs.readFileSync(contacts, 'utf-8'));
+      for (const card of vcfCards) {
+        const {
+          data: { tel: tels, fn }
+        } = card;
+
+        if (!fn) {
+          throw new Error(`Unable to find the full name (fn) property for vCard: ${card.toJSON()}`);
+        }
+
+        if (!tels) {
+          throw new Error(`Unable to find the phone number (tel) property for vCard: ${card.toJSON()}`);
+        }
+
+        const fullName = fn.valueOf().toString().trim();
+
+        for (const tel of Array.isArray(tels) ? tels : [tels]) {
+          const phoneNumber = tel.valueOf().trim().replace(/ /g, '').replace(/-/g, '');
+          this.phoneBook[phoneNumber] = fullName;
+        }
+      }
+
+      Entry.setPhoneBook(this.phoneBook);
+    }
+
     this.stats = {
       total: 0,
       types: {

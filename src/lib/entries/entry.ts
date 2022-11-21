@@ -33,6 +33,8 @@ export enum EntryAction {
 }
 export const EntryActions = { ...EntryAction };
 
+export type PhoneBook = Record<string, string>;
+
 export default abstract class Entry {
   public action: EntryAction;
   public type: EntryType;
@@ -43,6 +45,8 @@ export default abstract class Entry {
   public fullPath: string;
   public savedPath?: string;
   protected html?: HTMLElement;
+
+  protected static phoneBook: PhoneBook;
 
   // A running index of the currently processed number of group conversations.
   protected static gcCount = 0;
@@ -74,6 +78,10 @@ export default abstract class Entry {
 
   public hasUnknownPhoneNumber() {
     return this.phoneNumbers.length === 1 && this.phoneNumbers[0] === Entry.UNKNOWN_PHONE_NUMBER;
+  }
+
+  public static setPhoneBook(phoneBook: PhoneBook) {
+    this.phoneBook = phoneBook;
   }
 
   // Merges multiple entries and saves them in the provided output directory. Please note that this method requires all
