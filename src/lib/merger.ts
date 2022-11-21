@@ -1,14 +1,22 @@
-import Entry from './entries/entry';
+import Entry, { EntryAction, EntryFormat, EntryType } from './entries/entry';
 import Factory from './entries/factory';
 import Logger from './utils/logger';
 import fs from 'fs';
 import glob from 'glob';
 import path from 'path';
 
+interface Stats {
+  total: number;
+  types: Record<EntryType, number>;
+  actions: Record<EntryAction, number>;
+  formats: Record<EntryFormat, number>;
+}
+
 export default class Merger {
   private inputDir: string;
   private outputDir: string;
   private force: boolean;
+  private stats: Stats;
 
   constructor(inputDir: string, outputDir: string, force: boolean) {
     if (!fs.existsSync(inputDir)) {
@@ -18,6 +26,33 @@ export default class Merger {
     this.inputDir = path.resolve(inputDir);
     this.outputDir = path.resolve(outputDir);
     this.force = force;
+    this.stats = {
+      total: 0,
+      types: {
+        [EntryType.HTML]: 0,
+        [EntryType.Media]: 0
+      },
+      actions: {
+        [EntryAction.Received]: 0,
+        [EntryAction.Placed]: 0,
+        [EntryAction.Missed]: 0,
+        [EntryAction.Text]: 0,
+        [EntryAction.Voicemail]: 0,
+        [EntryAction.Recorded]: 0,
+        [EntryAction.GroupConversation]: 0,
+        [EntryAction.Unknown]: 0
+      },
+      formats: {
+        [EntryFormat.JPG]: 0,
+        [EntryFormat.GIF]: 0,
+        [EntryFormat.MP3]: 0,
+        [EntryFormat.MP4]: 0,
+        [EntryFormat.THREEGP]: 0,
+        [EntryFormat.AMR]: 0,
+        [EntryFormat.VCF]: 0,
+        [EntryFormat.HTML]: 0
+      }
+    };
   }
 
   // Merges Google Voice export history and groups it by participants' phone numbers, as well as fixes various Google
@@ -40,6 +75,10 @@ export default class Merger {
     for (const f of files) {
       const entry = Factory.fromFile(f);
 
+      this.stats.total++;
+      this.stats.actions[entry.action]++;
+      this.stats.formats[entry.format]++;
+
       const key = entry.phoneNumbers.join(',');
       if (!pendingEntries[key]) {
         pendingEntries[key] = [];
@@ -54,5 +93,34 @@ export default class Merger {
 
       Entry.merge(entries, this.outputDir);
     }
+
+    this.printSummary();
+  }
+
+  // Prints the summary
+  private printSummary() {
+    Logger.notice('Summary:');
+    Logger.notice('¯¯¯¯¯¯¯¯');
+
+    Logger.notice(`Total entries: ${this.stats.total}`);
+    Logger.notice();
+
+    Logger.notice('Types:');
+    for (const [type, count] of Object.entries(this.stats.types)) {
+      Logger.notice(`    ${type}: ${count}`);
+    }
+    Logger.notice();
+
+    Logger.notice('Actions:');
+    for (const [action, count] of Object.entries(this.stats.actions)) {
+      Logger.notice(`    ${action}: ${count}`);
+    }
+    Logger.notice();
+
+    Logger.notice('Formats:');
+    for (const [format, count] of Object.entries(this.stats.formats)) {
+      Logger.notice(`    ${format}: ${count}`);
+    }
+    Logger.notice();
   }
 }

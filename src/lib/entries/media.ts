@@ -1,5 +1,5 @@
 import Logger from '../utils/logger';
-import Entry, { EntryAction, EntryActions, EntryType, MediaFormat } from './entry';
+import Entry, { EntryAction, EntryActions, EntryFormat, EntryType } from './entry';
 import fs from 'fs';
 import { Moment } from 'moment';
 import path from 'path';
@@ -11,7 +11,7 @@ export default class MediaEntry extends Entry {
 
   constructor(
     action: EntryAction,
-    format: MediaFormat,
+    format: EntryFormat,
     name: string,
     phoneNumbers: string[],
     timestamp: Moment,
