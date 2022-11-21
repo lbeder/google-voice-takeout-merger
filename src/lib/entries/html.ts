@@ -176,7 +176,7 @@ export default class HTMLEntry extends Entry {
           if (!audio) {
             throw new Error(`Unable to find audio element for "${mediaKey}"`);
           }
-          audio.replaceWith(HTMLEntry.audioLinkElement(mediaEntry.relativePath));
+          audio.replaceWith(HTMLEntry.audioLinkElement(mediaEntry.relativePath, 'Audio attachment'));
 
           return;
         }
@@ -198,7 +198,7 @@ export default class HTMLEntry extends Entry {
           if (!video) {
             throw new Error(`Unable to find video element for "${mediaKey}"`);
           }
-          video.replaceWith(HTMLEntry.videoLinkElement(mediaEntry.relativePath));
+          video.replaceWith(HTMLEntry.videoLinkElement(mediaEntry.relativePath, 'Video attachment'));
 
           return;
         }
@@ -241,7 +241,10 @@ export default class HTMLEntry extends Entry {
     return parse(
       `<audio controls="controls" src="${audioPath}">
         <a rel="enclosure" href="${audioPath}">Audio</a>
-      </audio>`
+      </audio>
+      <div>
+        ${HTMLEntry.audioLinkElement(audioPath, 'Download')}
+      </div>`
     );
   }
 
@@ -249,16 +252,19 @@ export default class HTMLEntry extends Entry {
     return parse(
       `<video controls="controls" src="${videoPath}" width="50%">
         <a rel="enclosure" href="${videoPath}">Video</a>
-      </video>`
+      </video>
+      <div>
+        ${HTMLEntry.videoLinkElement(videoPath, 'Download')}
+      </div>`
     );
   }
 
-  private static videoLinkElement(videoPath: string): HTMLElement {
-    return parse(`<a href="${videoPath}">Video attachment</a>`);
+  private static videoLinkElement(videoPath: string, label: string): HTMLElement {
+    return parse(`<a href="${videoPath}">${label}</a>`);
   }
 
-  private static audioLinkElement(videoPath: string): HTMLElement {
-    return parse(`<a href="${videoPath}">Audio attachment</a>`);
+  private static audioLinkElement(videoPath: string, label: string): HTMLElement {
+    return parse(`<a href="${videoPath}">${label}</a>`);
   }
 
   private static vcardElement(vcardPath: string): HTMLElement {
