@@ -7,6 +7,8 @@ In addition to the above, this tool:
 * Reorganizes all media and metadata
 * Fixes all media and metadata issues (broken links, style issues, converts video and audio attachments into proper HTML5 controls, etc.)
 * Add a list of participants to every record
+* Display contact names (if an optional contacts VCF is provided)
+* Properly merges unknown phone number records into a single record
 
 ## Installation
 
@@ -28,11 +30,10 @@ Options:
       --version     Show version number                                [boolean]
   -i, --input-dir   Input directory                          [string] [required]
   -o, --output-dir  Output directory                         [string] [required]
+  -c, --contacts    Contacts file (in VCF format)                       [string]
   -v, --verbose     Verbose mode                      [boolean] [default: false]
   -f, --force       Overwrite output directory        [boolean] [default: false]
       --help        Show help                                          [boolean]
-
-
 ```
 
 For example, you can merge the archive located in `~/in/Calls` to `~/out` like this:

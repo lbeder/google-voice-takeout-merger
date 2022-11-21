@@ -8,7 +8,7 @@ import path from 'path';
 
 export default class HTMLEntry extends Entry {
   constructor(action: EntryAction, name: string, phoneNumbers: string[], timestamp: Moment, fullPath: string) {
-    if (!name.startsWith('Group Conversation') && phoneNumbers.length === 0) {
+    if (action === EntryActions.GroupConversation && phoneNumbers.length === 0) {
       throw new Error('Unexpected empty phones numbers');
     }
 
@@ -40,7 +40,7 @@ export default class HTMLEntry extends Entry {
       throw new Error('Unable to parse phone numbers from the senders in the entry');
     }
 
-    return senderPhoneNumbers.map((s) => s?.split('tel:')[1]).sort() as string[];
+    return senderPhoneNumbers.map((s) => s?.split('tel:')[1].replace(/\+\+/g, '+')).sort() as string[];
   }
 
   // Saves the entry in the specified output directory
@@ -97,8 +97,37 @@ export default class HTMLEntry extends Entry {
     }
 
     // Add a list of all participants
-    if (this.action !== EntryActions.GroupConversation) {
-      body.insertAdjacentHTML('beforebegin', HTMLEntry.participantsElement(this.phoneNumbers).toString());
+    if (this.action === EntryActions.GroupConversation) {
+      const participants = this.querySelector('.participants');
+      if (!participants) {
+        throw new Error(`Unable to get the participants of entry "${this.name}"`);
+      }
+
+      participants.replaceWith(HTMLEntry.participantsElement(this.phoneNumbers, 'Group conversation with:').toString());
+
+      // Update all participant names in the conversation as well
+      for (const participant of this.querySelectorAll('.message .sender.vcard')) {
+        if (!participant) {
+          continue;
+        }
+
+        const tel = participant.querySelector('a.tel');
+        if (!tel) {
+          throw new Error(`Unable to get the phone number of participant of entry "${this.name}"`);
+        }
+        const href = tel.getAttribute('href');
+        if (!href) {
+          throw new Error(`Unable to get the href attribute of a participant of entry "${this.name}"`);
+        }
+
+        const phoneNumber = href.split('tel:')[1].replace(/\+\+/g, '+');
+        participant.replaceWith(HTMLEntry.participantElement(phoneNumber));
+      }
+    } else {
+      body.insertAdjacentHTML(
+        'beforebegin',
+        HTMLEntry.participantsElement(this.phoneNumbers, 'Conversation with:').toString()
+      );
     }
 
     // Remove all unnecessary elements
@@ -271,21 +300,21 @@ export default class HTMLEntry extends Entry {
     return parse(`<a class="vcard" href="${vcardPath}">Contact card attachment</a>`);
   }
 
-  private static participantsElement(phoneNumbers: string[]): HTMLElement {
-    const participants = phoneNumbers
-      .map((p) =>
-        parse(`<cite class="sender vcard">
-              <a class="tel" href="tel:${p}">
-                <span class="fn">${p}</span>
-              </a>
-            </cite>`).toString()
-      )
-      .join(', ');
+  private static participantElement(phoneNumber: string): HTMLElement {
+    return parse(
+      `<cite class="sender vcard">
+        <a class="tel" href="tel:${phoneNumber}">
+          <span class="fn">${Entry.phoneBook[phoneNumber] ? Entry.phoneBook[phoneNumber] : phoneNumber}</span>
+        </a>
+      </cite>`
+    );
+  }
 
+  private static participantsElement(phoneNumbers: string[], description: string): HTMLElement {
     return parse(
       `<div class="participants hChatLog">
-        Conversation with:
-        ${participants.toString()}
+        ${description}
+        ${phoneNumbers.map((phoneNumber) => HTMLEntry.participantElement(phoneNumber).toString()).join(', ')}
       </div>`
     );
   }
