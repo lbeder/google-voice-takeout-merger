@@ -176,7 +176,7 @@ export default class HTMLEntry extends Entry {
           if (!audio) {
             throw new Error(`Unable to find audio element for "${mediaKey}"`);
           }
-          audio.replaceWith(HTMLEntry.audioElement(mediaEntry.relativePath));
+          audio.replaceWith(HTMLEntry.audioLinkElement(mediaEntry.relativePath));
 
           return;
         }
@@ -255,6 +255,10 @@ export default class HTMLEntry extends Entry {
 
   private static videoLinkElement(videoPath: string): HTMLElement {
     return parse(`<a href="${videoPath}">Video attachment</a>`);
+  }
+
+  private static audioLinkElement(videoPath: string): HTMLElement {
+    return parse(`<a href="${videoPath}">Audio attachment</a>`);
   }
 
   private static vcardElement(vcardPath: string): HTMLElement {
