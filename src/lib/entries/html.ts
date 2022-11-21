@@ -254,7 +254,7 @@ export default class HTMLEntry extends Entry {
   }
 
   private static videoLinkElement(videoPath: string): HTMLElement {
-    return parse(`<a href="${videoPath}">Video attachtment</a>`);
+    return parse(`<a href="${videoPath}">Video attachment</a>`);
   }
 
   private static vcardElement(vcardPath: string): HTMLElement {
