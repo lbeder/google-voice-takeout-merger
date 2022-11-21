@@ -17,6 +17,10 @@ export default class Logger {
     console.log(chalk.cyanBright(...args));
   }
 
+  public static notice(...args: unknown[]) {
+    console.log(chalk.greenBright(...args));
+  }
+
   public static debug(...args: unknown[]) {
     if (!this.verbose) {
       return;

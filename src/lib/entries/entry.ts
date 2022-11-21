@@ -3,22 +3,18 @@ import { sortBy } from 'lodash';
 import { Moment } from 'moment';
 import { HTMLElement } from 'node-html-parser';
 
-export enum MediaFormat {
+export enum EntryFormat {
   JPG = 'JPG',
   GIF = 'GIF',
   MP3 = 'MP3',
   MP4 = 'MP4',
   THREEGP = '3GP',
   AMR = 'AMR',
-  VCF = 'VCF'
-}
-
-export enum DocumentFormat {
+  VCF = 'VCF',
   HTML = 'HTML'
 }
 
-export type EntryFormat = MediaFormat | DocumentFormat;
-export const EntryFormats = { ...MediaFormat, ...DocumentFormat };
+export const EntryFormats = { ...EntryFormat };
 
 export enum EntryType {
   HTML = 'HTML',
