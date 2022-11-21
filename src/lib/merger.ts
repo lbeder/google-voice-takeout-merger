@@ -27,6 +27,10 @@ export default class Merger {
 
     if (this.force) {
       fs.rmSync(this.outputDir, { recursive: true, force: true });
+    } else if (fs.existsSync(this.outputDir)) {
+      throw new Error(
+        `Output directory ${this.outputDir} already exists. Please remove it or run the tool with the -f/--force flag`
+      );
     }
 
     const files = glob.sync(`${this.inputDir}/*`.replace(/\\/g, '/'), { ignore: '**/desktop.ini' });
