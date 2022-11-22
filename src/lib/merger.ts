@@ -1,6 +1,6 @@
 import Entry, { EntryAction, EntryFormat, EntryType } from './entries/entry';
 import Factory from './entries/factory';
-import PhoneBook from './phone-book';
+import PhoneBook, { MatchStrategy, MatchStrategyOptions } from './phone-book';
 import Logger from './utils/logger';
 import fs from 'fs';
 import glob from 'glob';
@@ -25,7 +25,14 @@ export default class Merger {
   private static UNKNOWN_LOG_NAME = 'unknown_numbers.csv';
   private static MATCHED_LOG_NAME = 'matched_numbers.csv';
 
-  constructor(inputDir: string, outputDir: string, force: boolean, contacts?: string) {
+  constructor(
+    inputDir: string,
+    outputDir: string,
+    force: boolean,
+    contacts?: string,
+    strategy?: MatchStrategy,
+    strategyOptions: MatchStrategyOptions = {}
+  ) {
     if (!fs.existsSync(inputDir)) {
       throw new Error(`Input directory "${inputDir}" does not exist`);
     }
@@ -33,7 +40,7 @@ export default class Merger {
     this.inputDir = path.resolve(inputDir);
     this.outputDir = path.resolve(outputDir);
     this.force = force;
-    this.phoneBook = new PhoneBook(contacts);
+    this.phoneBook = new PhoneBook(contacts, strategy, strategyOptions);
 
     Entry.setPhoneBook(this.phoneBook);
 
