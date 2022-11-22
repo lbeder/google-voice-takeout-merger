@@ -1,10 +1,10 @@
-import Entry, { EntryAction, EntryFormat, EntryType, PhoneBook } from './entries/entry';
+import Entry, { EntryAction, EntryFormat, EntryType } from './entries/entry';
 import Factory from './entries/factory';
+import PhoneBook from './phone-book';
 import Logger from './utils/logger';
 import fs from 'fs';
 import glob from 'glob';
 import path from 'path';
-import vCard from 'vcf';
 
 interface Stats {
   total: number;
@@ -20,6 +20,11 @@ export default class Merger {
   private phoneBook: PhoneBook;
   private stats: Stats;
 
+  private static LOGS_DIR = 'logs';
+  private static PHONEBOOK_LOGS_DIR = path.join(this.LOGS_DIR, 'phonebook');
+  private static UNKNOWN_LOG_NAME = 'unknown_numbers.csv';
+  private static MATCHED_LOG_NAME = 'matched_numbers.csv';
+
   constructor(inputDir: string, outputDir: string, force: boolean, contacts?: string) {
     if (!fs.existsSync(inputDir)) {
       throw new Error(`Input directory "${inputDir}" does not exist`);
@@ -28,38 +33,9 @@ export default class Merger {
     this.inputDir = path.resolve(inputDir);
     this.outputDir = path.resolve(outputDir);
     this.force = force;
+    this.phoneBook = new PhoneBook(contacts);
 
-    this.phoneBook = {};
-
-    if (contacts) {
-      if (!fs.existsSync(contacts)) {
-        throw new Error(`Contacts VCF file "${contacts}" does not exist`);
-      }
-
-      const vcfCards = vCard.parse(fs.readFileSync(contacts, 'utf-8'));
-      for (const card of vcfCards) {
-        const {
-          data: { tel: tels, fn }
-        } = card;
-
-        if (!fn) {
-          throw new Error(`Unable to find the full name (fn) property for vCard: ${card.toJSON()}`);
-        }
-
-        if (!tels) {
-          throw new Error(`Unable to find the phone number (tel) property for vCard: ${card.toJSON()}`);
-        }
-
-        const fullName = fn.valueOf().toString().trim();
-
-        for (const tel of Array.isArray(tels) ? tels : [tels]) {
-          const phoneNumber = tel.valueOf().trim().replace(/ /g, '').replace(/-/g, '');
-          this.phoneBook[phoneNumber] = fullName;
-        }
-      }
-
-      Entry.setPhoneBook(this.phoneBook);
-    }
+    Entry.setPhoneBook(this.phoneBook);
 
     this.stats = {
       total: 0,
@@ -129,6 +105,8 @@ export default class Merger {
       Entry.merge(entries, this.outputDir);
     }
 
+    this.savePhoneBookLogs();
+
     this.printSummary();
   }
 
@@ -157,5 +135,31 @@ export default class Merger {
       Logger.notice(`    ${format}: ${count}`);
     }
     Logger.notice();
+
+    Logger.notice(
+      `See the phonebook logs directory ${path.join(
+        this.outputDir,
+        Merger.PHONEBOOK_LOGS_DIR
+      )} for lists of known/unknown numbers`
+    );
+  }
+
+  // Saves phone book logs
+  public savePhoneBookLogs() {
+    const statsDir = path.join(this.outputDir, Merger.PHONEBOOK_LOGS_DIR);
+
+    fs.mkdirSync(statsDir, { recursive: true });
+
+    const { stats } = this.phoneBook;
+
+    const unknownLogPath = path.join(statsDir, Merger.UNKNOWN_LOG_NAME);
+    for (const unknown of stats.unknown) {
+      fs.appendFileSync(unknownLogPath, `${unknown}\n`);
+    }
+
+    const matchedLogPath = path.join(statsDir, Merger.MATCHED_LOG_NAME);
+    for (const matched of stats.matched) {
+      fs.appendFileSync(matchedLogPath, `${[matched, this.phoneBook.get(matched)].join(',')}\n`);
+    }
   }
 }

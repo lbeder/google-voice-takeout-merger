@@ -1,3 +1,4 @@
+import PhoneBook from '../phone-book';
 import Logger from '../utils/logger';
 import { sortBy } from 'lodash';
 import { Moment } from 'moment';
@@ -32,8 +33,6 @@ export enum EntryAction {
   Unknown = 'Unknown'
 }
 export const EntryActions = { ...EntryAction };
-
-export type PhoneBook = Record<string, string>;
 
 export default abstract class Entry {
   public action: EntryAction;
