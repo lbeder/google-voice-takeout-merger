@@ -1,4 +1,5 @@
 import Merger from './lib/merger';
+import { MatchStrategy } from './lib/phone-book';
 import Logger from './lib/utils/logger';
 import yargs from 'yargs';
 
@@ -7,22 +8,37 @@ const main = async () => {
     await yargs(process.argv.slice(2))
       .parserConfiguration({ 'parse-numbers': false })
       .option('input-dir', {
+        description: 'Input directory',
         type: 'string',
         alias: 'i',
-        required: true,
-        description: 'Input directory'
+        required: true
       })
       .option('output-dir', {
+        description: 'Output directory',
         type: 'string',
         alias: 'o',
-        required: true,
-        description: 'Output directory'
+        required: true
       })
       .option('contacts', {
+        description: 'Contacts file (in VCF format)',
         type: 'string',
         alias: 'c',
+        required: false
+      })
+      .option('matching-strategy', {
+        description: 'Contacts phone number matching strategy',
+        type: 'string',
+        alias: 's',
         required: false,
-        description: 'Contacts file (in VCF format)'
+        default: MatchStrategy.Exact,
+        choices: [MatchStrategy.Exact, MatchStrategy.Suffix]
+      })
+      .option('suffix-length', {
+        description: 'Shortest suffix to use for the suffix-based matching strategy',
+        type: 'number',
+        alias: 'sl',
+        required: false,
+        default: 8
       })
       .option('verbose', {
         type: 'boolean',
@@ -44,9 +60,14 @@ const main = async () => {
         'merge',
         'Merge all records',
         () => {},
-        async ({ inputDir, outputDir, force, contacts }) => {
+        async ({ inputDir, outputDir, force, contacts, matchingStrategy, suffixLength }) => {
           try {
-            const merger = new Merger(inputDir, outputDir, force, contacts);
+            let strategyOptions = {};
+            if (matchingStrategy === MatchStrategy.Suffix) {
+              strategyOptions = { suffixLength };
+            }
+
+            const merger = new Merger(inputDir, outputDir, force, contacts, matchingStrategy, strategyOptions);
 
             await merger.merge();
           } catch (e) {
