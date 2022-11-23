@@ -304,7 +304,7 @@ export default class HTMLEntry extends Entry {
     return parse(
       `<cite class="sender vcard">
         <a class="tel" href="tel:${phoneNumber}">
-          <span class="fn">${Entry.phoneBook.getAndRecordMatch(phoneNumber) ?? phoneNumber}</span>
+          <span class="fn">${Entry.phoneBook.getAndRecordMatch(phoneNumber).name ?? phoneNumber}</span>
         </a>
       </cite>`
     );

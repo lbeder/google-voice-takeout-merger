@@ -16,12 +16,18 @@ export interface SuffixStrategyOptions {
 export type MatchStrategyOptions = ExactMatchStrategy | SuffixStrategyOptions;
 
 export interface Stats {
-  matched: Set<string>;
+  matched: Record<string, Set<string>>;
   unknown: Set<string>;
+}
+
+interface Suffix {
+  name: string;
+  phoneBookNumber: string;
 }
 
 export default class PhoneBook {
   private phoneBook: Record<string, string>;
+  private suffixPhoneBook: Record<string, Suffix>;
   private strategy: MatchStrategy;
   private strategyOptions: MatchStrategyOptions;
   public stats: Stats;
@@ -32,12 +38,15 @@ export default class PhoneBook {
     strategyOptions: MatchStrategyOptions = {}
   ) {
     this.phoneBook = {};
-    (this.strategy = strategy),
-      (this.strategyOptions = strategyOptions),
-      (this.stats = {
-        matched: new Set(),
-        unknown: new Set()
-      });
+    this.suffixPhoneBook = {};
+
+    this.strategy = strategy;
+    this.strategyOptions = strategyOptions;
+
+    this.stats = {
+      matched: {},
+      unknown: new Set()
+    };
 
     if (!contacts) {
       return;
@@ -104,11 +113,13 @@ export default class PhoneBook {
             // Add suffix entries to the phone book so that it'd be possible to match any phone number based on its
             // suffix
             const phoneNumberLength = phoneNumber.length;
-            for (let i = this.strategyOptions.suffixLength; i < phoneNumberLength - 1; i++) {
+            for (let i = this.strategyOptions.suffixLength; i <= phoneNumberLength; i++) {
               const suffix = phoneNumber.slice(phoneNumberLength - i, phoneNumberLength);
               if (!suffix) {
                 break;
               }
+
+              this.suffixPhoneBook[suffix] = { name: fullName, phoneBookNumber: phoneNumber };
             }
 
             break;
@@ -120,37 +131,63 @@ export default class PhoneBook {
 
   public get(phoneNumber: string) {
     switch (this.strategy) {
-      case MatchStrategy.Exact:
+      case MatchStrategy.Exact: {
         // Find only exact matches
-        return this.phoneBook[phoneNumber];
+        const name = this.phoneBook[phoneNumber];
+        if (name) {
+          return { name, phoneBookNumber: phoneNumber };
+        }
+
+        return {};
+      }
 
       case MatchStrategy.Suffix: {
-        // Try to match the whole phone number and no match is found - attempt to match its suffixes
+        // Try an exact match first
+        const name = this.phoneBook[phoneNumber];
+        if (name) {
+          return { name, phoneBookNumber: phoneNumber };
+        }
+
+        // Try to match suffixes
         const phoneNumberLength = phoneNumber.length;
-        for (let i = 0; i < phoneNumberLength - this.strategyOptions.suffixLength + 1; i++) {
+        for (let i = 1; i < phoneNumberLength - this.strategyOptions.suffixLength + 1; i++) {
           const suffix = phoneNumber.slice(i, phoneNumberLength);
           if (!suffix) {
             break;
           }
 
-          const match = this.phoneBook[suffix];
-          if (match && i !== 0) {
+          if (!this.suffixPhoneBook[suffix]) {
+            continue;
+          }
+
+          const { name, phoneBookNumber } = this.suffixPhoneBook[suffix];
+          if (name) {
             Logger.warning(`WARNING: Found suffix-based match ${suffix} for phone number ${phoneNumber}`);
 
-            return match;
+            return { name, phoneBookNumber };
           }
         }
-      }
-    }
 
-    return this.phoneBook[phoneNumber];
+        return {};
+      }
+
+      default:
+        throw new Error(`Unknown matching strategy: ${this.strategy}`);
+    }
   }
 
   public getAndRecordMatch(phoneNumber: string) {
-    const name = this.get(phoneNumber);
+    const { name, phoneBookNumber } = this.get(phoneNumber);
 
-    (name ? this.stats.matched : this.stats.unknown).add(phoneNumber);
+    if (name) {
+      if (!this.stats.matched[phoneNumber]) {
+        this.stats.matched[phoneBookNumber] = new Set();
+      }
+      this.stats.matched[phoneBookNumber].add(phoneNumber);
+    } else {
+      this.stats.unknown.add(phoneNumber);
+    }
 
-    return name;
+    return { name, phoneBookNumber };
   }
 }
