@@ -145,7 +145,7 @@ export default class Merger {
     Logger.notice();
 
     Logger.notice('Phone number matching:');
-    Logger.notice(`    Matched numbers: ${this.phoneBook.stats.matched.size}`);
+    Logger.notice(`    Matched numbers: ${Object.keys(this.phoneBook.stats.matched).length}`);
     Logger.notice(`    Unknown numbers: ${this.phoneBook.stats.unknown.size}`);
     Logger.notice();
 
@@ -171,8 +171,14 @@ export default class Merger {
     }
 
     const matchedLogPath = path.join(statsDir, Merger.MATCHED_LOG_NAME);
-    for (const matched of stats.matched) {
-      fs.appendFileSync(matchedLogPath, `${[matched, this.phoneBook.get(matched)].join(',')}\n`);
+
+    for (const [phoneBookNumber, originalPhoneNumbers] of Object.entries(stats.matched)) {
+      for (const originalPhoneNumber of originalPhoneNumbers) {
+        fs.appendFileSync(
+          matchedLogPath,
+          `${[originalPhoneNumber, phoneBookNumber, this.phoneBook.get(phoneBookNumber).name].join(',')}\n`
+        );
+      }
     }
   }
 }
