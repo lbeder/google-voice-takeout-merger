@@ -47,6 +47,28 @@ export default class PhoneBook {
       throw new Error(`Contacts VCF file "${contacts}" does not exist`);
     }
 
+    let strategyDescription: string;
+    switch (strategy) {
+      case MatchStrategy.Exact:
+        strategyDescription = MatchStrategy.Exact;
+
+        break;
+
+      case MatchStrategy.Suffix: {
+        if (!this.strategyOptions.suffixLength) {
+          throw new Error(
+            `Invalid suffix length of ${strategyOptions.suffixLength} for suffix-based matching strategy`
+          );
+        }
+
+        strategyDescription = `${MatchStrategy.Suffix} (with suffix ${this.strategyOptions.suffixLength})`;
+
+        break;
+      }
+    }
+
+    Logger.info(`Using "${strategyDescription}" phone number matching strategy`);
+
     const vcfCards = vCard.parse(fs.readFileSync(contacts, 'utf-8'));
     for (const card of vcfCards) {
       const {
@@ -66,7 +88,7 @@ export default class PhoneBook {
       for (const tel of Array.isArray(tels) ? tels : [tels]) {
         const phoneNumber = tel.valueOf().trim().replace(/ /g, '').replace(/-/g, '');
 
-        switch (strategy) {
+        switch (this.strategy) {
           case MatchStrategy.Exact:
             this.phoneBook[phoneNumber] = fullName;
 
@@ -75,16 +97,10 @@ export default class PhoneBook {
           case MatchStrategy.Suffix: {
             this.phoneBook[phoneNumber] = fullName;
 
-            if (!strategyOptions.suffixLength) {
-              throw new Error(
-                `Invalid suffix length of ${strategyOptions.suffixLength} for suffix-based matching strategy`
-              );
-            }
-
             // Add suffix entries to the phone book so that it'd be possible to match any phone number based on its
             // suffix
             const phoneNumberLength = phoneNumber.length;
-            for (let i = strategyOptions.suffixLength; i < phoneNumberLength - 1; i++) {
+            for (let i = this.strategyOptions.suffixLength; i < phoneNumberLength - 1; i++) {
               const suffix = phoneNumber.slice(phoneNumberLength - i, phoneNumberLength);
               if (!suffix) {
                 break;
