@@ -76,11 +76,15 @@ export default class PhoneBook {
       } = card;
 
       if (!fn) {
-        throw new Error(`Unable to find the full name (fn) property for vCard: ${card.toJSON()}`);
+        Logger.warning(`Unable to find the full name (fn) property for vCard: ${card.toString()}`);
+
+        continue;
       }
 
       if (!tels) {
-        throw new Error(`Unable to find the phone number (tel) property for vCard: ${card.toJSON()}`);
+        Logger.warning(`Unable to find the phone number (tel) property for vCard: ${card.toJSON()}`);
+
+        continue;
       }
 
       const fullName = fn.valueOf().toString().trim();
