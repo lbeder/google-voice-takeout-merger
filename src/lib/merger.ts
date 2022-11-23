@@ -94,6 +94,7 @@ export default class Merger {
       const entry = Factory.fromFile(f);
 
       this.stats.total++;
+      this.stats.types[entry.type]++;
       this.stats.actions[entry.action]++;
       this.stats.formats[entry.format]++;
 
