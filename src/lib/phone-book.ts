@@ -96,7 +96,11 @@ export default class PhoneBook {
         continue;
       }
 
-      const fullName = fn.valueOf().toString().trim();
+      const fullName = fn
+        .valueOf()
+        .toString()
+        .trim()
+        .replace(/(\r\n|\n|\r)/gm, '');
 
       for (const tel of Array.isArray(tels) ? tels : [tels]) {
         const phoneNumber = tel.valueOf().trim().replace(/ /g, '').replace(/-/g, '');
@@ -150,7 +154,7 @@ export default class PhoneBook {
 
         // Try to match suffixes
         const phoneNumberLength = phoneNumber.length;
-        for (let i = 1; i < phoneNumberLength - this.strategyOptions.suffixLength + 1; i++) {
+        for (let i = 0; i < phoneNumberLength - this.strategyOptions.suffixLength + 1; i++) {
           const suffix = phoneNumber.slice(i, phoneNumberLength);
           if (!suffix) {
             break;
