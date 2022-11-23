@@ -31,10 +31,8 @@ Options:
   -i, --input-dir            Input directory                 [string] [required]
   -o, --output-dir           Output directory                [string] [required]
   -c, --contacts             Contacts file (in VCF format)              [string]
-  -s, --matching-strategy    Contacts phone number matching strategy
-                        [string] [choices: "exact", "suffix"] [default: "exact"]
       --suffix-length, --sl  Shortest suffix to use for the suffix-based
-                             matching strategy             [number] [default: 8]
+                             matching strategy                          [number]
   -v, --verbose              Verbose mode             [boolean] [default: false]
   -f, --force                Overwrite output directory
                                                       [boolean] [default: false]

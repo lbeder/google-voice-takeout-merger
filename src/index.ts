@@ -25,20 +25,11 @@ const main = async () => {
         alias: 'c',
         required: false
       })
-      .option('matching-strategy', {
-        description: 'Contacts phone number matching strategy',
-        type: 'string',
-        alias: 's',
-        required: false,
-        default: MatchStrategy.Exact,
-        choices: [MatchStrategy.Exact, MatchStrategy.Suffix]
-      })
       .option('suffix-length', {
         description: 'Shortest suffix to use for the suffix-based matching strategy',
         type: 'number',
         alias: 'sl',
-        required: false,
-        default: 8
+        required: false
       })
       .option('verbose', {
         type: 'boolean',
@@ -60,11 +51,15 @@ const main = async () => {
         'merge',
         'Merge all records',
         () => {},
-        async ({ inputDir, outputDir, force, contacts, matchingStrategy, suffixLength }) => {
+        async ({ inputDir, outputDir, force, contacts, suffixLength }) => {
           try {
             let strategyOptions = {};
-            if (matchingStrategy === MatchStrategy.Suffix) {
+            let matchingStrategy: MatchStrategy;
+            if (suffixLength && suffixLength > 0) {
+              matchingStrategy = MatchStrategy.Suffix;
               strategyOptions = { suffixLength };
+            } else {
+              matchingStrategy = MatchStrategy.Exact;
             }
 
             const merger = new Merger(inputDir, outputDir, force, contacts, matchingStrategy, strategyOptions);
