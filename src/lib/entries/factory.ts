@@ -48,7 +48,9 @@ export default class Factory {
         action = components[1];
         timestampStr = components[2];
       } else if (components.length === 2) {
-        action = EntryAction.Unknown;
+        Logger.warning(`Unknown action for entry "${name}". Defaulting to "${EntryAction.Placed}"`);
+
+        action = EntryAction.Placed;
         phoneNumbers = [components[0]];
         timestampStr = components[1];
       } else {
