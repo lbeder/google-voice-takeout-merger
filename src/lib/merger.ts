@@ -144,6 +144,11 @@ export default class Merger {
     }
     Logger.notice();
 
+    Logger.notice('Phone number matching:');
+    Logger.notice(`    Matched numbers: ${this.phoneBook.stats.matched.size}`);
+    Logger.notice(`    Unknown numbers: ${this.phoneBook.stats.unknown.size}`);
+    Logger.notice();
+
     Logger.notice(
       `See the phonebook logs directory ${path.join(
         this.outputDir,
