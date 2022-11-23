@@ -247,15 +247,23 @@ export default class HTMLEntry extends Entry {
       }
     }
 
+    // Add a nice horizontal separator
     const body = this.querySelector('body');
     if (!body) {
       throw new Error(`Unable to get the body of entry "${this.name}"`);
     }
 
-    // Add a nice horizontal separator
     body.insertAdjacentHTML('beforeend', '<hr/>');
 
-    const otherBody = (entry as HTMLEntry).querySelector('body');
+    // Remove unnecessary participants header in merged entries
+    const otherEntry = entry as HTMLEntry;
+    const participants = otherEntry.querySelector('.participants');
+    if (participants) {
+      participants.remove();
+    }
+
+    // Append the whole entry after the current entry
+    const otherBody = otherEntry.querySelector('body');
     if (!otherBody) {
       throw new Error(`Unable to get the body of entry "${entry.name}"`);
     }

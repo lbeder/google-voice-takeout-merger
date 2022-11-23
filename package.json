@@ -1,6 +1,6 @@
 {
   "name": "google-voice-merger",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Google Voice Merger",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
