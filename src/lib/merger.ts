@@ -24,6 +24,7 @@ export default class Merger {
   private static PHONEBOOK_LOGS_DIR = path.join(this.LOGS_DIR, 'phonebook');
   private static UNKNOWN_LOG_NAME = 'unknown_numbers.csv';
   private static MATCHED_LOG_NAME = 'matched_numbers.csv';
+  private static MATCHED_LOG_HEADERS = ['phone number (html)', 'phone number (contacts)', 'name'];
 
   constructor(
     inputDir: string,
@@ -171,6 +172,8 @@ export default class Merger {
     }
 
     const matchedLogPath = path.join(statsDir, Merger.MATCHED_LOG_NAME);
+
+    fs.appendFileSync(matchedLogPath, `${Merger.MATCHED_LOG_HEADERS.join(',')}\n`);
 
     for (const [phoneBookNumber, originalPhoneNumbers] of Object.entries(stats.matched)) {
       for (const originalPhoneNumber of originalPhoneNumbers) {
