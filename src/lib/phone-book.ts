@@ -57,7 +57,7 @@ export default class PhoneBook {
 
   private static UNKNOWN_LOG_NAME = 'unknown_numbers.csv';
   private static MATCHED_LOG_NAME = 'matched_numbers.csv';
-  private static MATCHED_LOG_HEADERS = ['phone number (html)', 'phone number (vcf)', 'name', 'match length'];
+  private static MATCHED_LOG_HEADERS = ['phone number (html)', 'phone number (vcf)', 'match length', 'name'];
 
   constructor(
     contacts?: string,
@@ -253,7 +253,7 @@ export default class PhoneBook {
       for (const { phoneNumber: originalPhoneNumber, matchLength } of originalPhoneNumbers) {
         fs.appendFileSync(
           matchedLogPath,
-          `${[originalPhoneNumber, phoneBookNumber, this.get(phoneBookNumber).name, matchLength].join(',')}\n`
+          `${[originalPhoneNumber, phoneBookNumber, matchLength, this.get(phoneBookNumber).name].join(',')}\n`
         );
       }
     }
