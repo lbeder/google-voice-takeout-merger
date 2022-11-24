@@ -150,7 +150,7 @@ export default class Merger {
     const totalMatchedVCF = Object.keys(this.phoneBook.stats.matched).length;
     const totalMatched = Object.values(this.phoneBook.stats.matched).reduce((res, s) => res + s.size, 0);
     const totalUnknown = this.phoneBook.stats.unknown.size;
-    Logger.notice(`    Total matched VCF contact numbers: ${totalMatchedVCF}`);
+    Logger.notice(`    Total matched VCF contacts: ${totalMatchedVCF}`);
     Logger.notice(`    Total matched numbers: ${totalMatched}`);
     Logger.notice(`    Total unknown numbers: ${totalUnknown}`);
     Logger.notice();
