@@ -109,7 +109,7 @@ export default class PhoneBook {
 
       for (const tel of Array.isArray(tels) ? tels : [tels]) {
         const telValue = tel.valueOf();
-        const phoneNumber = telValue.trim().replace(/ |-|\(|\)/g, '');
+        const phoneNumber = PhoneBook.sanitizePhoneNumber(telValue);
 
         switch (this.strategy) {
           case MatchStrategy.Exact:
@@ -199,6 +199,10 @@ export default class PhoneBook {
     }
 
     return { name, phoneBookNumber };
+  }
+
+  public static sanitizePhoneNumber(phoneNumber: string) {
+    return phoneNumber.replace(/[^0-9+]/g, '');
   }
 
   // Saves phone book logs
