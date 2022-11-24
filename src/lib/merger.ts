@@ -21,10 +21,6 @@ export default class Merger {
   private stats: Stats;
 
   private static LOGS_DIR = 'logs';
-  private static PHONEBOOK_LOGS_DIR = path.join(this.LOGS_DIR, 'phonebook');
-  private static UNKNOWN_LOG_NAME = 'unknown_numbers.csv';
-  private static MATCHED_LOG_NAME = 'matched_numbers.csv';
-  private static MATCHED_LOG_HEADERS = ['phone number (html)', 'phone number (vcf)', 'name'];
 
   constructor(
     inputDir: string,
@@ -114,7 +110,7 @@ export default class Merger {
       Entry.merge(entries, this.outputDir);
     }
 
-    this.savePhoneBookLogs();
+    this.phoneBook.saveLogs(path.join(this.outputDir, Merger.LOGS_DIR));
 
     this.printSummary();
   }
@@ -156,37 +152,7 @@ export default class Merger {
     Logger.notice();
 
     Logger.notice(
-      `See the phonebook logs directory ${path.join(
-        this.outputDir,
-        Merger.PHONEBOOK_LOGS_DIR
-      )} for lists of known/unknown numbers`
+      `See the logs directory ${path.join(this.outputDir, Merger.LOGS_DIR)} for lists of known/unknown numbers`
     );
-  }
-
-  // Saves phone book logs
-  public savePhoneBookLogs() {
-    const statsDir = path.join(this.outputDir, Merger.PHONEBOOK_LOGS_DIR);
-
-    fs.mkdirSync(statsDir, { recursive: true });
-
-    const { stats } = this.phoneBook;
-
-    const unknownLogPath = path.join(statsDir, Merger.UNKNOWN_LOG_NAME);
-    for (const unknown of stats.unknown) {
-      fs.appendFileSync(unknownLogPath, `${unknown}\n`);
-    }
-
-    const matchedLogPath = path.join(statsDir, Merger.MATCHED_LOG_NAME);
-
-    fs.appendFileSync(matchedLogPath, `${Merger.MATCHED_LOG_HEADERS.join(',')}\n`);
-
-    for (const [phoneBookNumber, originalPhoneNumbers] of Object.entries(stats.matched)) {
-      for (const originalPhoneNumber of originalPhoneNumbers) {
-        fs.appendFileSync(
-          matchedLogPath,
-          `${[originalPhoneNumber, phoneBookNumber, this.phoneBook.get(phoneBookNumber).name].join(',')}\n`
-        );
-      }
-    }
   }
 }

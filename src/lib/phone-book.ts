@@ -1,5 +1,6 @@
 import Logger from './utils/logger';
 import fs from 'fs';
+import path from 'path';
 import vCard from 'vcf';
 
 export enum MatchStrategy {
@@ -31,6 +32,10 @@ export default class PhoneBook {
   private strategy: MatchStrategy;
   private strategyOptions: MatchStrategyOptions;
   public stats: Stats;
+
+  private static UNKNOWN_LOG_NAME = 'unknown_numbers.csv';
+  private static MATCHED_LOG_NAME = 'matched_numbers.csv';
+  private static MATCHED_LOG_HEADERS = ['phone number (html)', 'phone number (vcf)', 'name'];
 
   constructor(
     contacts?: string,
@@ -194,5 +199,28 @@ export default class PhoneBook {
     }
 
     return { name, phoneBookNumber };
+  }
+
+  // Saves phone book logs
+  public saveLogs(outputDir: string) {
+    fs.mkdirSync(outputDir, { recursive: true });
+
+    const unknownLogPath = path.join(outputDir, PhoneBook.UNKNOWN_LOG_NAME);
+    for (const unknown of this.stats.unknown) {
+      fs.appendFileSync(unknownLogPath, `${unknown}\n`);
+    }
+
+    const matchedLogPath = path.join(outputDir, PhoneBook.MATCHED_LOG_NAME);
+
+    fs.appendFileSync(matchedLogPath, `${PhoneBook.MATCHED_LOG_HEADERS.join(',')}\n`);
+
+    for (const [phoneBookNumber, originalPhoneNumbers] of Object.entries(this.stats.matched)) {
+      for (const originalPhoneNumber of originalPhoneNumbers) {
+        fs.appendFileSync(
+          matchedLogPath,
+          `${[originalPhoneNumber, phoneBookNumber, this.get(phoneBookNumber).name].join(',')}\n`
+        );
+      }
+    }
   }
 }
