@@ -1,6 +1,5 @@
 import Logger from './utils/logger';
 import fs from 'fs';
-import phone from 'phone';
 import vCard from 'vcf';
 
 export enum MatchStrategy {
@@ -105,16 +104,7 @@ export default class PhoneBook {
 
       for (const tel of Array.isArray(tels) ? tels : [tels]) {
         const telValue = tel.valueOf();
-        let { phoneNumber } = phone(telValue);
-        if (!phoneNumber) {
-          Logger.warning(
-            `Unable to properly parse phone number: ${tel.valueOf()}. Performing basic sanitization and using the phone number as-is`
-          );
-
-          phoneNumber = telValue.trim().replace(/ |-|\(|\)/g, '');
-
-          continue;
-        }
+        const phoneNumber = telValue.trim().replace(/ |-|\(|\)/g, '');
 
         switch (this.strategy) {
           case MatchStrategy.Exact:
