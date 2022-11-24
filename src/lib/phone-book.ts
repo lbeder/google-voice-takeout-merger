@@ -96,11 +96,7 @@ export default class PhoneBook {
         continue;
       }
 
-      const fullName = fn
-        .valueOf()
-        .toString()
-        .trim()
-        .replace(/(\r\n|\n|\r)/gm, '');
+      const fullName = fn.valueOf().toString().trim();
 
       for (const tel of Array.isArray(tels) ? tels : [tels]) {
         const phoneNumber = tel.valueOf().trim().replace(/ /g, '').replace(/-/g, '');
@@ -184,7 +180,7 @@ export default class PhoneBook {
     const { name, phoneBookNumber } = this.get(phoneNumber);
 
     if (name) {
-      if (!this.stats.matched[phoneNumber]) {
+      if (!this.stats.matched[phoneBookNumber]) {
         this.stats.matched[phoneBookNumber] = new Set();
       }
       this.stats.matched[phoneBookNumber].add(phoneNumber);
