@@ -199,7 +199,7 @@ export default class HTMLEntry extends Entry {
         }
 
         case EntryFormats.AMR: {
-          Logger.warning(`WARNING: ${EntryFormats.AMR} playback in HTML5 isn't currently supported`);
+          Logger.warning(`${EntryFormats.AMR} playback in HTML5 isn't currently supported`);
 
           const audio = this.querySelector(`audio[src$="${mediaKey}"]`);
           if (!audio) {
@@ -221,7 +221,7 @@ export default class HTMLEntry extends Entry {
         }
 
         case EntryFormats.THREEGP: {
-          Logger.warning(`WARNING: ${EntryFormats.THREEGP} playback in HTML5 isn't currently supported`);
+          Logger.warning(`${EntryFormats.THREEGP} playback in HTML5 isn't currently supported`);
 
           const video = this.querySelector(`a.video[href$="${mediaKey}"]`);
           if (!video) {
