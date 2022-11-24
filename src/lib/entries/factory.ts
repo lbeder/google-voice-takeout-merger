@@ -1,3 +1,4 @@
+import PhoneBook from '../phone-book';
 import Logger from '../utils/logger';
 import Entry, { EntryAction, EntryActions, EntryFormats } from './entry';
 import HTMLEntry from './html';
@@ -33,11 +34,19 @@ export default class Factory {
       const groupConversationPath = path.join(inputDir, fileName);
 
       action = gcAction;
-      phoneNumbers = HTMLEntry.queryPhoneNumbers(groupConversationPath);
+      phoneNumbers = HTMLEntry.queryPhoneNumbers(groupConversationPath)
+        .map((p) => PhoneBook.sanitizePhoneNumber(p))
+        .filter((p) => p);
+      if (phoneNumbers.length === 0) {
+        Logger.warning(`Unknown phone number for entry "${name}". Defaulting to ${Entry.UNKNOWN_PHONE_NUMBER}`);
+
+        phoneNumbers = [Entry.UNKNOWN_PHONE_NUMBER];
+      }
+
       timestampStr = components[1];
     } else {
       if (components.length === 3) {
-        let phoneNumber = components[0];
+        let phoneNumber = PhoneBook.sanitizePhoneNumber(components[0]);
         if (!phoneNumber) {
           Logger.warning(`Unknown phone number for entry "${name}". Defaulting to ${Entry.UNKNOWN_PHONE_NUMBER}`);
 
@@ -50,8 +59,16 @@ export default class Factory {
       } else if (components.length === 2) {
         Logger.warning(`Unknown action for entry "${name}". Defaulting to "${EntryAction.Placed}"`);
 
+        let phoneNumber = PhoneBook.sanitizePhoneNumber(components[0]);
+        if (!phoneNumber) {
+          Logger.warning(`Unknown phone number for entry "${name}". Defaulting to ${Entry.UNKNOWN_PHONE_NUMBER}`);
+
+          phoneNumber = Entry.UNKNOWN_PHONE_NUMBER;
+          name = `${phoneNumber} ${name}`;
+        }
+
         action = EntryAction.Placed;
-        phoneNumbers = [components[0]];
+        phoneNumbers = [phoneNumber];
         timestampStr = components[1];
       } else {
         throw new Error(`Invalid or unsupported entry "${name}"`);
