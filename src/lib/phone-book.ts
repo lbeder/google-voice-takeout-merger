@@ -16,8 +16,30 @@ export interface SuffixStrategyOptions {
 
 export type MatchStrategyOptions = ExactMatchStrategy | SuffixStrategyOptions;
 
+interface Match {
+  phoneNumber: string;
+  matchLength: number;
+}
+
+class MatchSet<T extends Match> extends Set<T> {
+  add(value: T): this {
+    let found = false;
+    this.forEach((item) => {
+      if (value.phoneNumber === item.phoneNumber) {
+        found = true;
+      }
+    });
+
+    if (!found) {
+      super.add(value);
+    }
+
+    return this;
+  }
+}
+
 export interface Stats {
-  matched: Record<string, Set<string>>;
+  matched: Record<string, MatchSet<Match>>;
   unknown: Set<string>;
 }
 
@@ -35,7 +57,7 @@ export default class PhoneBook {
 
   private static UNKNOWN_LOG_NAME = 'unknown_numbers.csv';
   private static MATCHED_LOG_NAME = 'matched_numbers.csv';
-  private static MATCHED_LOG_HEADERS = ['phone number (html)', 'phone number (vcf)', 'name'];
+  private static MATCHED_LOG_HEADERS = ['phone number (html)', 'phone number (vcf)', 'name', 'match length'];
 
   constructor(
     contacts?: string,
@@ -110,6 +132,11 @@ export default class PhoneBook {
       for (const tel of Array.isArray(tels) ? tels : [tels]) {
         const telValue = tel.valueOf();
         const phoneNumber = PhoneBook.sanitizePhoneNumber(telValue);
+        if (!phoneNumber) {
+          Logger.warning(`Unable to parse the phone number for: ${phoneNumber}`);
+
+          continue;
+        }
 
         switch (this.strategy) {
           case MatchStrategy.Exact:
@@ -145,7 +172,7 @@ export default class PhoneBook {
         // Find only exact matches
         const name = this.phoneBook[phoneNumber];
         if (name) {
-          return { name, phoneBookNumber: phoneNumber };
+          return { name, phoneBookNumber: phoneNumber, matchLength: phoneNumber.length };
         }
 
         return {};
@@ -155,7 +182,7 @@ export default class PhoneBook {
         // Try an exact match first
         const name = this.phoneBook[phoneNumber];
         if (name) {
-          return { name, phoneBookNumber: phoneNumber };
+          return { name, phoneBookNumber: phoneNumber, matchLength: phoneNumber.length };
         }
 
         // Try to match suffixes
@@ -174,7 +201,7 @@ export default class PhoneBook {
           if (name) {
             Logger.warning(`Found suffix-based match ${suffix} for phone number ${phoneNumber}`);
 
-            return { name, phoneBookNumber };
+            return { name, phoneBookNumber, matchLength: suffix.length };
           }
         }
 
@@ -187,13 +214,13 @@ export default class PhoneBook {
   }
 
   public getAndRecordMatch(phoneNumber: string) {
-    const { name, phoneBookNumber } = this.get(phoneNumber);
+    const { name, phoneBookNumber, matchLength } = this.get(phoneNumber);
 
     if (name) {
       if (!this.stats.matched[phoneBookNumber]) {
-        this.stats.matched[phoneBookNumber] = new Set();
+        this.stats.matched[phoneBookNumber] = new MatchSet();
       }
-      this.stats.matched[phoneBookNumber].add(phoneNumber);
+      this.stats.matched[phoneBookNumber].add({ phoneNumber, matchLength });
     } else {
       this.stats.unknown.add(phoneNumber);
     }
@@ -219,10 +246,10 @@ export default class PhoneBook {
     fs.appendFileSync(matchedLogPath, `${PhoneBook.MATCHED_LOG_HEADERS.join(',')}\n`);
 
     for (const [phoneBookNumber, originalPhoneNumbers] of Object.entries(this.stats.matched)) {
-      for (const originalPhoneNumber of originalPhoneNumbers) {
+      for (const { phoneNumber: originalPhoneNumber, matchLength } of originalPhoneNumbers) {
         fs.appendFileSync(
           matchedLogPath,
-          `${[originalPhoneNumber, phoneBookNumber, this.get(phoneBookNumber).name].join(',')}\n`
+          `${[originalPhoneNumber, phoneBookNumber, this.get(phoneBookNumber).name, matchLength].join(',')}\n`
         );
       }
     }
