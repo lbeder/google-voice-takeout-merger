@@ -96,7 +96,11 @@ export default class PhoneBook {
         continue;
       }
 
-      const fullName = fn.valueOf().toString().trim();
+      const fullName = fn
+        .valueOf()
+        .toString()
+        .trim()
+        .replace(/(\r\n|\n|\r)/g, ' ');
 
       for (const tel of Array.isArray(tels) ? tels : [tels]) {
         const phoneNumber = tel.valueOf().trim().replace(/ /g, '').replace(/-/g, '');
