@@ -214,6 +214,10 @@ export default class PhoneBook {
   }
 
   public getAndRecordMatch(phoneNumber: string) {
+    if (!phoneNumber) {
+      return {};
+    }
+
     const { name, phoneBookNumber, matchLength } = this.get(phoneNumber);
 
     if (name) {
