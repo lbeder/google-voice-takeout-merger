@@ -76,7 +76,7 @@ export default class PhoneBook {
       }
     }
 
-    Logger.info(`Using "${strategyDescription}" phone number matching strategy`);
+    Logger.info(`Using ${strategyDescription} phone number matching strategy`);
 
     const vcfCards = vCard.parse(fs.readFileSync(contacts, 'utf-8'));
     for (const card of vcfCards) {
