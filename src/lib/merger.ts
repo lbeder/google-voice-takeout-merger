@@ -146,8 +146,13 @@ export default class Merger {
     Logger.notice();
 
     Logger.notice('Phone number matching:');
-    Logger.notice(`    Matched numbers: ${Object.keys(this.phoneBook.stats.matched).length}`);
-    Logger.notice(`    Unknown numbers: ${this.phoneBook.stats.unknown.size}`);
+
+    const totalMatchedVCF = Object.keys(this.phoneBook.stats.matched).length;
+    const totalMatched = Object.values(this.phoneBook.stats.matched).reduce((res, s) => res + s.size, 0);
+    const totalUnknown = this.phoneBook.stats.unknown.size;
+    Logger.notice(`    Total matched VCF contact numbers: ${totalMatchedVCF}`);
+    Logger.notice(`    Total matched numbers: ${totalMatched}`);
+    Logger.notice(`    Total unknown numbers: ${totalUnknown}`);
     Logger.notice();
 
     Logger.notice(
