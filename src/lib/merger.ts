@@ -24,7 +24,7 @@ export default class Merger {
   private static PHONEBOOK_LOGS_DIR = path.join(this.LOGS_DIR, 'phonebook');
   private static UNKNOWN_LOG_NAME = 'unknown_numbers.csv';
   private static MATCHED_LOG_NAME = 'matched_numbers.csv';
-  private static MATCHED_LOG_HEADERS = ['phone number (html)', 'phone number (contacts)', 'name'];
+  private static MATCHED_LOG_HEADERS = ['phone number (html)', 'phone number (vcf)', 'name'];
 
   constructor(
     inputDir: string,
