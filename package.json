@@ -2,6 +2,8 @@
   "name": "google-voice-merger",
   "version": "0.7.0",
   "description": "Google Voice Merger",
+  "author": "leonid.beder@gmail.com",
+  "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -11,8 +13,6 @@
     "format": "prettier --check --write src/**/* --config .prettierrc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^3.4.0",
     "@types/glob": "^8.0.0",
