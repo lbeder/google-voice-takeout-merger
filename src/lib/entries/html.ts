@@ -247,6 +247,11 @@ export default class HTMLEntry extends Entry {
       }
     }
 
+    // Store the latest timestamp
+    if (this.lastTimestamp < entry.timestamp) {
+      this.lastTimestamp = entry.timestamp;
+    }
+
     // Add a nice horizontal separator
     const body = this.querySelector('body');
     if (!body) {
