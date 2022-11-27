@@ -41,6 +41,7 @@ export default abstract class Entry {
   public name: string;
   public phoneNumbers: string[];
   public timestamp: Moment;
+  public lastTimestamp: Moment;
   public fullPath: string;
   public savedPath?: string;
   protected html?: HTMLElement;
@@ -68,6 +69,7 @@ export default abstract class Entry {
     this.name = name;
     this.phoneNumbers = phoneNumbers.map((p) => PhoneBook.sanitizePhoneNumber(p)).sort();
     this.timestamp = timestamp;
+    this.lastTimestamp = timestamp;
     this.fullPath = fullPath;
   }
 
@@ -140,6 +142,8 @@ export default abstract class Entry {
 
     // Save the final entry
     firstEntry.save(outputDir);
+
+    return firstEntry;
   }
 
   // Saves the entry in the specified output directory

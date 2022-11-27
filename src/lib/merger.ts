@@ -16,11 +16,13 @@ interface Stats {
 export default class Merger {
   private inputDir: string;
   private outputDir: string;
+  private logsDir: string;
   private force: boolean;
   private phoneBook: PhoneBook;
   private stats: Stats;
 
   private static LOGS_DIR = 'logs';
+  private static INDEX_NAME = 'index.csv';
 
   constructor(
     inputDir: string,
@@ -36,6 +38,8 @@ export default class Merger {
 
     this.inputDir = path.resolve(inputDir);
     this.outputDir = path.resolve(outputDir);
+    this.logsDir = path.join(this.outputDir, Merger.LOGS_DIR);
+
     this.force = force;
     this.phoneBook = new PhoneBook(contacts, strategy, strategyOptions);
 
@@ -83,6 +87,8 @@ export default class Merger {
       );
     }
 
+    fs.mkdirSync(this.logsDir, { recursive: true });
+
     const files = glob.sync(`${this.inputDir}/*`.replace(/\\/g, '/'), { ignore: '**/desktop.ini' });
     const pendingEntries: Record<string, Entry[]> = {};
 
@@ -104,15 +110,51 @@ export default class Merger {
     }
 
     // Merge all entries belonging to the same phone number
-    for (const [phoneNumbers, entries] of Object.entries(pendingEntries)) {
-      Logger.info(`Merging entries for ${phoneNumbers}`);
+    this.mergeEntries(pendingEntries);
 
-      Entry.merge(entries, this.outputDir);
-    }
-
-    this.phoneBook.saveLogs(path.join(this.outputDir, Merger.LOGS_DIR));
+    this.phoneBook.saveLogs(this.logsDir);
 
     this.printSummary();
+  }
+
+  // Merges all entries belonging to the same phone number
+  private mergeEntries(data: Record<string, Entry[]>) {
+    for (const [phoneNumbers, entries] of Object.entries(data)) {
+      Logger.info(`Merging entries for ${phoneNumbers}`);
+
+      const firstEntry = Entry.merge(entries, this.outputDir);
+
+      // Save the entry to the index
+      this.saveToIndex(firstEntry);
+    }
+  }
+
+  // Saves all entries to an index
+  private saveToIndex(entry: Entry) {
+    for (const phoneNumber of entry.phoneNumbers) {
+      const { name, phoneBookNumber, matchLength } = this.phoneBook.get(phoneNumber);
+
+      // Each index entry will record:
+      //
+      // 1. Phone number (one per group conversation!)
+      // 2. The date of the first conversation
+      // 3. The date of the last conversation
+      // 4. The name of the participant (if we were able to match it)
+      // 5. The contact number of the participant (if we were able to match it)
+      // 6. The full path where the entry was saved
+      fs.appendFileSync(
+        path.join(this.logsDir, Merger.INDEX_NAME),
+        `${[
+          phoneNumber,
+          entry.timestamp.toISOString(),
+          entry.lastTimestamp.toISOString(),
+          name ? name : '',
+          phoneBookNumber ? phoneBookNumber : '',
+          matchLength,
+          entry.savedPath
+        ].join(',')}\n`
+      );
+    }
   }
 
   // Prints the summary
@@ -151,8 +193,6 @@ export default class Merger {
     Logger.notice(`    Total unknown numbers: ${totalUnknown}`);
     Logger.notice();
 
-    Logger.notice(
-      `See the logs directory ${path.join(this.outputDir, Merger.LOGS_DIR)} for lists of known/unknown numbers`
-    );
+    Logger.notice(`See the logs directory ${this.logsDir} for lists of known/unknown numbers`);
   }
 }
