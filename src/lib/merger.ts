@@ -30,7 +30,8 @@ export default class Merger {
     'name (vcf)',
     'phone number (vcf)',
     'match length',
-    'path'
+    'path',
+    'file size'
   ];
 
   constructor(
@@ -155,17 +156,19 @@ export default class Merger {
       // 3. The date of the last conversation
       // 4. The name of the participant (if we were able to match it)
       // 5. The contact number of the participant (if we were able to match it)
-      // 6. The full path where the entry was saved
+      // 6. The path where the merged entry was saved
+      // 7. The file size of the merged entry
       fs.appendFileSync(
         path.join(this.logsDir, Merger.INDEX_NAME),
         `${[
           phoneNumber,
           entry.timestamp.toISOString(),
           entry.lastTimestamp.toISOString(),
-          name ? name : '',
+          name ? `"${name}"` : '',
           phoneBookNumber ? phoneBookNumber : '',
           matchLength,
-          entry.savedPath
+          entry.savedPath,
+          entry.savedPath ? fs.statSync(entry.savedPath).size : 0
         ].join(',')}\n`
       );
     }
