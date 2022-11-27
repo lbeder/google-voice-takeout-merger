@@ -23,6 +23,15 @@ export default class Merger {
 
   private static LOGS_DIR = 'logs';
   private static INDEX_NAME = 'index.csv';
+  private static INDEX_HEADERS = [
+    'phone number (html)',
+    'first date',
+    'last date',
+    'name (vcf)',
+    'phone number (vcf)',
+    'match length',
+    'path'
+  ];
 
   constructor(
     inputDir: string,
@@ -109,24 +118,29 @@ export default class Merger {
       pendingEntries[key].push(entry);
     }
 
+    // Prepare the index
+    this.prepareIndex();
+
     // Merge all entries belonging to the same phone number
-    this.mergeEntries(pendingEntries);
+    for (const [phoneNumbers, entries] of Object.entries(pendingEntries)) {
+      Logger.info(`Merging entries for ${phoneNumbers}`);
+
+      const firstEntry = Entry.merge(entries, this.outputDir);
+
+      Logger.debug(`Saving entry "${firstEntry.name}" to the index`);
+
+      // Save the entry to the index
+      this.saveToIndex(firstEntry);
+    }
 
     this.phoneBook.saveLogs(this.logsDir);
 
     this.printSummary();
   }
 
-  // Merges all entries belonging to the same phone number
-  private mergeEntries(data: Record<string, Entry[]>) {
-    for (const [phoneNumbers, entries] of Object.entries(data)) {
-      Logger.info(`Merging entries for ${phoneNumbers}`);
-
-      const firstEntry = Entry.merge(entries, this.outputDir);
-
-      // Save the entry to the index
-      this.saveToIndex(firstEntry);
-    }
+  // Saves all entries to an index
+  private prepareIndex() {
+    fs.appendFileSync(path.join(this.logsDir, Merger.INDEX_NAME), `${Merger.INDEX_HEADERS.join(',')}\n`);
   }
 
   // Saves all entries to an index
