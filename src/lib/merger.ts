@@ -1,5 +1,6 @@
-import Entry, { EntryAction, EntryFormat, EntryType } from './entries/entry';
+import Entry, { EntryAction, EntryFormat, EntryFormats, EntryType } from './entries/entry';
 import Factory from './entries/factory';
+import HTMLEntry from './entries/html';
 import PhoneBook, { MatchStrategy, MatchStrategyOptions } from './phone-book';
 import Logger from './utils/logger';
 import fs from 'fs';
@@ -31,7 +32,8 @@ export default class Merger {
     'phone number (vcf)',
     'match length',
     'path',
-    'file size'
+    'file size',
+    'media size'
   ];
 
   constructor(
@@ -131,7 +133,7 @@ export default class Merger {
       Logger.debug(`Saving entry "${firstEntry.name}" to the index`);
 
       // Save the entry to the index
-      this.saveToIndex(firstEntry);
+      await this.saveToIndex(firstEntry);
     }
 
     this.phoneBook.saveLogs(this.logsDir);
@@ -145,7 +147,11 @@ export default class Merger {
   }
 
   // Saves all entries to an index
-  private saveToIndex(entry: Entry) {
+  private async saveToIndex(entry: Entry) {
+    if (entry.format !== EntryFormats.HTML) {
+      throw new Error('Unable to save non-HTLM entry to the index');
+    }
+
     for (const phoneNumber of entry.phoneNumbers) {
       const { name, phoneBookNumber, matchLength } = this.phoneBook.get(phoneNumber);
 
@@ -157,7 +163,19 @@ export default class Merger {
       // 4. The name of the participant (if we were able to match it)
       // 5. The contact number of the participant (if we were able to match it)
       // 6. The path where the merged entry was saved
-      // 7. The file size of the merged entry
+      // 7. The file size of the merged entry HTML file
+      // 8. The total size of the merged entry media
+
+      let fileSize = 0;
+      let mediaSize = 0;
+      if (entry.savedPath) {
+        fileSize = fs.statSync(entry.savedPath).size;
+
+        for (const mediaEntry of (entry as HTMLEntry).media) {
+          mediaSize += mediaEntry.savedPath ? fs.statSync(mediaEntry.savedPath).size : 0;
+        }
+      }
+
       fs.appendFileSync(
         path.join(this.logsDir, Merger.INDEX_NAME),
         `${[
@@ -168,7 +186,8 @@ export default class Merger {
           phoneBookNumber ? phoneBookNumber : '',
           matchLength,
           entry.savedPath,
-          entry.savedPath ? fs.statSync(entry.savedPath).size : 0
+          fileSize,
+          mediaSize
         ].join(',')}\n`
       );
     }

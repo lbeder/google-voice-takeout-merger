@@ -7,6 +7,8 @@ import { HTMLElement, parse } from 'node-html-parser';
 import path from 'path';
 
 export default class HTMLEntry extends Entry {
+  public media: MediaEntry[] = [];
+
   constructor(action: EntryAction, name: string, phoneNumbers: string[], timestamp: Moment, fullPath: string) {
     if (action === EntryActions.GroupConversation && phoneNumbers.length === 0) {
       throw new Error('Unexpected empty phones numbers');
@@ -154,6 +156,9 @@ export default class HTMLEntry extends Entry {
       if (!mediaEntry.relativePath) {
         throw new Error(`Unable to merge unsaved entry "${mediaEntry.name}"`);
       }
+
+      this.media.push(entry);
+
       const mediaName = path.basename(mediaEntry.name, path.extname(mediaEntry.name));
       const mediaKey = mediaEntry.hasUnknownPhoneNumber() ? mediaName.split('+00000000000')[1].trim() : mediaName;
 
