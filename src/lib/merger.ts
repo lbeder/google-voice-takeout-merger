@@ -162,13 +162,17 @@ export default class Merger {
       // 3. The date of the last conversation
       // 4. The name of the participant (if we were able to match it)
       // 5. The contact number of the participant (if we were able to match it)
-      // 6. The path where the merged entry was saved
+      // 6. The relative path to the merged entry
       // 7. The file size of the merged entry HTML file
       // 8. The total size of the merged entry media
 
       let fileSize = 0;
       let mediaSize = 0;
+      let relativePath = '';
       if (entry.savedPath) {
+        const rootDir = path.dirname(this.outputDir);
+        relativePath = entry.savedPath.replace(rootDir, '').replace(/^(\\|\/)/, '');
+
         fileSize = fs.statSync(entry.savedPath).size;
 
         for (const mediaEntry of (entry as HTMLEntry).media) {
@@ -185,7 +189,7 @@ export default class Merger {
           name ? `"${name}"` : '',
           phoneBookNumber ? phoneBookNumber : '',
           matchLength,
-          entry.savedPath,
+          `"${relativePath}"`,
           fileSize,
           mediaSize
         ].join(',')}\n`
