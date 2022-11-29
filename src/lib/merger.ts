@@ -143,7 +143,7 @@ export default class Merger {
 
   // Saves all entries to an index
   private prepareIndex() {
-    fs.appendFileSync(path.join(this.logsDir, Merger.INDEX_NAME), `${Merger.INDEX_HEADERS.join(',')}\n`);
+    fs.appendFileSync(path.join(this.outputDir, Merger.INDEX_NAME), `${Merger.INDEX_HEADERS.join(',')}\n`);
   }
 
   // Saves all entries to an index
@@ -177,7 +177,7 @@ export default class Merger {
       }
 
       fs.appendFileSync(
-        path.join(this.logsDir, Merger.INDEX_NAME),
+        path.join(this.outputDir, Merger.INDEX_NAME),
         `${[
           phoneNumber,
           entry.timestamp.toISOString(),
