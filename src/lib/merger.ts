@@ -186,7 +186,7 @@ export default class Merger {
           phoneNumber,
           entry.timestamp.toISOString(),
           entry.lastTimestamp.toISOString(),
-          name ? `"${name}"` : '',
+          name ? `"${name.replace(/"/g, '""')}"` : '',
           phoneBookNumber ? phoneBookNumber : '',
           matchLength,
           `"${relativePath}"`,
