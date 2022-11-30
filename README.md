@@ -1,4 +1,4 @@
-# Google Voice Merger
+# Google Voice Takeout Merger
 
 Currently, Google Voice breaks every call/conversation into a single record, which can result in thousands of records for each participant/phone number, making the export very hard to use. Using this tool, it's possible to merge all these records. into a single time-sorted record.
 
