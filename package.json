@@ -1,7 +1,7 @@
 {
-  "name": "google-voice-merger",
+  "name": "google-voice-takeout-merger",
   "version": "0.8.0",
-  "description": "Google Voice Merger",
+  "description": "Google Voice Takeout Merger",
   "author": "leonid.beder@gmail.com",
   "license": "MIT",
   "main": "dist/index.js",
