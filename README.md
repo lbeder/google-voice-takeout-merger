@@ -7,7 +7,7 @@ The main features of the tool are:
 * Merges and groups Google Voice takeout records by participants:
   * A conversation/call record with the same participant (or number of participants) appears in the same entry (similar to how it's done by other services).
   * All records are sorted by timestamps, and the resulting filename includes the timestamp of the earliest record.
-* Receives an optional contacts VCF file. See [Contact Matching](#contact-matching) below.
+* Receives an optional contacts VCF file. See the [Contact Matching](#contact-matching) section below.
 * Fixes all media and metadata issues (broken links, style issues, converts video and audio attachments into proper HTML5 controls, etc.).
 * Generates an `index.csv` which can be separately used with the [Google Voice Takeout Viewer](https://github.com/lbeder/google-voice-takeout-viewer) indexing app.
 * Reorganizes all media and metadata.
@@ -15,7 +15,7 @@ The main features of the tool are:
 * Displays contact names (if an optional contacts VCF file is provided).
 * Properly merges unknown phone number records into a single record.
 
-Please see [samples](#samples) below:
+Please see the [Samples](#samples) section below:
 
 ## Installation
 
@@ -103,9 +103,11 @@ In addition, please also note the `matched_numbers.csv` and the `unknown_numbers
 
 Please see the provided example input and output in [docs/samples](docs/samples).
 
+**All the phone numbers, contacts, media, and data uses fake and sample data.**
+
 ### Input
 
-* [docs/samples/in/contracts.vcf](docs/samples/in/contracts.vcf): sample contacts VCF file.
+* [docs/samples/in/contacts.vcf](docs/samples/in/contacts.vcf): sample contacts VCF file.
 * [docs/samples/in/Calls](docs/samples/in/Calls): sample Google Voice takeout.
 
 We will execute the following command:
@@ -165,6 +167,14 @@ For example, you could see that all the records for `+17015550147`:
 Have been merged into a single record:
 
 * [docs/samples/out/+17015550147/2022-03-09T08_00_32 +17015550147.html](docs/samples/out/+17015550147/2022-03-09T08_00_32%20%2B17015550147.html)
+
+Before:
+
+<img src="docs/images/2022-03-09T08_00_32%20%2B17015550147-before.png" style="border: 1px solid black" alt="before"/>
+
+After:
+
+<img src="docs/images/2022-03-09T08_00_32%20%2B17015550147-after.png" style="border: 1px solid black" alt="after"/>
 
 In addition, all the records with an unknown phone numbers have been merged into:
 
