@@ -170,11 +170,15 @@ Have been merged into a single record:
 
 Before:
 
-<img src="docs/images/2022-03-09T08_00_32%20%2B17015550147-before.png" style="border: 1px solid black" alt="before"/>
+<kbd>
+  <img src="docs/images/2022-03-09T08_00_32%20%2B17015550147-before.png" alt="before"/>
+</kbd>
 
 After:
 
-<img src="docs/images/2022-03-09T08_00_32%20%2B17015550147-after.png" style="border: 1px solid black" alt="after"/>
+<kbd>
+  <img src="docs/images/2022-03-09T08_00_32%20%2B17015550147-after.png" alt="after"/>
+</kbd>
 
 In addition, all the records with an unknown phone numbers have been merged into:
 
