@@ -101,7 +101,7 @@ In addition, please also note the `matched_numbers.csv` and the `unknown_numbers
 
 ## Samples
 
-Please see the provided example input and output in [docs/samples](docs/samples).
+Please see the provided example input and output in [docs/samples](docs/samples). This input includes many examples of invalid and buggy Google Voice records, we have encountered, thus showcases many of the fixes that this tool is performing during the merge process.
 
 **All the phone numbers, contacts, media, and data uses fake and sample data.**
 
@@ -119,39 +119,39 @@ yarn merge -f -i ./docs/samples/in/Calls -o ./docs/samples/out -c ./docs/samples
 In the of the execution, you should expect the following summary:
 
 ```sh
-[2022/12/01 16:57:28.367] Summary:
-[2022/12/01 16:57:28.368] ¯¯¯¯¯¯¯¯
-[2022/12/01 16:57:28.368] Total entries: 43
-[2022/12/01 16:57:28.368]
-[2022/12/01 16:57:28.368] Types:
-[2022/12/01 16:57:28.368]     HTML: 29
-[2022/12/01 16:57:28.368]     Media: 14
-[2022/12/01 16:57:28.368]
-[2022/12/01 16:57:28.368] Actions:
-[2022/12/01 16:57:28.368]     Received: 5
-[2022/12/01 16:57:28.368]     Placed: 2
-[2022/12/01 16:57:28.368]     Missed: 5
-[2022/12/01 16:57:28.368]     Text: 17
-[2022/12/01 16:57:28.368]     Voicemail: 8
-[2022/12/01 16:57:28.368]     Recorded: 0
-[2022/12/01 16:57:28.368]     Group Conversation: 6
-[2022/12/01 16:57:28.368]     Unknown: 0
-[2022/12/01 16:57:28.368]
-[2022/12/01 16:57:28.368] Formats:
-[2022/12/01 16:57:28.368]     JPG: 4
-[2022/12/01 16:57:28.368]     GIF: 1
-[2022/12/01 16:57:28.368]     MP3: 4
-[2022/12/01 16:57:28.368]     MP4: 2
-[2022/12/01 16:57:28.368]     3GP: 1
-[2022/12/01 16:57:28.368]     AMR: 1
-[2022/12/01 16:57:28.368]     VCF: 1
-[2022/12/01 16:57:28.368]     HTML: 29
-[2022/12/01 16:57:28.369]
-[2022/12/01 16:57:28.369] Phone number matching:
-[2022/12/01 16:57:28.369]     Total matched VCF contacts: 13
-[2022/12/01 16:57:28.369]     Total matched numbers: 13
-[2022/12/01 16:57:28.369]     Total unknown numbers: 20
-[2022/12/01 16:57:28.369]
+[2022/12/02 15:14:55.153] Summary:
+[2022/12/02 15:14:55.153] ¯¯¯¯¯¯¯¯
+[2022/12/02 15:14:55.153] Total entries: 45
+[2022/12/02 15:14:55.153]
+[2022/12/02 15:14:55.153] Types:
+[2022/12/02 15:14:55.153]     HTML: 30
+[2022/12/02 15:14:55.153]     Media: 15
+[2022/12/02 15:14:55.153]
+[2022/12/02 15:14:55.153] Actions:
+[2022/12/02 15:14:55.153]     Received: 5
+[2022/12/02 15:14:55.153]     Placed: 2
+[2022/12/02 15:14:55.153]     Missed: 5
+[2022/12/02 15:14:55.153]     Text: 17
+[2022/12/02 15:14:55.153]     Voicemail: 8
+[2022/12/02 15:14:55.153]     Recorded: 0
+[2022/12/02 15:14:55.153]     Group Conversation: 8
+[2022/12/02 15:14:55.153]     Unknown: 0
+[2022/12/02 15:14:55.153]
+[2022/12/02 15:14:55.153] Formats:
+[2022/12/02 15:14:55.153]     JPG: 5
+[2022/12/02 15:14:55.153]     GIF: 1
+[2022/12/02 15:14:55.153]     MP3: 4
+[2022/12/02 15:14:55.153]     MP4: 2
+[2022/12/02 15:14:55.153]     3GP: 1
+[2022/12/02 15:14:55.153]     AMR: 1
+[2022/12/02 15:14:55.153]     VCF: 1
+[2022/12/02 15:14:55.153]     HTML: 30
+[2022/12/02 15:14:55.153]
+[2022/12/02 15:14:55.153] Phone number matching:
+[2022/12/02 15:14:55.153]     Total matched VCF contacts: 13
+[2022/12/02 15:14:55.153]     Total matched numbers: 13
+[2022/12/02 15:14:55.153]     Total unknown numbers: 21
+[2022/12/02 15:14:55.153]
 [2022/12/01 16:57:28.369] See the logs directory ~/google-voice-takeout-merger/docs/samples/out/logs for lists of known/unknown numbers
 ```
 
