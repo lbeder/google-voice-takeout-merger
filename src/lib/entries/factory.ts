@@ -34,9 +34,9 @@ export default class Factory {
       const groupConversationPath = path.join(inputDir, fileName);
 
       action = gcAction;
-      phoneNumbers = HTMLEntry.queryPhoneNumbers(groupConversationPath)
-        .map((p) => PhoneBook.sanitizePhoneNumber(p))
-        .filter((p) => p);
+      phoneNumbers = HTMLEntry.queryPhoneNumbers(groupConversationPath).map(
+        (p) => PhoneBook.sanitizePhoneNumber(p) || p
+      );
       if (phoneNumbers.length === 0) {
         Logger.warning(`Unknown phone number for entry "${name}". Defaulting to ${Entry.UNKNOWN_PHONE_NUMBER}`);
 
