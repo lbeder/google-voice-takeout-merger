@@ -1,7 +1,6 @@
 # Google Voice Takeout Merger
 
 [![Docs](https://img.shields.io/badge/docs-%F0%9F%93%84-blue)](https://github.com/lbeder/google-voice-takeout-merger)
-[![NPM Package](https://img.shields.io/npm/v/lbeder/google-voice-takeout-merger.svg)](https://www.npmjs.org/package/lbeder/google-voice-takeout-merger)
 [![Test](https://github.com/lbeder/google-voice-takeout-merger/actions/workflows/ci.yml/badge.svg)](https://github.com/lbeder/google-voice-takeout-merger/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/lbeder/google-voice-takeout-merger?style=flat-square)](https://github.com/lbeder/google-voice-takeout-merger/blob/master/LICENSE)
 
