@@ -67,7 +67,7 @@ export default abstract class Entry {
     this.type = type;
     this.format = format;
     this.name = name;
-    this.phoneNumbers = phoneNumbers.map((p) => PhoneBook.sanitizePhoneNumber(p) || p).sort();
+    this.phoneNumbers = phoneNumbers.sort();
     this.timestamp = timestamp;
     this.lastTimestamp = timestamp;
     this.fullPath = fullPath;
