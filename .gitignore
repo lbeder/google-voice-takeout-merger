@@ -8,7 +8,6 @@ lib-cov
 *.swp
 
 pids
-logs
 results
 tmp
 

@@ -167,12 +167,14 @@ export default class PhoneBook {
   }
 
   public get(phoneNumber: string) {
+    const sanitizedPhoneNumber = PhoneBook.sanitizePhoneNumber(phoneNumber);
+
     switch (this.strategy) {
       case MatchStrategy.Exact: {
         // Find only exact matches
-        const name = this.phoneBook[phoneNumber];
+        const name = this.phoneBook[sanitizedPhoneNumber];
         if (name) {
-          return { name, phoneBookNumber: phoneNumber, matchLength: phoneNumber.length };
+          return { name, phoneBookNumber: sanitizedPhoneNumber, matchLength: sanitizedPhoneNumber.length };
         }
 
         return {};
@@ -180,15 +182,15 @@ export default class PhoneBook {
 
       case MatchStrategy.Suffix: {
         // Try an exact match first
-        const name = this.phoneBook[phoneNumber];
+        const name = this.phoneBook[sanitizedPhoneNumber];
         if (name) {
-          return { name, phoneBookNumber: phoneNumber, matchLength: phoneNumber.length };
+          return { name, phoneBookNumber: sanitizedPhoneNumber, matchLength: sanitizedPhoneNumber.length };
         }
 
         // Try to match suffixes
-        const phoneNumberLength = phoneNumber.length;
+        const phoneNumberLength = sanitizedPhoneNumber.length;
         for (let i = 0; i < phoneNumberLength - this.strategyOptions.suffixLength + 1; i++) {
-          const suffix = phoneNumber.slice(i, phoneNumberLength);
+          const suffix = sanitizedPhoneNumber.slice(i, phoneNumberLength);
           if (!suffix) {
             break;
           }
@@ -199,7 +201,7 @@ export default class PhoneBook {
 
           const { name, phoneBookNumber } = this.suffixPhoneBook[suffix];
           if (name) {
-            Logger.warning(`Found suffix-based match ${suffix} for phone number ${phoneNumber}`);
+            Logger.warning(`Found suffix-based match ${suffix} for phone number ${sanitizedPhoneNumber}`);
 
             return { name, phoneBookNumber, matchLength: suffix.length };
           }
