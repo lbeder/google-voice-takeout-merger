@@ -1,8 +1,9 @@
 import Logger from '../utils/logger';
 import Entry, { EntryAction, EntryActions, EntryFormats, EntryType } from './entry';
 import MediaEntry from './media';
+import Message, { MessageType } from './message';
 import fs from 'fs';
-import { Moment } from 'moment';
+import moment, { Moment } from 'moment';
 import { HTMLElement, parse } from 'node-html-parser';
 import path from 'path';
 
@@ -18,6 +19,10 @@ export default class HTMLEntry extends Entry {
 
     // If this is a group conversation entry, make sure to parse (and sort) the phone numbers of all of its participants
     this.load();
+  }
+
+  public isGroupConversation() {
+    return this.action == EntryActions.GroupConversation;
   }
 
   // Lazily loads the contents of the entry
@@ -37,12 +42,12 @@ export default class HTMLEntry extends Entry {
     if (senders.length === 0) {
       throw new Error('Unable to find any senders in the entry');
     }
-    const senderPhoneNumbers = senders.map((e) => e.getAttribute('href'));
+    const senderPhoneNumbers = senders.map((e) => HTMLEntry.hrefToPhoneNumber(e.getAttribute('href')));
     if (senderPhoneNumbers.length === 0) {
       throw new Error('Unable to parse phone numbers from the senders in the entry');
     }
 
-    return senderPhoneNumbers.map((s) => s?.split('tel:')[1].replace(/\+\+/g, '+')).sort() as string[];
+    return senderPhoneNumbers.sort() as string[];
   }
 
   // Saves the entry in the specified output directory
@@ -306,12 +311,99 @@ export default class HTMLEntry extends Entry {
     );
   }
 
+  public messages(): Message[] {
+    this.load();
+
+    const res = [];
+
+    const participants = this.phoneNumbers.map(
+      (phoneNumber) => Entry.phoneBook.get(phoneNumber as string).phoneBookNumber ?? phoneNumber
+    );
+
+    // Look for regular messages
+    const msgs = this.querySelectorAll('.message');
+    for (const msg of msgs) {
+      const { author, authorName, me } = this.parseSender(msg, '.sender.vcard a', participants);
+      const unixTime = this.parseDate(msg, '.dt');
+
+      const content = msg.querySelector('q');
+      if (!content) {
+        throw new Error(`Unable to find the content of message: ${msg}`);
+      }
+      const text = content.text;
+
+      const message = new Message(
+        me && me === author ? MessageType.Sent : MessageType.Received,
+        author,
+        participants,
+        unixTime,
+        text,
+        this.parseMedia(msg),
+        this.action === EntryActions.GroupConversation,
+        authorName,
+        me
+      );
+
+      res.push(message);
+    }
+
+    // Looks of call logs
+    const callLogs = this.querySelectorAll('.haudio');
+    for (const callLog of callLogs) {
+      const description = callLog.querySelector('.fn')?.text.trim();
+      if (!description) {
+        throw new Error(`Unable to find the content of call log: ${callLog}`);
+      }
+
+      let type: MessageType;
+
+      switch (description) {
+        case 'Voicemail from':
+        case 'Received call from':
+        case 'Missed call from': {
+          type = MessageType.Received;
+
+          break;
+        }
+
+        case 'Placed call to': {
+          type = MessageType.Sent;
+
+          break;
+        }
+
+        default:
+          throw new Error(`Unsupported description ${description} for call log: ${callLog}`);
+      }
+
+      const { author, authorName } = this.parseSender(callLog, '.contributor.vcard a', participants);
+      const unixTime = this.parseDate(callLog, '.published');
+      const authorDescription = authorName ? `${authorName} (${author})` : author;
+      const text = `${description} ${authorDescription}`;
+
+      const message = new Message(
+        type,
+        author,
+        participants,
+        unixTime,
+        text,
+        this.parseMedia(callLog),
+        this.action === EntryActions.GroupConversation,
+        authorName
+      );
+
+      res.push(message);
+    }
+
+    return res;
+  }
+
   private static videoLinkElement(videoPath: string, label: string): HTMLElement {
-    return parse(`<a href="${videoPath}">${label}</a>`);
+    return parse(`<a class="video" href="${videoPath}">${label}</a>`);
   }
 
   private static audioLinkElement(videoPath: string, label: string): HTMLElement {
-    return parse(`<a href="${videoPath}">${label}</a>`);
+    return parse(`<a class="audio" href="${videoPath}">${label}</a>`);
   }
 
   private static vcardElement(vcardPath: string): HTMLElement {
@@ -335,5 +427,114 @@ export default class HTMLEntry extends Entry {
         ${phoneNumbers.map((phoneNumber) => HTMLEntry.participantElement(phoneNumber).toString()).join(', ')}
       </div>`
     );
+  }
+
+  private static hrefToPhoneNumber(href?: string) {
+    return href?.split('tel:')[1].replace(/\+\+/g, '+') ?? href ?? '';
+  }
+
+  private parseSender(message: HTMLElement, selector: string, participants: string[]) {
+    const sender = message.querySelector(selector);
+    if (!sender) {
+      throw new Error(`Unable to find the sender for message: ${message}`);
+    }
+
+    const phoneNumber = HTMLEntry.hrefToPhoneNumber(sender.getAttribute('href'));
+    const authorInfo = Entry.phoneBook.get(phoneNumber as string);
+    let author = authorInfo.phoneBookNumber ?? phoneNumber;
+
+    const authorName = authorInfo.name;
+
+    let me;
+    const element = sender.querySelector('abbr') || sender.querySelector('span');
+    if (element?.text === 'Me' || (participants.length > 0 && !participants.includes(author))) {
+      me = author;
+    }
+
+    if (!author) {
+      author = Entry.UNKNOWN_PHONE_NUMBER;
+    }
+
+    return { author, authorName, me };
+  }
+
+  private parseDate(message: HTMLElement, selector: string) {
+    const time = message.querySelector(selector);
+    if (!time) {
+      throw new Error(`Unable to find the time of message: ${message}`);
+    }
+    const date = time.getAttribute('title');
+    if (!date) {
+      throw new Error(`Unable to find the date of message: ${message}`);
+    }
+
+    return moment(date).unix() * 1000;
+  }
+
+  private parseMedia(message: HTMLElement) {
+    return [
+      ...this.parseImages(message),
+      ...this.parseVideos(message),
+      ...this.parseAudios(message),
+      ...this.parseVCFContacts(message)
+    ];
+  }
+
+  private parseImages(message: HTMLElement) {
+    return this.parseMediaAttachment(message, 'img', 'src', 'image', { jpg: 'jpeg' });
+  }
+
+  private parseVideos(message: HTMLElement) {
+    return [
+      ...this.parseMediaAttachment(message, 'video', 'src', 'video', { '3gp': '3gpp' }),
+      ...this.parseMediaAttachment(message, '.video', 'href', 'video', { '3gp': '3gpp' })
+    ];
+  }
+
+  private parseAudios(message: HTMLElement) {
+    return this.parseMediaAttachment(message, '.audio', 'href', 'audio', { mp3: 'mpeg' });
+  }
+
+  private parseVCFContacts(message: HTMLElement) {
+    return this.parseMediaAttachment(message, 'a.vcard', 'href', 'text/x-vcard');
+  }
+
+  private parseMediaAttachment(
+    message: HTMLElement,
+    selector: string,
+    attribute: string,
+    contentType: string,
+    contentTypeSubs: Record<string, string> = {}
+  ) {
+    const media = [];
+
+    const attachments = message.querySelectorAll(selector);
+    for (const attachment of attachments) {
+      const attachmentPath = attachment.getAttribute(attribute);
+      if (!attachmentPath) {
+        throw new Error(`Unable to find the attachment ${attribute} of: ${attachment}`);
+      }
+
+      let attachmentType;
+      if (contentType.includes('/')) {
+        attachmentType = contentType;
+      } else {
+        attachmentType = path.extname(attachmentPath).slice(1).toLowerCase();
+        attachmentType = `${contentType}/${contentTypeSubs[attachmentType] ?? attachmentType}`;
+      }
+
+      const mediaEntry = this.media.find((m) => m.relativePath?.startsWith(attachmentPath));
+      if (!mediaEntry) {
+        throw new Error(`Unable to find a media entry for the attachment: ${attachment}`);
+      }
+      if (!mediaEntry.savedPath) {
+        throw new Error(`Unable to find the saved path of a media entry: ${mediaEntry}`);
+      }
+      const data = fs.readFileSync(mediaEntry.savedPath);
+
+      media.push({ contentType: `${attachmentType}`, name: path.basename(attachmentPath), data });
+    }
+
+    return media;
   }
 }

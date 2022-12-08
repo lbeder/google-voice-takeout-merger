@@ -135,7 +135,7 @@ export default class Merger {
     if (this.generateXml) {
       Logger.info('Generating SMS Backup export...');
 
-      const smsBackup = new SMSBackup(this.outputDir, this.phoneBook);
+      const smsBackup = new SMSBackup(this.outputDir);
       smsBackup.saveEntries(mainEntries);
     }
 
