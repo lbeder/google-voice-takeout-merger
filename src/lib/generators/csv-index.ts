@@ -28,20 +28,26 @@ export default class CSVIndex extends Generator {
 
     this.outputDir = outputDir;
     this.phoneBook = phoneBook;
-
-    fs.mkdirSync(this.outputDir, { recursive: true });
-    fs.appendFileSync(path.join(this.outputDir, CSVIndex.INDEX_NAME), `${CSVIndex.INDEX_HEADERS.join(',')}\n`);
   }
 
   // Saves all entries to an index
   public saveEntries(entries: Entry[]) {
+    const indexPath = path.join(this.outputDir, CSVIndex.INDEX_NAME);
+
+    fs.mkdirSync(this.outputDir, { recursive: true });
+    if (fs.existsSync(indexPath)) {
+      fs.rmSync(indexPath);
+    }
+
+    fs.appendFileSync(indexPath, `${CSVIndex.INDEX_HEADERS.join(',')}\n`);
+
     for (const entry of entries) {
-      this.saveEntry(entry);
+      this.saveEntry(entry, indexPath);
     }
   }
 
   // Saves an entries to an index
-  private saveEntry(entry: Entry) {
+  private saveEntry(entry: Entry, indexPath: string) {
     Logger.debug(`Saving entry "${entry.name}" to the csv index`);
 
     if (entry.format !== EntryFormats.HTML) {
@@ -77,7 +83,7 @@ export default class CSVIndex extends Generator {
       }
 
       fs.appendFileSync(
-        path.join(this.outputDir, CSVIndex.INDEX_NAME),
+        indexPath,
         `${[
           phoneNumber,
           entry.timestamp.toISOString(),

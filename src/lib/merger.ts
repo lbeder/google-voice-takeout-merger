@@ -135,6 +135,7 @@ export default class Merger {
 
   // Prints the summary
   private printSummary() {
+    Logger.notice();
     Logger.notice('Summary:');
     Logger.notice('¯¯¯¯¯¯¯¯');
 
