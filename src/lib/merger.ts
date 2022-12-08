@@ -1,6 +1,7 @@
 import Entry, { EntryAction, EntryFormat, EntryType } from './entries/entry';
 import Factory from './entries/factory';
 import CSVIndex from './generators/csv-index';
+import SMSBackup from './generators/sms-backup';
 import PhoneBook, { MatchStrategy, MatchStrategyOptions } from './phone-book';
 import Logger from './utils/logger';
 import fs from 'fs';
@@ -22,6 +23,7 @@ export default class Merger {
   private phoneBook: PhoneBook;
   private stats: Stats;
   private generateIndex: boolean;
+  private generateXml: boolean;
 
   private static LOGS_DIR = 'logs';
 
@@ -32,7 +34,8 @@ export default class Merger {
     contacts?: string,
     strategy?: MatchStrategy,
     strategyOptions: MatchStrategyOptions = {},
-    generateIndex = false
+    generateIndex = false,
+    generateXml = false
   ) {
     if (!fs.existsSync(inputDir)) {
       throw new Error(`Input directory "${inputDir}" does not exist`);
@@ -43,6 +46,7 @@ export default class Merger {
     this.logsDir = path.join(this.outputDir, Merger.LOGS_DIR);
     this.force = force;
     this.generateIndex = generateIndex;
+    this.generateXml = generateXml;
 
     this.phoneBook = new PhoneBook(contacts, strategy, strategyOptions);
 
@@ -122,10 +126,17 @@ export default class Merger {
     }
 
     if (this.generateIndex) {
-      Logger.info('Generating index...');
+      Logger.info('Generating CSV index export...');
 
       const csvIndex = new CSVIndex(this.outputDir, this.phoneBook);
       csvIndex.saveEntries(mainEntries);
+    }
+
+    if (this.generateXml) {
+      Logger.info('Generating SMS Backup export...');
+
+      const smsBackup = new SMSBackup(this.outputDir, this.phoneBook);
+      smsBackup.saveEntries(mainEntries);
     }
 
     this.phoneBook.saveLogs(this.logsDir);
