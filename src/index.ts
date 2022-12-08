@@ -32,7 +32,7 @@ const main = async () => {
         required: false
       })
       .option('generate-index', {
-        description: 'Generate a index of all conversations',
+        description: 'Generate an index of all conversations',
         type: 'boolean',
         alias: 'gi',
         required: false

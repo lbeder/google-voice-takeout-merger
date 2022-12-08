@@ -1,6 +1,6 @@
 import Entry, { EntryAction, EntryFormat, EntryType } from './entries/entry';
 import Factory from './entries/factory';
-import Index from './generators/index';
+import CSVIndex from './generators/csv-index';
 import PhoneBook, { MatchStrategy, MatchStrategyOptions } from './phone-book';
 import Logger from './utils/logger';
 import fs from 'fs';
@@ -124,8 +124,8 @@ export default class Merger {
     if (this.generateIndex) {
       Logger.info('Generating index...');
 
-      const index = new Index(this.outputDir, this.phoneBook);
-      index.saveEntries(mainEntries);
+      const csvIndex = new CSVIndex(this.outputDir, this.phoneBook);
+      csvIndex.saveEntries(mainEntries);
     }
 
     this.phoneBook.saveLogs(this.logsDir);

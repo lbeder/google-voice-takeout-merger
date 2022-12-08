@@ -5,7 +5,7 @@ import Logger from '../utils/logger';
 import fs from 'fs';
 import path from 'path';
 
-export default class Index {
+export default class CSVIndex {
   private outputDir: string;
   private phoneBook: PhoneBook;
 
@@ -27,7 +27,7 @@ export default class Index {
     this.phoneBook = phoneBook;
 
     fs.mkdirSync(this.outputDir, { recursive: true });
-    fs.appendFileSync(path.join(this.outputDir, Index.INDEX_NAME), `${Index.INDEX_HEADERS.join(',')}\n`);
+    fs.appendFileSync(path.join(this.outputDir, CSVIndex.INDEX_NAME), `${CSVIndex.INDEX_HEADERS.join(',')}\n`);
   }
 
   // Saves all entries to an index
@@ -74,7 +74,7 @@ export default class Index {
       }
 
       fs.appendFileSync(
-        path.join(this.outputDir, Index.INDEX_NAME),
+        path.join(this.outputDir, CSVIndex.INDEX_NAME),
         `${[
           phoneNumber,
           entry.timestamp.toISOString(),
