@@ -1,6 +1,6 @@
-import Entry, { EntryAction, EntryFormat, EntryFormats, EntryType } from './entries/entry';
+import Entry, { EntryAction, EntryFormat, EntryType } from './entries/entry';
 import Factory from './entries/factory';
-import HTMLEntry from './entries/html';
+import Index from './generators/index';
 import PhoneBook, { MatchStrategy, MatchStrategyOptions } from './phone-book';
 import Logger from './utils/logger';
 import fs from 'fs';
@@ -21,20 +21,9 @@ export default class Merger {
   private force: boolean;
   private phoneBook: PhoneBook;
   private stats: Stats;
+  private generateIndex: boolean;
 
   private static LOGS_DIR = 'logs';
-  private static INDEX_NAME = 'index.csv';
-  private static INDEX_HEADERS = [
-    'phone number (html)',
-    'first date',
-    'last date',
-    'name (vcf)',
-    'phone number (vcf)',
-    'match length',
-    'path',
-    'file size',
-    'media size'
-  ];
 
   constructor(
     inputDir: string,
@@ -42,7 +31,8 @@ export default class Merger {
     force: boolean,
     contacts?: string,
     strategy?: MatchStrategy,
-    strategyOptions: MatchStrategyOptions = {}
+    strategyOptions: MatchStrategyOptions = {},
+    generateIndex = false
   ) {
     if (!fs.existsSync(inputDir)) {
       throw new Error(`Input directory "${inputDir}" does not exist`);
@@ -51,8 +41,9 @@ export default class Merger {
     this.inputDir = path.resolve(inputDir);
     this.outputDir = path.resolve(outputDir);
     this.logsDir = path.join(this.outputDir, Merger.LOGS_DIR);
-
     this.force = force;
+    this.generateIndex = generateIndex;
+
     this.phoneBook = new PhoneBook(contacts, strategy, strategyOptions);
 
     Entry.setPhoneBook(this.phoneBook);
@@ -121,80 +112,25 @@ export default class Merger {
       pendingEntries[key].push(entry);
     }
 
-    // Prepare the index
-    this.prepareIndex();
+    const mainEntries: Entry[] = [];
 
     // Merge all entries belonging to the same phone number
     for (const [phoneNumbers, entries] of Object.entries(pendingEntries)) {
       Logger.info(`Merging entries for ${phoneNumbers}`);
 
-      const firstEntry = Entry.merge(entries, this.outputDir);
+      mainEntries.push(Entry.merge(entries, this.outputDir));
+    }
 
-      Logger.debug(`Saving entry "${firstEntry.name}" to the index`);
+    if (this.generateIndex) {
+      Logger.info('Generating index...');
 
-      // Save the entry to the index
-      await this.saveToIndex(firstEntry);
+      const index = new Index(this.outputDir, this.phoneBook);
+      index.saveEntries(mainEntries);
     }
 
     this.phoneBook.saveLogs(this.logsDir);
 
     this.printSummary();
-  }
-
-  // Saves all entries to an index
-  private prepareIndex() {
-    fs.appendFileSync(path.join(this.outputDir, Merger.INDEX_NAME), `${Merger.INDEX_HEADERS.join(',')}\n`);
-  }
-
-  // Saves all entries to an index
-  private async saveToIndex(entry: Entry) {
-    if (entry.format !== EntryFormats.HTML) {
-      throw new Error('Unable to save non-HTLM entry to the index');
-    }
-
-    for (const phoneNumber of entry.phoneNumbers) {
-      const { name, phoneBookNumber, matchLength } = this.phoneBook.get(phoneNumber);
-
-      // Each index entry will record:
-      //
-      // 1. Phone number (one per group conversation!)
-      // 2. The date of the first conversation
-      // 3. The date of the last conversation
-      // 4. The name of the participant (if we were able to match it)
-      // 5. The contact number of the participant (if we were able to match it)
-      // 6. The relative path to the merged entry
-      // 7. The file size of the merged entry HTML file
-      // 8. The total size of the merged entry media
-
-      let fileSize = 0;
-      let mediaSize = 0;
-      let relativePath = '';
-      if (entry.savedPath) {
-        const rootDir = path.dirname(this.outputDir);
-        relativePath = entry.savedPath.replace(rootDir, '').replace(/^(\\|\/)/, '');
-
-        fileSize = fs.statSync(entry.savedPath).size;
-
-        for (const mediaEntry of (entry as HTMLEntry).media) {
-          mediaSize += mediaEntry.savedPath ? fs.statSync(mediaEntry.savedPath).size : 0;
-        }
-      }
-
-      fs.appendFileSync(
-        path.join(this.outputDir, Merger.INDEX_NAME),
-        `${[
-          phoneNumber,
-          entry.timestamp.toISOString(),
-          entry.lastTimestamp.toISOString(),
-          name ? `"${name.replace(/"/g, '""')}"` : '',
-          phoneBookNumber ? phoneBookNumber : '',
-          matchLength,
-          `"${relativePath}"`,
-          fileSize,
-          mediaSize
-        ].join(',')}\n`
-      );
-    }
   }
 
   // Prints the summary
