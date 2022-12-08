@@ -16,12 +16,12 @@ export interface SuffixStrategyOptions {
 
 export type MatchStrategyOptions = ExactMatchStrategy | SuffixStrategyOptions;
 
-interface Match {
+interface MatchData {
   phoneNumber: string;
   matchLength: number;
 }
 
-class MatchSet<T extends Match> extends Set<T> {
+class MatchSet<T extends MatchData> extends Set<T> {
   add(value: T): this {
     let found = false;
     this.forEach((item) => {
@@ -39,7 +39,7 @@ class MatchSet<T extends Match> extends Set<T> {
 }
 
 export interface Stats {
-  matched: Record<string, MatchSet<Match>>;
+  matched: Record<string, MatchSet<MatchData>>;
   unknown: Set<string>;
 }
 
@@ -48,8 +48,15 @@ interface Suffix {
   phoneBookNumber: string;
 }
 
+interface Match {
+  name: string;
+  phoneBookNumber: string;
+  matchLength: number;
+}
+
 export default class PhoneBook {
   private phoneBook: Record<string, string>;
+  private cache: Record<string, Match>;
   private suffixPhoneBook: Record<string, Suffix>;
   private strategy: MatchStrategy;
   private strategyOptions: MatchStrategyOptions;
@@ -65,6 +72,7 @@ export default class PhoneBook {
     strategyOptions: MatchStrategyOptions = {}
   ) {
     this.phoneBook = {};
+    this.cache = {};
     this.suffixPhoneBook = {};
 
     this.strategy = strategy;
@@ -166,7 +174,7 @@ export default class PhoneBook {
     }
   }
 
-  public get(phoneNumber: string) {
+  public get(phoneNumber: string): Partial<Match> {
     const sanitizedPhoneNumber = PhoneBook.sanitizePhoneNumber(phoneNumber);
 
     switch (this.strategy) {
@@ -187,6 +195,12 @@ export default class PhoneBook {
           return { name, phoneBookNumber: sanitizedPhoneNumber, matchLength: sanitizedPhoneNumber.length };
         }
 
+        // Check the cache
+        const cache = this.cache[sanitizedPhoneNumber];
+        if (cache) {
+          return cache;
+        }
+
         // Try to match suffixes
         const phoneNumberLength = sanitizedPhoneNumber.length;
         for (let i = 0; i < phoneNumberLength - this.strategyOptions.suffixLength + 1; i++) {
@@ -202,6 +216,9 @@ export default class PhoneBook {
           const { name, phoneBookNumber } = this.suffixPhoneBook[suffix];
           if (name) {
             Logger.warning(`Found suffix-based match ${suffix} for phone number ${sanitizedPhoneNumber}`);
+
+            // Add the match to the cache
+            this.cache[sanitizedPhoneNumber] = { name, phoneBookNumber, matchLength: suffix.length };
 
             return { name, phoneBookNumber, matchLength: suffix.length };
           }
@@ -222,7 +239,7 @@ export default class PhoneBook {
 
     const { name, phoneBookNumber, matchLength } = this.get(phoneNumber);
 
-    if (name) {
+    if (phoneBookNumber && matchLength !== undefined) {
       if (!this.stats.matched[phoneBookNumber]) {
         this.stats.matched[phoneBookNumber] = new MatchSet();
       }
