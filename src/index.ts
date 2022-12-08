@@ -37,6 +37,12 @@ const main = async () => {
         alias: 'gi',
         required: false
       })
+      .option('generate-xml', {
+        description: 'Generate an XML of all conversations which is suitable for use with SMS Backup and Restore',
+        type: 'boolean',
+        alias: 'gx',
+        required: false
+      })
       .option('verbose', {
         type: 'boolean',
         alias: 'v',
@@ -57,7 +63,7 @@ const main = async () => {
         'merge',
         'Merge all records',
         () => {},
-        async ({ inputDir, outputDir, force, contacts, suffixLength, generateIndex }) => {
+        async ({ inputDir, outputDir, force, contacts, suffixLength, generateIndex, generateXml }) => {
           try {
             let strategyOptions = {};
             let matchingStrategy: MatchStrategy;
@@ -75,7 +81,8 @@ const main = async () => {
               contacts,
               matchingStrategy,
               strategyOptions,
-              generateIndex
+              generateIndex,
+              generateXml
             );
 
             await merger.merge();
