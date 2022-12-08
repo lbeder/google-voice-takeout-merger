@@ -2,10 +2,11 @@ import Entry, { EntryFormats } from '../entries/entry';
 import HTMLEntry from '../entries/html';
 import PhoneBook from '../phone-book';
 import Logger from '../utils/logger';
+import Generator from './generator';
 import fs from 'fs';
 import path from 'path';
 
-export default class CSVIndex {
+export default class CSVIndex extends Generator {
   private outputDir: string;
   private phoneBook: PhoneBook;
 
@@ -23,6 +24,8 @@ export default class CSVIndex {
   ];
 
   constructor(outputDir: string, phoneBook: PhoneBook) {
+    super();
+
     this.outputDir = outputDir;
     this.phoneBook = phoneBook;
 
@@ -31,15 +34,15 @@ export default class CSVIndex {
   }
 
   // Saves all entries to an index
-  public async saveEntries(entries: Entry[]) {
+  public saveEntries(entries: Entry[]) {
     for (const entry of entries) {
       this.saveEntry(entry);
     }
   }
 
   // Saves an entries to an index
-  private async saveEntry(entry: Entry) {
-    Logger.debug(`Saving entry "${entry.name}" to the index`);
+  private saveEntry(entry: Entry) {
+    Logger.debug(`Saving entry "${entry.name}" to the csv index`);
 
     if (entry.format !== EntryFormats.HTML) {
       throw new Error('Unable to save non-HTML entry to the index');
