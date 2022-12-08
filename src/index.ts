@@ -31,6 +31,12 @@ const main = async () => {
         alias: 'sl',
         required: false
       })
+      .option('generate-index', {
+        description: 'Generate a index of all conversations',
+        type: 'boolean',
+        alias: 'gi',
+        required: false
+      })
       .option('verbose', {
         type: 'boolean',
         alias: 'v',
@@ -51,7 +57,7 @@ const main = async () => {
         'merge',
         'Merge all records',
         () => {},
-        async ({ inputDir, outputDir, force, contacts, suffixLength }) => {
+        async ({ inputDir, outputDir, force, contacts, suffixLength, generateIndex }) => {
           try {
             let strategyOptions = {};
             let matchingStrategy: MatchStrategy;
@@ -62,7 +68,15 @@ const main = async () => {
               matchingStrategy = MatchStrategy.Exact;
             }
 
-            const merger = new Merger(inputDir, outputDir, force, contacts, matchingStrategy, strategyOptions);
+            const merger = new Merger(
+              inputDir,
+              outputDir,
+              force,
+              contacts,
+              matchingStrategy,
+              strategyOptions,
+              generateIndex
+            );
 
             await merger.merge();
           } catch (e) {

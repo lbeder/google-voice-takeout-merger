@@ -38,16 +38,17 @@ Commands:
   index.ts merge  Merge all records
 
 Options:
-      --version              Show version number                       [boolean]
-  -i, --input-dir            Input directory                 [string] [required]
-  -o, --output-dir           Output directory                [string] [required]
-  -c, --contacts             Contacts file (in VCF format)              [string]
-      --suffix-length, --sl  Shortest suffix to use for the suffix-based
-                             matching strategy                          [number]
-  -v, --verbose              Verbose mode             [boolean] [default: false]
-  -f, --force                Overwrite output directory
+      --version               Show version number                      [boolean]
+  -i, --input-dir             Input directory                [string] [required]
+  -o, --output-dir            Output directory               [string] [required]
+  -c, --contacts              Contacts file (in VCF format)             [string]
+      --suffix-length, --sl   Shortest suffix to use for the suffix-based
+                              matching strategy                         [number]
+      --generate-index, --gi  Generate a index of all conversations    [boolean]
+  -v, --verbose               Verbose mode            [boolean] [default: false]
+  -f, --force                 Overwrite output directory
                                                       [boolean] [default: false]
-      --help                 Show help                                 [boolean]
+      --help                  Show help                                [boolean]
 ```
 
 For example, you can merge the archive located in `~/in/Calls` to `~/out` like this:
