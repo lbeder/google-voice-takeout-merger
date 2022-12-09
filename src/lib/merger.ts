@@ -22,6 +22,7 @@ export default class Merger {
   private force: boolean;
   private phoneBook: PhoneBook;
   private stats: Stats;
+  private ignoreCallLogs: boolean;
   private generateIndex: boolean;
   private generateXml: boolean;
 
@@ -34,6 +35,7 @@ export default class Merger {
     contacts?: string,
     strategy?: MatchStrategy,
     strategyOptions: MatchStrategyOptions = {},
+    ignoreCallLogs = false,
     generateIndex = false,
     generateXml = false
   ) {
@@ -45,8 +47,13 @@ export default class Merger {
     this.outputDir = path.resolve(outputDir);
     this.logsDir = path.join(this.outputDir, Merger.LOGS_DIR);
     this.force = force;
+    this.ignoreCallLogs = ignoreCallLogs;
     this.generateIndex = generateIndex;
     this.generateXml = generateXml;
+
+    if (this.ignoreCallLogs) {
+      Logger.warning('Ignoring call logs...');
+    }
 
     this.phoneBook = new PhoneBook(contacts, strategy, strategyOptions);
 
@@ -102,6 +109,12 @@ export default class Merger {
     // Parse all entries and index them by phone numbers
     for (const f of files) {
       const entry = Factory.fromFile(f);
+
+      if (this.ignoreCallLogs && entry.isCallLog()) {
+        Logger.warning(`Ignoring call log "${entry.name}"`);
+
+        continue;
+      }
 
       this.stats.total++;
       this.stats.types[entry.type]++;

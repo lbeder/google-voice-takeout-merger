@@ -13,7 +13,8 @@ The main features of the tool are:
   * All records are sorted by timestamps, and the resulting filename includes the timestamp of the earliest record.
 * Receives an optional contacts VCF file. See the [Contact Matching](#contact-matching) section below.
 * Fixes all media and metadata issues (broken links, style issues, converts video and audio attachments into proper HTML5 controls, etc.).
-* Generates an `index.csv` which can be separately used with the [Google Voice Takeout Viewer](https://github.com/lbeder/google-voice-takeout-viewer) indexing app.
+* Generates a CSV index (as `index.csv`) which can be separately used with the [Google Voice Takeout Viewer](https://github.com/lbeder/google-voice-takeout-viewer) indexing app.
+* Generates an SMS Backup compatible XML (as `sms.xml`) which can be imported to an Android device. You can also view it via [Syntech View Backup Files](https://www.synctech.com.au/sms-backup-restore/view-backup/) web app.
 * Reorganizes all media and metadata.
 * Adds a list of participants to every record.
 * Displays contact names (if an optional contacts VCF file is provided).
@@ -38,17 +39,22 @@ Commands:
   index.ts merge  Merge all records
 
 Options:
-      --version               Show version number                      [boolean]
-  -i, --input-dir             Input directory                [string] [required]
-  -o, --output-dir            Output directory               [string] [required]
-  -c, --contacts              Contacts file (in VCF format)             [string]
-      --suffix-length, --sl   Shortest suffix to use for the suffix-based
-                              matching strategy                         [number]
-      --generate-index, --gi  Generate a index of all conversations    [boolean]
-  -v, --verbose               Verbose mode            [boolean] [default: false]
-  -f, --force                 Overwrite output directory
+      --version              Show version number                       [boolean]
+  -i, --input-dir            Input directory                 [string] [required]
+  -o, --output-dir           Output directory                [string] [required]
+  -c, --contacts             Contacts file (in VCF format)              [string]
+      --suffix-length, --sl  Shortest suffix to use for the suffix-based
+                             matching strategy                          [number]
+      --generate-index       Generate an index of all conversations    [boolean]
+      --generate-xml         Generate an XML of all conversations which is
+                             suitable for use with SMS Backup and Restore
+                                                                       [boolean]
+  -v, --verbose              Verbose mode             [boolean] [default: false]
+  -f, --force                Overwrite output directory
                                                       [boolean] [default: false]
-      --help                  Show help                                [boolean]
+      --ignore-call-logs     Ignore call logs (Missed, Received, Placed, etc.)
+                                                      [boolean] [default: false]
+      --help                 Show help                                 [boolean]
 ```
 
 For example, you can merge the archive located in `~/in/Calls` to `~/out` like this:
@@ -118,46 +124,49 @@ Please see the provided example input and output in [docs/samples](docs/samples)
 We will execute the following command:
 
 ```sh
-yarn merge -f -i ./docs/samples/in/Calls -o ./docs/samples/out -c ./docs/samples/in/contacts.vcf --sl 8
+yarn merge -f -i ./docs/samples/in/Calls -o ./docs/samples/out -c ./docs/samples/in/contacts.vcf --sl 8 --generate-index --generate-xml
 ```
 
 In the of the execution, you should expect the following summary:
 
 ```sh
-[2022/12/02 15:14:55.153] Summary:
-[2022/12/02 15:14:55.153] ¯¯¯¯¯¯¯¯
-[2022/12/02 15:14:55.153] Total entries: 45
-[2022/12/02 15:14:55.153]
-[2022/12/02 15:14:55.153] Types:
-[2022/12/02 15:14:55.153]     HTML: 30
-[2022/12/02 15:14:55.153]     Media: 15
-[2022/12/02 15:14:55.153]
-[2022/12/02 15:14:55.153] Actions:
-[2022/12/02 15:14:55.153]     Received: 5
-[2022/12/02 15:14:55.153]     Placed: 2
-[2022/12/02 15:14:55.153]     Missed: 5
-[2022/12/02 15:14:55.153]     Text: 17
-[2022/12/02 15:14:55.153]     Voicemail: 8
-[2022/12/02 15:14:55.153]     Recorded: 0
-[2022/12/02 15:14:55.153]     Group Conversation: 8
-[2022/12/02 15:14:55.153]     Unknown: 0
-[2022/12/02 15:14:55.153]
-[2022/12/02 15:14:55.153] Formats:
-[2022/12/02 15:14:55.153]     JPG: 5
-[2022/12/02 15:14:55.153]     GIF: 1
-[2022/12/02 15:14:55.153]     MP3: 4
-[2022/12/02 15:14:55.153]     MP4: 2
-[2022/12/02 15:14:55.153]     3GP: 1
-[2022/12/02 15:14:55.153]     AMR: 1
-[2022/12/02 15:14:55.153]     VCF: 1
-[2022/12/02 15:14:55.153]     HTML: 30
-[2022/12/02 15:14:55.153]
-[2022/12/02 15:14:55.153] Phone number matching:
-[2022/12/02 15:14:55.153]     Total matched VCF contacts: 13
-[2022/12/02 15:14:55.153]     Total matched numbers: 13
-[2022/12/02 15:14:55.153]     Total unknown numbers: 21
-[2022/12/02 15:14:55.153]
-[2022/12/01 16:57:28.369] See the logs directory ~/google-voice-takeout-merger/docs/samples/out/logs for lists of known/unknown numbers
+[2022/12/09 14:00:38.167] Summary:
+[2022/12/09 14:00:38.167] ¯¯¯¯¯¯¯¯
+[2022/12/09 14:00:38.167] Total entries: 45
+[2022/12/09 14:00:38.167]
+[2022/12/09 14:00:38.167] Types:
+[2022/12/09 14:00:38.167]     HTML: 30
+[2022/12/09 14:00:38.167]     Media: 15
+[2022/12/09 14:00:38.167]
+[2022/12/09 14:00:38.167] Actions:
+[2022/12/09 14:00:38.167]     Received: 5
+[2022/12/09 14:00:38.167]     Placed: 2
+[2022/12/09 14:00:38.167]     Missed: 5
+[2022/12/09 14:00:38.167]     Text: 17
+[2022/12/09 14:00:38.167]     Voicemail: 8
+[2022/12/09 14:00:38.167]     Recorded: 0
+[2022/12/09 14:00:38.170]     Group Conversation: 8
+[2022/12/09 14:00:38.170]     Unknown: 0
+[2022/12/09 14:00:38.170]
+[2022/12/09 14:00:38.170] Formats:
+[2022/12/09 14:00:38.170]     JPG: 5
+[2022/12/09 14:00:38.170]     GIF: 1
+[2022/12/09 14:00:38.170]     MP3: 4
+[2022/12/09 14:00:38.171]     MP4: 2
+[2022/12/09 14:00:38.171]     3GP: 1
+[2022/12/09 14:00:38.171]     AMR: 1
+[2022/12/09 14:00:38.171]     VCF: 1
+[2022/12/09 14:00:38.171]     HTML: 30
+[2022/12/09 14:00:38.171]
+[2022/12/09 14:00:38.171] Phone number matching:
+[2022/12/09 14:00:38.171]     Total matched VCF contacts: 13
+[2022/12/09 14:00:38.171]     Total matched numbers: 13
+[2022/12/09 14:00:38.171]     Total unknown numbers: 21
+[2022/12/09 14:00:38.171]
+[2022/12/09 14:00:38.171] Generated CSV index at: ~/google-voice-takeout-merger/docs/samples/out/index.csv
+[2022/12/09 14:00:38.171] Generated SMS backup export: ~/google-voice-takeout-merger/docs/samples/out/sms.xml
+[2022/12/09 14:00:38.171]
+[2022/12/09 14:00:38.171] See the logs directory ~/google-voice-takeout-merger/docs/samples/out/logs for lists of known/unknown numbers
 ```
 
 For example, you could see that all the records for `+17015550147`:
