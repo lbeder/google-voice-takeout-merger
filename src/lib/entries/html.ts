@@ -354,60 +354,70 @@ export default class HTMLEntry extends Entry {
     }
 
     // Looks of call logs
-    if (!ignoreCallLogs) {
-      const callLogs = this.querySelectorAll('.haudio');
-      for (const callLog of callLogs) {
-        const description = callLog.querySelector('.fn')?.text.trim();
-        if (!description) {
-          throw new Error(`Unable to find the content of call log: ${callLog}`);
-        }
-
-        let type: MessageType;
-
-        switch (description) {
-          case 'Voicemail from':
-          case 'Received call from':
-          case 'Missed call from': {
-            type = MessageType.Received;
-
-            break;
-          }
-
-          case 'Placed call to': {
-            type = MessageType.Sent;
-
-            break;
-          }
-
-          default:
-            throw new Error(`Unsupported description ${description} for call log: ${callLog}`);
-        }
-
-        const { author, authorName } = this.parseSender(callLog, '.contributor.vcard a', participants);
-        const unixTime = this.parseDate(callLog, '.published');
-        const authorDescription = authorName ? `${authorName} (${author})` : author;
-
-        let text = `${description} ${authorDescription}`;
-
-        const duration = callLog.querySelector('abbr.duration');
-        if (duration) {
-          const durationText = humanizeDuration(moment.duration(duration.getAttribute('title')).asMilliseconds());
-          text = `${text} (${durationText})`;
-        }
-
-        const message = new Message(
-          type,
-          author,
-          participants,
-          unixTime,
-          text,
-          ignoreMedia ? [] : this.parseMedia(callLog),
-          this.action === EntryAction.GroupConversation,
-          authorName
-        );
-
-        res.push(message);
+    const callLogs = this.querySelectorAll('.haudio');
+    for (const callLog of callLogs) {
+      const description = callLog.querySelector('.fn')?.text.trim();
+      if (!description) {
+        throw new Error(`Unable to find the content of call log: ${callLog}`);
       }
+
+      let type: MessageType;
+      let isCallLog;
+
+      switch (description) {
+        case 'Voicemail from':
+          type = MessageType.Received;
+          isCallLog = false;
+
+          break;
+
+        case 'Received call from':
+        case 'Missed call from': {
+          type = MessageType.Received;
+          isCallLog = true;
+
+          break;
+        }
+
+        case 'Placed call to': {
+          type = MessageType.Sent;
+          isCallLog = true;
+
+          break;
+        }
+
+        default:
+          throw new Error(`Unsupported description ${description} for call log: ${callLog}`);
+      }
+
+      if (ignoreCallLogs && isCallLog) {
+        continue;
+      }
+
+      const { author, authorName } = this.parseSender(callLog, '.contributor.vcard a', participants);
+      const unixTime = this.parseDate(callLog, '.published');
+      const authorDescription = authorName ? `${authorName} (${author})` : author;
+
+      let text = `${description} ${authorDescription}`;
+
+      const duration = callLog.querySelector('abbr.duration');
+      if (duration) {
+        const durationText = humanizeDuration(moment.duration(duration.getAttribute('title')).asMilliseconds());
+        text = `${text} (${durationText})`;
+      }
+
+      const message = new Message(
+        type,
+        author,
+        participants,
+        unixTime,
+        text,
+        ignoreMedia ? [] : this.parseMedia(callLog),
+        this.action === EntryAction.GroupConversation,
+        authorName
+      );
+
+      res.push(message);
     }
 
     return res;
