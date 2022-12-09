@@ -12,18 +12,18 @@ export interface Media {
 }
 
 interface Part {
-  ct: string;
-  seq: number;
-  text: string;
-  name?: string;
-  chset?: string;
   cd?: string;
-  fn?: string;
+  chset?: string;
   cid?: string;
   cl?: string;
+  ct: string;
   ctt_s?: string;
   ctt_t?: string;
   data?: string;
+  fn?: string;
+  name?: string;
+  seq: number;
+  text: string;
 }
 
 export default class Message {
@@ -72,18 +72,18 @@ export default class Message {
   private toSMS(): xml.XmlObject {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const attr: Record<string, any> = {
-      protocol: 0,
       address: this.author,
-      date: this.unixTime,
-      type: this.type,
-      subject: Message.NULL,
       body: Message.escapeText(this.text),
-      toa: Message.NULL,
+      date: this.unixTime,
+      locked: 0,
+      protocol: 0,
+      read: 1,
       sc_toa: Message.NULL,
       service_center: Message.NULL,
-      read: 1,
       status: 1,
-      locked: 0
+      subject: Message.NULL,
+      toa: Message.NULL,
+      type: this.type
     };
 
     if (this.authorName) {
@@ -131,18 +131,18 @@ export default class Message {
 
     for (const media of this.media) {
       mediaParts.push({
-        ct: media.contentType,
-        seq: seq++,
-        name: media.name,
-        chset: Message.NULL,
         cd: Message.NULL,
-        fn: Message.NULL,
+        chset: Message.NULL,
         cid: `<${media.name}>`,
         cl: media.name,
+        ct: media.contentType,
         ctt_s: Message.NULL,
         ctt_t: Message.NULL,
-        text: Message.NULL,
-        data: media.data.toString('base64')
+        data: media.data.toString('base64'),
+        fn: Message.NULL,
+        name: media.name,
+        seq: seq++,
+        text: Message.NULL
       });
     }
 
