@@ -1,4 +1,4 @@
-import Entry, { EntryFormats } from '../entries/entry';
+import Entry, { EntryFormat } from '../entries/entry';
 import HTMLEntry from '../entries/html';
 import Logger from '../utils/logger';
 import Generator from './generator';
@@ -9,7 +9,7 @@ import xml from 'xml';
 export default class SMSBackup extends Generator {
   private outputDir: string;
 
-  private static SMS_BACKUP_NAME = 'sms.xml';
+  public static SMS_BACKUP_NAME = 'sms.xml';
 
   constructor(outputDir: string) {
     super();
@@ -47,7 +47,7 @@ export default class SMSBackup extends Generator {
   private processEntry(entry: HTMLEntry) {
     Logger.debug(`Saving entry "${entry.name}" to the SMS backup export`);
 
-    if (entry.format !== EntryFormats.HTML) {
+    if (entry.format !== EntryFormat.HTML) {
       throw new Error('Unable to save non-HTML entry to the index');
     }
 

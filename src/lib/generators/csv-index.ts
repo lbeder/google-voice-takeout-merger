@@ -1,4 +1,4 @@
-import Entry, { EntryFormats } from '../entries/entry';
+import Entry, { EntryFormat } from '../entries/entry';
 import HTMLEntry from '../entries/html';
 import PhoneBook from '../phone-book';
 import Logger from '../utils/logger';
@@ -10,7 +10,7 @@ export default class CSVIndex extends Generator {
   private outputDir: string;
   private phoneBook: PhoneBook;
 
-  private static INDEX_NAME = 'index.csv';
+  public static INDEX_NAME = 'index.csv';
   private static INDEX_HEADERS = [
     'phone number (html)',
     'first date',
@@ -50,7 +50,7 @@ export default class CSVIndex extends Generator {
   private saveEntry(entry: Entry, indexPath: string) {
     Logger.debug(`Saving entry "${entry.name}" to the csv index`);
 
-    if (entry.format !== EntryFormats.HTML) {
+    if (entry.format !== EntryFormat.HTML) {
       throw new Error('Unable to save non-HTML entry to the index');
     }
 

@@ -194,6 +194,16 @@ export default class Merger {
     Logger.notice(`    Total unknown numbers: ${totalUnknown}`);
     Logger.notice();
 
+    if (this.generateIndex) {
+      Logger.notice(`Generated CSV index at: ${path.join(this.outputDir, CSVIndex.INDEX_NAME)}`);
+    }
+
+    if (this.generateXml) {
+      Logger.notice(`Generated SMS backup export: ${path.join(this.outputDir, SMSBackup.SMS_BACKUP_NAME)}`);
+    }
+
+    Logger.notice();
+
     Logger.notice(`See the logs directory ${this.logsDir} for lists of known/unknown numbers`);
   }
 }

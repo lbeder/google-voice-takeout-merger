@@ -77,6 +77,12 @@ export default abstract class Entry {
     return this.type == EntryType.Media;
   }
 
+  public isCallLog() {
+    return (
+      this.action == EntryAction.Received || this.action == EntryAction.Placed || this.action == EntryAction.Missed
+    );
+  }
+
   public hasUnknownPhoneNumber() {
     return this.phoneNumbers.length === 1 && this.phoneNumbers[0] === Entry.UNKNOWN_PHONE_NUMBER;
   }
