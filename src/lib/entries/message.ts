@@ -61,7 +61,7 @@ export default class Message {
     this.me = me;
   }
 
-  public toXML(): xml.XmlObject {
+  public toSMSXML(): xml.XmlObject {
     if (this.groupConversation || this.media.length > 0) {
       return this.toMMS();
     }
