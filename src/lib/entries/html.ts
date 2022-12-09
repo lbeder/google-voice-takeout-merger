@@ -1,5 +1,5 @@
 import Logger from '../utils/logger';
-import Entry, { EntryAction, EntryActions, EntryFormats, EntryType } from './entry';
+import Entry, { EntryAction, EntryFormat, EntryType } from './entry';
 import MediaEntry from './media';
 import Message, { MessageType } from './message';
 import fs from 'fs';
@@ -12,18 +12,18 @@ export default class HTMLEntry extends Entry {
   public media: MediaEntry[] = [];
 
   constructor(action: EntryAction, name: string, phoneNumbers: string[], timestamp: Moment, fullPath: string) {
-    if (action === EntryActions.GroupConversation && phoneNumbers.length === 0) {
+    if (action === EntryAction.GroupConversation && phoneNumbers.length === 0) {
       throw new Error('Unexpected empty phones numbers');
     }
 
-    super(action, EntryType.HTML, EntryFormats.HTML, name, phoneNumbers, timestamp, fullPath);
+    super(action, EntryType.HTML, EntryFormat.HTML, name, phoneNumbers, timestamp, fullPath);
 
     // If this is a group conversation entry, make sure to parse (and sort) the phone numbers of all of its participants
     this.load();
   }
 
   public isGroupConversation() {
-    return this.action == EntryActions.GroupConversation;
+    return this.action == EntryAction.GroupConversation;
   }
 
   // Lazily loads the contents of the entry
@@ -57,8 +57,8 @@ export default class HTMLEntry extends Entry {
 
     const timestamp = this.timestamp.format('YYYY-MM-DDTHH_mm_ss');
     let key: string;
-    if (this.action === EntryActions.GroupConversation) {
-      key = `${EntryActions.GroupConversation} ${++Entry.gcCount}`;
+    if (this.action === EntryAction.GroupConversation) {
+      key = `${EntryAction.GroupConversation} ${++Entry.gcCount}`;
     } else {
       key = this.phoneNumbers.join(',');
     }
@@ -105,7 +105,7 @@ export default class HTMLEntry extends Entry {
     }
 
     // Add a list of all participants
-    if (this.action === EntryActions.GroupConversation) {
+    if (this.action === EntryAction.GroupConversation) {
       const participants = this.querySelector('.participants');
       if (!participants) {
         throw new Error(`Unable to get the participants of entry "${this.name}"`);
@@ -169,8 +169,8 @@ export default class HTMLEntry extends Entry {
       const mediaKey = mediaEntry.hasUnknownPhoneNumber() ? mediaName.split('+00000000000')[1].trim() : mediaName;
 
       switch (mediaEntry.format) {
-        case EntryFormats.JPG:
-        case EntryFormats.GIF: {
+        case EntryFormat.JPG:
+        case EntryFormat.GIF: {
           const image = this.querySelector(`img[src$="${mediaKey}"]`);
           if (!image) {
             throw new Error(`Unable to find image element for "${mediaKey}"`);
@@ -180,7 +180,7 @@ export default class HTMLEntry extends Entry {
           return;
         }
 
-        case EntryFormats.MP3: {
+        case EntryFormat.MP3: {
           switch (this.action) {
             case EntryAction.Voicemail: {
               const audio = this.querySelector(`audio[src$="${mediaKey}.mp3"]`);
@@ -209,8 +209,8 @@ export default class HTMLEntry extends Entry {
           }
         }
 
-        case EntryFormats.AMR: {
-          Logger.warning(`${EntryFormats.AMR} playback in HTML5 isn't currently supported`);
+        case EntryFormat.AMR: {
+          Logger.warning(`${EntryFormat.AMR} playback in HTML5 isn't currently supported`);
 
           const audio = this.querySelector(`audio[src$="${mediaKey}"]`);
           if (!audio) {
@@ -221,7 +221,7 @@ export default class HTMLEntry extends Entry {
           return;
         }
 
-        case EntryFormats.MP4: {
+        case EntryFormat.MP4: {
           const video = this.querySelector(`a.video[href$="${mediaKey}"]`);
           if (!video) {
             throw new Error(`Unable to find video element for "${mediaKey}"`);
@@ -231,8 +231,8 @@ export default class HTMLEntry extends Entry {
           return;
         }
 
-        case EntryFormats.THREEGP: {
-          Logger.warning(`${EntryFormats.THREEGP} playback in HTML5 isn't currently supported`);
+        case EntryFormat.THREEGP: {
+          Logger.warning(`${EntryFormat.THREEGP} playback in HTML5 isn't currently supported`);
 
           const video = this.querySelector(`a.video[href$="${mediaKey}"]`);
           if (!video) {
@@ -243,7 +243,7 @@ export default class HTMLEntry extends Entry {
           return;
         }
 
-        case EntryFormats.VCF: {
+        case EntryFormat.VCF: {
           const vcard = this.querySelector(`a.vcard[href$="${mediaKey}"]`);
           if (!vcard) {
             throw new Error(`Unable to find vcard element for "${mediaKey}"`);
@@ -340,7 +340,7 @@ export default class HTMLEntry extends Entry {
         unixTime,
         text,
         this.parseMedia(msg),
-        this.action === EntryActions.GroupConversation,
+        this.action === EntryAction.GroupConversation,
         authorName,
         me
       );
@@ -396,7 +396,7 @@ export default class HTMLEntry extends Entry {
         unixTime,
         text,
         this.parseMedia(callLog),
-        this.action === EntryActions.GroupConversation,
+        this.action === EntryAction.GroupConversation,
         authorName
       );
 

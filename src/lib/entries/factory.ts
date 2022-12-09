@@ -1,5 +1,5 @@
 import Logger from '../utils/logger';
-import Entry, { EntryAction, EntryActions, EntryFormats } from './entry';
+import Entry, { EntryAction, EntryActions, EntryFormat } from './entry';
 import HTMLEntry from './html';
 import MediaEntry from './media';
 import moment from 'moment';
@@ -81,16 +81,16 @@ export default class Factory {
     }
 
     switch (format) {
-      case EntryFormats.JPG:
-      case EntryFormats.GIF:
-      case EntryFormats.MP3:
-      case EntryFormats.AMR:
-      case EntryFormats.MP4:
-      case EntryFormats.THREEGP:
-      case EntryFormats.VCF:
+      case EntryFormat.JPG:
+      case EntryFormat.GIF:
+      case EntryFormat.MP3:
+      case EntryFormat.AMR:
+      case EntryFormat.MP4:
+      case EntryFormat.THREEGP:
+      case EntryFormat.VCF:
         return new MediaEntry(entryAction, format, name, phoneNumbers, Factory.parseTimestamp(timestampStr), fullPath);
 
-      case EntryFormats.HTML:
+      case EntryFormat.HTML:
         return new HTMLEntry(entryAction, name, phoneNumbers, Factory.parseTimestamp(timestampStr), fullPath);
 
       default:
