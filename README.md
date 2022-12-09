@@ -54,6 +54,7 @@ Options:
                                                       [boolean] [default: false]
       --ignore-call-logs     Ignore call logs (Missed, Received, Placed, etc.)
                                                       [boolean] [default: false]
+      --ignore-media         Ignore media attachments [boolean] [default: false]
       --help                 Show help                                 [boolean]
 ```
 

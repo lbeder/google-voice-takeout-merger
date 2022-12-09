@@ -23,6 +23,7 @@ export default class Merger {
   private phoneBook: PhoneBook;
   private stats: Stats;
   private ignoreCallLogs: boolean;
+  private ignoreMedia: boolean;
   private generateIndex: boolean;
   private generateXml: boolean;
 
@@ -36,6 +37,7 @@ export default class Merger {
     strategy?: MatchStrategy,
     strategyOptions: MatchStrategyOptions = {},
     ignoreCallLogs = false,
+    ignoreMedia = false,
     generateIndex = false,
     generateXml = false
   ) {
@@ -48,11 +50,16 @@ export default class Merger {
     this.logsDir = path.join(this.outputDir, Merger.LOGS_DIR);
     this.force = force;
     this.ignoreCallLogs = ignoreCallLogs;
+    this.ignoreMedia = ignoreMedia;
     this.generateIndex = generateIndex;
     this.generateXml = generateXml;
 
     if (this.ignoreCallLogs) {
       Logger.warning('Ignoring call logs...');
+    }
+
+    if (this.ignoreMedia) {
+      Logger.warning('Ignoring media attachments...');
     }
 
     this.phoneBook = new PhoneBook(contacts, strategy, strategyOptions);
@@ -116,6 +123,12 @@ export default class Merger {
         continue;
       }
 
+      if (this.ignoreMedia && entry.isMedia()) {
+        Logger.warning(`Ignoring media "${entry.name}"`);
+
+        continue;
+      }
+
       this.stats.total++;
       this.stats.types[entry.type]++;
       this.stats.actions[entry.action]++;
@@ -148,7 +161,10 @@ export default class Merger {
     if (this.generateXml) {
       Logger.info('Generating SMS Backup export...');
 
-      const smsBackup = new SMSBackup(this.outputDir);
+      const smsBackup = new SMSBackup(this.outputDir, {
+        ignoreCallLogs: this.ignoreCallLogs,
+        ignoreMedia: this.ignoreMedia
+      });
       smsBackup.saveEntries(mainEntries);
     }
 
