@@ -3,6 +3,7 @@ import Entry, { EntryAction, EntryActions, EntryFormats, EntryType } from './ent
 import MediaEntry from './media';
 import Message, { MessageType } from './message';
 import fs from 'fs';
+import humanizeDuration from 'humanize-duration';
 import moment, { Moment } from 'moment';
 import { HTMLElement, parse } from 'node-html-parser';
 import path from 'path';
@@ -379,7 +380,14 @@ export default class HTMLEntry extends Entry {
       const { author, authorName } = this.parseSender(callLog, '.contributor.vcard a', participants);
       const unixTime = this.parseDate(callLog, '.published');
       const authorDescription = authorName ? `${authorName} (${author})` : author;
-      const text = `${description} ${authorDescription}`;
+
+      let text = `${description} ${authorDescription}`;
+
+      const duration = callLog.querySelector('abbr.duration');
+      if (duration) {
+        const durationText = humanizeDuration(moment.duration(duration.getAttribute('title')).asMilliseconds());
+        text = `${text} (${durationText})`;
+      }
 
       const message = new Message(
         type,
