@@ -34,13 +34,11 @@ const main = async () => {
       .option('generate-index', {
         description: 'Generate an index of all conversations',
         type: 'boolean',
-        alias: 'gi',
         required: false
       })
       .option('generate-xml', {
         description: 'Generate an XML of all conversations which is suitable for use with SMS Backup and Restore',
         type: 'boolean',
-        alias: 'gx',
         required: false
       })
       .option('verbose', {
@@ -55,6 +53,12 @@ const main = async () => {
         default: false,
         description: 'Overwrite output directory'
       })
+      .option('ignore-call-logs', {
+        type: 'boolean',
+        alias: '',
+        default: false,
+        description: 'Ignore call logs (Missed, Received, Placed, etc.)'
+      })
       .middleware(({ verbose }) => {
         Logger.init();
         Logger.setVerbose(verbose);
@@ -63,7 +67,7 @@ const main = async () => {
         'merge',
         'Merge all records',
         () => {},
-        async ({ inputDir, outputDir, force, contacts, suffixLength, generateIndex, generateXml }) => {
+        async ({ inputDir, outputDir, force, contacts, suffixLength, ignoreCallLogs, generateIndex, generateXml }) => {
           try {
             let strategyOptions = {};
             let matchingStrategy: MatchStrategy;
@@ -81,6 +85,7 @@ const main = async () => {
               contacts,
               matchingStrategy,
               strategyOptions,
+              ignoreCallLogs,
               generateIndex,
               generateXml
             );
