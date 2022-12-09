@@ -1,5 +1,5 @@
 import Entry, { EntryFormat } from '../entries/entry';
-import HTMLEntry from '../entries/html';
+import HTMLEntry, { MessageOptions } from '../entries/html';
 import Logger from '../utils/logger';
 import Generator from './generator';
 import fs from 'fs';
@@ -8,13 +8,17 @@ import xml from 'xml';
 
 export default class SMSBackup extends Generator {
   private outputDir: string;
+  private ignoreCallLogs: boolean;
+  private ignoreMedia: boolean;
 
   public static SMS_BACKUP_NAME = 'sms.xml';
 
-  constructor(outputDir: string) {
+  constructor(outputDir: string, { ignoreCallLogs, ignoreMedia }: MessageOptions) {
     super();
 
     this.outputDir = outputDir;
+    this.ignoreCallLogs = ignoreCallLogs;
+    this.ignoreMedia = ignoreMedia;
 
     fs.mkdirSync(this.outputDir, { recursive: true });
   }
@@ -51,6 +55,8 @@ export default class SMSBackup extends Generator {
       throw new Error('Unable to save non-HTML entry to the index');
     }
 
-    return entry.messages().map((m) => m.toSMSXML());
+    return entry
+      .messages({ ignoreCallLogs: this.ignoreCallLogs, ignoreMedia: this.ignoreMedia })
+      .map((m) => m.toSMSXML());
   }
 }

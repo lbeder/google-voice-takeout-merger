@@ -8,6 +8,11 @@ import moment, { Moment } from 'moment';
 import { HTMLElement, parse } from 'node-html-parser';
 import path from 'path';
 
+export interface MessageOptions {
+  ignoreMedia: boolean;
+  ignoreCallLogs: boolean;
+}
+
 export default class HTMLEntry extends Entry {
   public media: MediaEntry[] = [];
 
@@ -312,7 +317,7 @@ export default class HTMLEntry extends Entry {
     );
   }
 
-  public messages(): Message[] {
+  public messages({ ignoreMedia, ignoreCallLogs }: MessageOptions): Message[] {
     this.load();
 
     const res = [];
@@ -339,7 +344,7 @@ export default class HTMLEntry extends Entry {
         participants,
         unixTime,
         text,
-        this.parseMedia(msg),
+        ignoreMedia ? [] : this.parseMedia(msg),
         this.action === EntryAction.GroupConversation,
         authorName,
         me
@@ -349,58 +354,60 @@ export default class HTMLEntry extends Entry {
     }
 
     // Looks of call logs
-    const callLogs = this.querySelectorAll('.haudio');
-    for (const callLog of callLogs) {
-      const description = callLog.querySelector('.fn')?.text.trim();
-      if (!description) {
-        throw new Error(`Unable to find the content of call log: ${callLog}`);
-      }
-
-      let type: MessageType;
-
-      switch (description) {
-        case 'Voicemail from':
-        case 'Received call from':
-        case 'Missed call from': {
-          type = MessageType.Received;
-
-          break;
+    if (!ignoreCallLogs) {
+      const callLogs = this.querySelectorAll('.haudio');
+      for (const callLog of callLogs) {
+        const description = callLog.querySelector('.fn')?.text.trim();
+        if (!description) {
+          throw new Error(`Unable to find the content of call log: ${callLog}`);
         }
 
-        case 'Placed call to': {
-          type = MessageType.Sent;
+        let type: MessageType;
 
-          break;
+        switch (description) {
+          case 'Voicemail from':
+          case 'Received call from':
+          case 'Missed call from': {
+            type = MessageType.Received;
+
+            break;
+          }
+
+          case 'Placed call to': {
+            type = MessageType.Sent;
+
+            break;
+          }
+
+          default:
+            throw new Error(`Unsupported description ${description} for call log: ${callLog}`);
         }
 
-        default:
-          throw new Error(`Unsupported description ${description} for call log: ${callLog}`);
+        const { author, authorName } = this.parseSender(callLog, '.contributor.vcard a', participants);
+        const unixTime = this.parseDate(callLog, '.published');
+        const authorDescription = authorName ? `${authorName} (${author})` : author;
+
+        let text = `${description} ${authorDescription}`;
+
+        const duration = callLog.querySelector('abbr.duration');
+        if (duration) {
+          const durationText = humanizeDuration(moment.duration(duration.getAttribute('title')).asMilliseconds());
+          text = `${text} (${durationText})`;
+        }
+
+        const message = new Message(
+          type,
+          author,
+          participants,
+          unixTime,
+          text,
+          ignoreMedia ? [] : this.parseMedia(callLog),
+          this.action === EntryAction.GroupConversation,
+          authorName
+        );
+
+        res.push(message);
       }
-
-      const { author, authorName } = this.parseSender(callLog, '.contributor.vcard a', participants);
-      const unixTime = this.parseDate(callLog, '.published');
-      const authorDescription = authorName ? `${authorName} (${author})` : author;
-
-      let text = `${description} ${authorDescription}`;
-
-      const duration = callLog.querySelector('abbr.duration');
-      if (duration) {
-        const durationText = humanizeDuration(moment.duration(duration.getAttribute('title')).asMilliseconds());
-        text = `${text} (${durationText})`;
-      }
-
-      const message = new Message(
-        type,
-        author,
-        participants,
-        unixTime,
-        text,
-        this.parseMedia(callLog),
-        this.action === EntryAction.GroupConversation,
-        authorName
-      );
-
-      res.push(message);
     }
 
     return res;

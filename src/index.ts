@@ -59,6 +59,12 @@ const main = async () => {
         default: false,
         description: 'Ignore call logs (Missed, Received, Placed, etc.)'
       })
+      .option('ignore-media', {
+        type: 'boolean',
+        alias: '',
+        default: false,
+        description: 'Ignore media attachments'
+      })
       .middleware(({ verbose }) => {
         Logger.init();
         Logger.setVerbose(verbose);
@@ -67,7 +73,17 @@ const main = async () => {
         'merge',
         'Merge all records',
         () => {},
-        async ({ inputDir, outputDir, force, contacts, suffixLength, ignoreCallLogs, generateIndex, generateXml }) => {
+        async ({
+          inputDir,
+          outputDir,
+          force,
+          contacts,
+          suffixLength,
+          ignoreCallLogs,
+          ignoreMedia,
+          generateIndex,
+          generateXml
+        }) => {
           try {
             let strategyOptions = {};
             let matchingStrategy: MatchStrategy;
@@ -86,6 +102,7 @@ const main = async () => {
               matchingStrategy,
               strategyOptions,
               ignoreCallLogs,
+              ignoreMedia,
               generateIndex,
               generateXml
             );

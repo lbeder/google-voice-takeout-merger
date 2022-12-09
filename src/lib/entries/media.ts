@@ -1,5 +1,5 @@
 import Logger from '../utils/logger';
-import Entry, { EntryAction, EntryActions, EntryFormat, EntryType } from './entry';
+import Entry, { EntryAction, EntryFormat, EntryType } from './entry';
 import fs from 'fs';
 import { Moment } from 'moment';
 import path from 'path';
