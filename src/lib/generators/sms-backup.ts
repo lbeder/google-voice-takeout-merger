@@ -51,6 +51,6 @@ export default class SMSBackup extends Generator {
       throw new Error('Unable to save non-HTML entry to the index');
     }
 
-    return entry.messages().map((m) => m.toXML());
+    return entry.messages().map((m) => m.toSMSXML());
   }
 }
