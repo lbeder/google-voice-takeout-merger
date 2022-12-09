@@ -2,7 +2,33 @@ import xml from 'xml';
 
 export enum MessageType {
   Received = 1,
-  Sent = 2
+  Sent = 2,
+  Draft = 3,
+  Outbox = 4
+}
+
+enum MMSMessageType {
+  Received = 132,
+  Sent = 128
+}
+
+enum MessageReadStatus {
+  Unread = 0,
+  Read = 1
+}
+
+enum MessageStatus {
+  None = -1,
+  Complete = 0,
+  Pending = 32,
+  Failed = 64
+}
+
+enum AddressType {
+  BCC = 129,
+  CC = 130,
+  To = 151,
+  From = 137
 }
 
 export interface Media {
@@ -38,6 +64,10 @@ export default class Message {
   private media: Media[];
 
   private static NULL = 'null';
+  private static DEFAULT_SMS_PROTOCOL = 0;
+  private static CHARSET_UTF8 = 106;
+  private static MMS_CONTENT_TYPE = 'application/vnd.wap.multipart.relate';
+  private static READ_REPORT = 129;
 
   constructor(
     type: MessageType,
@@ -75,12 +105,11 @@ export default class Message {
       address: this.author,
       body: Message.escapeText(this.text),
       date: this.unixTime,
-      locked: 0,
-      protocol: 0,
-      read: 1,
+      protocol: Message.DEFAULT_SMS_PROTOCOL,
+      read: MessageReadStatus.Read,
       sc_toa: Message.NULL,
       service_center: Message.NULL,
-      status: 1,
+      status: MessageStatus.Complete,
       subject: Message.NULL,
       toa: Message.NULL,
       type: this.type
@@ -101,8 +130,8 @@ export default class Message {
 
   private toMMS(): xml.XmlObject {
     const sentByMe = this.me && this.author == this.me;
-    const msgBox = sentByMe ? 2 : 1;
-    const mType = sentByMe ? 128 : 132;
+    const msgBox = sentByMe ? MessageType.Sent : MessageType.Received;
+    const mType = sentByMe ? MMSMessageType.Sent : MMSMessageType.Received;
 
     const participants = [];
     for (const participant of this.participants) {
@@ -111,8 +140,8 @@ export default class Message {
           {
             _attr: {
               address: participant,
-              charset: 106,
-              type: participant === this.author ? 137 : 151
+              charset: Message.CHARSET_UTF8,
+              type: participant === this.author ? AddressType.From : AddressType.To
             }
           }
         ]
@@ -163,12 +192,12 @@ export default class Message {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const attr: Record<string, any> = {
       address: this.participants.join('~'),
-      ct_t: 'application/vnd.wap.multipart.relate',
+      ct_t: Message.MMS_CONTENT_TYPE,
       date: this.unixTime,
       m_type: mType,
       msg_box: msgBox,
-      read: 1,
-      rr: 129,
+      read: MessageReadStatus.Read,
+      rr: Message.READ_REPORT,
       seen: 1,
       sub_id: 1,
       text_only: 1
