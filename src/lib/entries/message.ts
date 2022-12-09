@@ -38,6 +38,7 @@ export default class Message {
   private media: Media[];
 
   private static NULL = 'null';
+  private static IGNORED_CONTENT = ['MMS Received'];
 
   constructor(
     type: MessageType,
@@ -54,7 +55,7 @@ export default class Message {
     this.author = author;
     this.participants = participants;
     this.unixTime = unixTime;
-    this.text = text;
+    this.text = Message.IGNORED_CONTENT.includes(text) ? '' : text;
     this.media = media;
     this.groupConversation = groupConversation;
     this.authorName = authorName;
