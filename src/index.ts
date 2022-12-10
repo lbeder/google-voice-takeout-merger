@@ -108,8 +108,11 @@ const main = async () => {
             );
 
             await merger.merge();
-          } catch (e) {
+          } catch (e: unknown) {
             Logger.error(e);
+            if (e instanceof Error) {
+              Logger.error(e.stack);
+            }
 
             process.exit(1);
           }
@@ -121,6 +124,9 @@ const main = async () => {
       .parse();
   } catch (e) {
     Logger.error(e);
+    if (e instanceof Error) {
+      Logger.error(e.stack);
+    }
 
     process.exit(1);
   }
