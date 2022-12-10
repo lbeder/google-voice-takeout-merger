@@ -41,10 +41,13 @@ export default class SMSBackup extends Generator {
 
     for (const entry of entries) {
       const messages = this.processEntry(entry as HTMLEntry);
+
       for (const message of messages) {
         smses.push(message);
       }
     }
+
+    smses.close();
   }
 
   // Saves an entries to an index
