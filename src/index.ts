@@ -109,9 +109,10 @@ const main = async () => {
 
             await merger.merge();
           } catch (e: unknown) {
-            Logger.error(e);
             if (e instanceof Error) {
               Logger.error(e.stack);
+            } else {
+              Logger.error(e);
             }
 
             process.exit(1);
@@ -123,9 +124,10 @@ const main = async () => {
       .showHelpOnFail(false)
       .parse();
   } catch (e) {
-    Logger.error(e);
     if (e instanceof Error) {
       Logger.error(e.stack);
+    } else {
+      Logger.error(e);
     }
 
     process.exit(1);
