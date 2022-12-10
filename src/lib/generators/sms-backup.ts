@@ -32,19 +32,19 @@ export default class SMSBackup extends Generator {
       fs.rmSync(smsPath);
     }
 
-    let messages: xml.XmlObject[] = [];
+    const smses = xml.element();
+    const stream = xml({ smses }, { stream: true, declaration: { standalone: 'yes', encoding: 'UTF-8' } });
+
+    stream.on('data', (chunk) => {
+      fs.appendFileSync(smsPath, chunk);
+    });
 
     for (const entry of entries) {
-      messages = [...messages, ...this.processEntry(entry as HTMLEntry)];
+      const messages = this.processEntry(entry as HTMLEntry);
+      for (const message of messages) {
+        smses.push(message);
+      }
     }
-
-    fs.writeFileSync(
-      smsPath,
-      xml(
-        { smses: [{ _attr: { count: messages.length } }, ...messages] },
-        { indent: '\t', declaration: { standalone: 'yes', encoding: 'UTF-8' } }
-      )
-    );
   }
 
   // Saves an entries to an index
