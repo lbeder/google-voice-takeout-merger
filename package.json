@@ -7,7 +7,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "merge": "ts-node src/index.ts merge",
+    "merge": "NODE_OPTIONS='--max-old-space-size=8192' ts-node src/index.ts merge",
     "cli": "ts-node src/index.ts --help",
     "lint": "eslint -c .eslintrc --ext .ts src",
     "format": "prettier --check --write src/**/* --config .prettierrc",
