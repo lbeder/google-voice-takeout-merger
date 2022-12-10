@@ -218,6 +218,10 @@ export default class Message {
   }
 
   private static escapeText(text: string) {
-    return text.replace(/<br\s*\/?>/g, '&#10;');
+    return text
+      .replace(/<br\s*\/?>/g, '&#10;')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
   }
 }
