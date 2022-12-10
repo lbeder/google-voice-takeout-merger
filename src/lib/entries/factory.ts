@@ -100,6 +100,6 @@ export default class Factory {
 
   // Parses Google Voice timestamp format
   private static parseTimestamp(timestamp: string) {
-    return moment(timestamp, 'YYYY-MM-DDTHH_mm_ssZ*');
+    return moment(timestamp, 'YYYY-MM-DDTHH_mm_ssZ*').utc();
   }
 }
