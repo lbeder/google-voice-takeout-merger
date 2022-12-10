@@ -159,7 +159,7 @@ export default class Merger {
     }
 
     if (this.generateXml) {
-      Logger.info('Generating SMS Backup export...');
+      Logger.info('Generating SMS Backup and Restore XML export...');
 
       const smsBackup = new SMSBackup(this.outputDir, {
         ignoreCallLogs: this.ignoreCallLogs,
@@ -215,7 +215,9 @@ export default class Merger {
     }
 
     if (this.generateXml) {
-      Logger.notice(`Generated SMS backup export: ${path.join(this.outputDir, SMSBackup.SMS_BACKUP_NAME)}`);
+      Logger.notice(
+        `Generated SMS Backup and Restore XML export: ${path.join(this.outputDir, SMSBackup.SMS_BACKUP_NAME)}`
+      );
     }
 
     Logger.notice();
