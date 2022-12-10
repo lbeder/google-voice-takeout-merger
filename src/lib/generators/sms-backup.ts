@@ -49,7 +49,7 @@ export default class SMSBackup extends Generator {
 
   // Saves an entries to an index
   private processEntry(entry: HTMLEntry) {
-    Logger.debug(`Saving entry "${entry.name}" to the SMS Backup and Restore XML export`);
+    Logger.info(`Saving entry "${entry.name}" to the SMS Backup and Restore XML export`);
 
     if (entry.format !== EntryFormat.HTML) {
       throw new Error('Unable to save non-HTML entry to the index');
