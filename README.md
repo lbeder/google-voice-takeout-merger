@@ -14,7 +14,7 @@ The main features of the tool are:
 * Receives an optional contacts VCF file. See the [Contact Matching](#contact-matching) section below.
 * Fixes all media and metadata issues (broken links, style issues, converts video and audio attachments into proper HTML5 controls, etc.).
 * Generates a CSV index (as `index.csv`) which can be separately used with the [Google Voice Takeout Viewer](https://github.com/lbeder/google-voice-takeout-viewer) indexing app.
-* Generates an SMS Backup compatible XML (as `sms.xml`) which can be imported to an Android device. You can also view it via [Syntech View Backup Files](https://www.synctech.com.au/sms-backup-restore/view-backup/) web app.
+* Generates an SMS Backup and Restore compatible XML (as `sms.xml`) which can be imported to an Android device. You can also view it via [Syntech View Backup Files](https://www.synctech.com.au/sms-backup-restore/view-backup/) web app.
 * Reorganizes all media and metadata.
 * Adds a list of participants to every record.
 * Displays contact names (if an optional contacts VCF file is provided).
@@ -165,7 +165,7 @@ In the of the execution, you should expect the following summary:
 [2022/12/09 14:00:38.171]     Total unknown numbers: 21
 [2022/12/09 14:00:38.171]
 [2022/12/09 14:00:38.171] Generated CSV index at: ~/google-voice-takeout-merger/docs/samples/out/index.csv
-[2022/12/09 14:00:38.171] Generated SMS backup export: ~/google-voice-takeout-merger/docs/samples/out/sms.xml
+[2022/12/09 14:00:38.171] Generated SMS Backup and Restore XML export: ~/google-voice-takeout-merger/docs/samples/out/sms.xml
 [2022/12/09 14:00:38.171]
 [2022/12/09 14:00:38.171] See the logs directory ~/google-voice-takeout-merger/docs/samples/out/logs for lists of known/unknown numbers
 ```
