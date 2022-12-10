@@ -366,10 +366,12 @@ export default class HTMLEntry extends Entry {
 
       switch (description) {
         case 'Voicemail from':
+        case 'Recorded call with': {
           type = MessageType.Received;
           isCallLog = false;
 
           break;
+        }
 
         case 'Received call from':
         case 'Missed call from': {
