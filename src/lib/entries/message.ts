@@ -112,7 +112,7 @@ export default class Message {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const attr: Record<string, any> = {
       address: this.target,
-      body: Message.escapeText(this.text),
+      body: this.text,
       date: this.unixTime,
       protocol: Message.DEFAULT_SMS_PROTOCOL,
       read: MessageReadStatus.Read,
@@ -163,7 +163,7 @@ export default class Message {
       {
         ct: 'text/plain',
         seq: seq++,
-        text: Message.escapeText(this.text)
+        text: this.text
       }
     ];
 
@@ -220,13 +220,5 @@ export default class Message {
         ...elements
       ]
     };
-  }
-
-  private static escapeText(text: string) {
-    return text
-      .replace(/<br\s*\/?>/g, '&#10;')
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
   }
 }
