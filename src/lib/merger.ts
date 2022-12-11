@@ -24,7 +24,7 @@ export default class Merger {
   private stats: Stats;
   private ignoreCallLogs: boolean;
   private ignoreMedia: boolean;
-  private generateIndex: boolean;
+  private generateCsv: boolean;
   private generateXml: boolean;
 
   private static LOGS_DIR = 'logs';
@@ -38,7 +38,7 @@ export default class Merger {
     strategyOptions: MatchStrategyOptions = {},
     ignoreCallLogs = false,
     ignoreMedia = false,
-    generateIndex = false,
+    generateCsv = false,
     generateXml = false
   ) {
     if (!fs.existsSync(inputDir)) {
@@ -51,7 +51,7 @@ export default class Merger {
     this.force = force;
     this.ignoreCallLogs = ignoreCallLogs;
     this.ignoreMedia = ignoreMedia;
-    this.generateIndex = generateIndex;
+    this.generateCsv = generateCsv;
     this.generateXml = generateXml;
 
     if (this.ignoreCallLogs) {
@@ -151,7 +151,7 @@ export default class Merger {
       mainEntries.push(Entry.merge(entries, this.outputDir));
     }
 
-    if (this.generateIndex) {
+    if (this.generateCsv) {
       Logger.info('Generating CSV index export...');
 
       const csvIndex = new CSVIndex(this.outputDir, this.phoneBook);
@@ -210,7 +210,7 @@ export default class Merger {
     Logger.notice(`    Total unknown numbers: ${totalUnknown}`);
     Logger.notice();
 
-    if (this.generateIndex) {
+    if (this.generateCsv) {
       Logger.notice(`Generated CSV index at: ${path.join(this.outputDir, CSVIndex.INDEX_NAME)}`);
     }
 

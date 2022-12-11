@@ -31,8 +31,8 @@ const main = async () => {
         alias: 'sl',
         required: false
       })
-      .option('generate-index', {
-        description: 'Generate an index of all conversations',
+      .option('generate-csv', {
+        description: 'Generate a CSV index of all conversations',
         type: 'boolean',
         required: false
       })
@@ -81,7 +81,7 @@ const main = async () => {
           suffixLength,
           ignoreCallLogs,
           ignoreMedia,
-          generateIndex,
+          generateCsv,
           generateXml
         }) => {
           try {
@@ -103,7 +103,7 @@ const main = async () => {
               strategyOptions,
               ignoreCallLogs,
               ignoreMedia,
-              generateIndex,
+              generateCsv,
               generateXml
             );
 
