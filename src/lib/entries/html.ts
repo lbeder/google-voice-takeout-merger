@@ -492,6 +492,8 @@ export default class HTMLEntry extends Entry {
         throw new Error(`Unable to find the sender of a group conversation message: ${message}`);
       }
 
+      // Since this isn't a group conversation and the missing sender isn't "Me" - take it from the record itself (i.e.,
+      // the name of the file)
       sender = this.phoneNumbers[0];
     }
 
