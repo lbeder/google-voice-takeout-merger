@@ -60,6 +60,7 @@ export default class PhoneBook {
   private suffixPhoneBook: Record<string, Suffix>;
   private strategy: MatchStrategy;
   private strategyOptions: MatchStrategyOptions;
+  private replaceContactQuotes?: string;
   public stats: Stats;
 
   private static UNKNOWN_LOG_NAME = 'unknown_numbers.csv';
@@ -69,7 +70,8 @@ export default class PhoneBook {
   constructor(
     contacts?: string,
     strategy: MatchStrategy = MatchStrategy.Exact,
-    strategyOptions: MatchStrategyOptions = {}
+    strategyOptions: MatchStrategyOptions = {},
+    replaceContactQuotes?: string
   ) {
     this.phoneBook = {};
     this.cache = {};
@@ -77,6 +79,8 @@ export default class PhoneBook {
 
     this.strategy = strategy;
     this.strategyOptions = strategyOptions;
+
+    this.replaceContactQuotes = replaceContactQuotes;
 
     this.stats = {
       matched: {},
@@ -131,11 +135,15 @@ export default class PhoneBook {
         continue;
       }
 
-      const fullName = fn
+      let fullName = fn
         .valueOf()
         .toString()
         .trim()
         .replace(/(\r\n|\n|\r)/g, ' ');
+
+      if (replaceContactQuotes) {
+        fullName = fullName.replace(/'/g, replaceContactQuotes);
+      }
 
       for (const tel of Array.isArray(tels) ? tels : [tels]) {
         const telValue = tel.valueOf();
