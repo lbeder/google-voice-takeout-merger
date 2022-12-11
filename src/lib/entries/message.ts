@@ -207,7 +207,7 @@ export default class Message {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const attr: Record<string, any> = {
       address: this.participants
-        .map(({ phoneNumber, name }) => (name ? `${phoneNumber} (${name})` : phoneNumber))
+        .map(({ phoneNumber, name }) => (name ? `${name} (${phoneNumber})` : phoneNumber))
         .join('~'),
       ct_t: Message.MMS_CONTENT_TYPE,
       date: this.unixTime,
