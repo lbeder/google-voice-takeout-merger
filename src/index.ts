@@ -55,15 +55,17 @@ const main = async () => {
       })
       .option('ignore-call-logs', {
         type: 'boolean',
-        alias: '',
         default: false,
         description: 'Ignore call logs (Missed, Received, Placed, etc.)'
       })
       .option('ignore-media', {
         type: 'boolean',
-        alias: '',
         default: false,
         description: 'Ignore media attachments'
+      })
+      .option('replace-contact-quotes', {
+        type: 'string',
+        description: 'Replace single quotes in contact names'
       })
       .middleware(({ verbose }) => {
         Logger.init();
@@ -82,7 +84,8 @@ const main = async () => {
           ignoreCallLogs,
           ignoreMedia,
           generateCsv,
-          generateXml
+          generateXml,
+          replaceContactQuotes
         }) => {
           try {
             let strategyOptions = {};
@@ -104,7 +107,8 @@ const main = async () => {
               ignoreCallLogs,
               ignoreMedia,
               generateCsv,
-              generateXml
+              generateXml,
+              replaceContactQuotes
             );
 
             await merger.merge();

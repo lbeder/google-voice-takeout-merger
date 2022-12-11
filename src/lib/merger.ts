@@ -39,7 +39,8 @@ export default class Merger {
     ignoreCallLogs = false,
     ignoreMedia = false,
     generateCsv = false,
-    generateXml = false
+    generateXml = false,
+    replaceContactQuotes?: string
   ) {
     if (!fs.existsSync(inputDir)) {
       throw new Error(`Input directory "${inputDir}" does not exist`);
@@ -62,7 +63,7 @@ export default class Merger {
       Logger.warning('Ignoring media attachments...');
     }
 
-    this.phoneBook = new PhoneBook(contacts, strategy, strategyOptions);
+    this.phoneBook = new PhoneBook(contacts, strategy, strategyOptions, replaceContactQuotes);
 
     Entry.setPhoneBook(this.phoneBook);
 
