@@ -45,7 +45,7 @@ Options:
   -c, --contacts             Contacts file (in VCF format)              [string]
       --suffix-length, --sl  Shortest suffix to use for the suffix-based
                              matching strategy                          [number]
-      --generate-index       Generate an index of all conversations    [boolean]
+      --generate-csv         Generate a CSV index of all conversations [boolean]
       --generate-xml         Generate an XML of all conversations which is
                              suitable for use with SMS Backup and Restore
                                                                        [boolean]
