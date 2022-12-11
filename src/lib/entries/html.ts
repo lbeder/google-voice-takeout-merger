@@ -415,6 +415,11 @@ export default class HTMLEntry extends Entry {
         text = `${text} (${durationText})`;
       }
 
+      const transcription = callLog.querySelector('span.description span.full-text');
+      if (transcription) {
+        text = `${text}: ${transcription.text}`;
+      }
+
       const message = new Message({
         type,
         target,
