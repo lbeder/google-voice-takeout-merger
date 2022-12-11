@@ -4,7 +4,6 @@ import Logger from '../utils/logger';
 import Generator from './generator';
 import fs from 'fs';
 import path from 'path';
-import replace from 'replace-in-file';
 import xml from 'xml';
 
 export default class SMSBackup extends Generator {
@@ -43,17 +42,15 @@ export default class SMSBackup extends Generator {
     xmlStream.pipe(writer);
 
     writer.on('finish', () => {
-      replace.sync({
-        files: smsPath,
-        from: /<smses>/,
-        to: `<smses count="${messageCount}">`
-      });
+      // TODO:
+      // const data = fs.readFileSync(smsPath, 'utf-8');
+      // fs.writeFileSync(smsPath, data.replace('<smses>', `<smses count=${messageCount}>`), 'utf-8');
     });
 
-    let messageCount = 0;
+    // TODO: let messageCount = 0;
     for (const entry of entries) {
       const messages = this.processEntry(entry as HTMLEntry);
-      messageCount += messages.length;
+      // TODO:  messageCount += messages.length;
 
       for (const message of messages) {
         smses.push(message);
