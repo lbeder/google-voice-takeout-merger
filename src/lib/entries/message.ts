@@ -52,13 +52,18 @@ interface Part {
   text: string;
 }
 
+export interface Participant {
+  phoneNumber: string;
+  name?: string;
+}
+
 export interface MessageParams {
   type: MessageType;
   target?: string;
   targetName?: string;
   sender: string;
   me?: string;
-  participants: string[];
+  participants: Participant[];
   unixTime: number;
   text: string;
   media: Media[];
@@ -71,7 +76,7 @@ export default class Message {
   private target?: string;
   private targetName?: string;
   private sender: string;
-  private participants: string[];
+  private participants: Participant[];
   private unixTime: number;
   private text: string;
   private isGroupConversation: boolean;
@@ -138,19 +143,20 @@ export default class Message {
   }
 
   private toMMS(): xml.XmlObject {
-    const sentByMe = (this.me && this.sender == this.me) || !this.participants.includes(this.sender);
+    const sentByMe =
+      (this.me && this.sender == this.me) || !this.participants.find((p) => p.phoneNumber === this.sender);
     const msgBox = sentByMe ? MessageType.Sent : MessageType.Received;
     const mType = sentByMe ? MMSMessageType.Sent : MMSMessageType.Received;
 
     const participants = [];
-    for (const participant of this.participants) {
+    for (const { phoneNumber } of this.participants) {
       participants.push({
         addr: [
           {
             _attr: {
-              address: participant,
+              address: phoneNumber,
               charset: Message.CHARSET_UTF8,
-              type: participant === this.sender || sentByMe ? AddressType.From : AddressType.To
+              type: phoneNumber === this.sender || sentByMe ? AddressType.From : AddressType.To
             }
           }
         ]
@@ -200,7 +206,9 @@ export default class Message {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const attr: Record<string, any> = {
-      address: this.participants.join('~'),
+      address: this.participants
+        .map(({ phoneNumber, name }) => (name ? `${phoneNumber} (${name})` : phoneNumber))
+        .join('~'),
       ct_t: Message.MMS_CONTENT_TYPE,
       date: this.unixTime,
       m_type: mType,

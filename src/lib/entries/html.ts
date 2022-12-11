@@ -322,7 +322,10 @@ export default class HTMLEntry extends Entry {
 
     const res = [];
 
-    const participants = this.phoneNumbers;
+    const participants = this.phoneNumbers.map((phoneNumber) => ({
+      phoneNumber,
+      name: Entry.phoneBook.get(phoneNumber).name
+    }));
     let target: string | undefined;
     let targetName: string | undefined;
 
