@@ -219,9 +219,11 @@ export default class Merger {
         `Generated SMS Backup and Restore XML export: ${path.join(this.outputDir, SMSBackup.SMS_BACKUP_NAME)}`
       );
     }
-
     Logger.notice();
 
     Logger.notice(`See the logs directory ${this.logsDir} for lists of known/unknown numbers`);
+    Logger.notice();
+
+    Logger.notice('Please let the tool a few moments to finish');
   }
 }
