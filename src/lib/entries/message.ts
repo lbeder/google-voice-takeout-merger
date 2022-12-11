@@ -52,15 +52,29 @@ interface Part {
   text: string;
 }
 
+export interface MessageParams {
+  type: MessageType;
+  target?: string;
+  targetName?: string;
+  sender: string;
+  me?: string;
+  participants: string[];
+  unixTime: number;
+  text: string;
+  media: Media[];
+  isGroupConversation: boolean;
+}
+
 export default class Message {
   private type: MessageType;
   private me?: string;
-  private author: string;
-  private authorName?: string;
+  private target?: string;
+  private targetName?: string;
+  private sender: string;
   private participants: string[];
   private unixTime: number;
   private text: string;
-  private groupConversation: boolean;
+  private isGroupConversation: boolean;
   private media: Media[];
 
   private static NULL = 'null';
@@ -69,30 +83,25 @@ export default class Message {
   private static MMS_CONTENT_TYPE = 'application/vnd.wap.multipart.relate';
   private static READ_REPORT = 129;
 
-  constructor(
-    type: MessageType,
-    author: string,
-    participants: string[],
-    unixTime: number,
-    text: string,
-    media: Media[] = [],
-    groupConversation = false,
-    authorName?: string,
-    me?: string
-  ) {
-    this.type = type;
-    this.author = author;
-    this.participants = participants;
-    this.unixTime = unixTime;
-    this.text = text;
-    this.media = media;
-    this.groupConversation = groupConversation;
-    this.authorName = authorName;
-    this.me = me;
+  constructor(params: MessageParams) {
+    if (!params.target && !params.isGroupConversation) {
+      throw new Error(`Missing target from: ${params}`);
+    }
+
+    this.type = params.type;
+    this.target = params.target;
+    this.targetName = params.targetName;
+    this.sender = params.sender;
+    this.me = params.me;
+    this.participants = params.participants;
+    this.unixTime = params.unixTime;
+    this.text = params.text;
+    this.media = params.media;
+    this.isGroupConversation = params.isGroupConversation;
   }
 
   public toSMSXML(): xml.XmlObject {
-    if (this.groupConversation || this.media.length > 0) {
+    if (this.isGroupConversation || this.media.length > 0) {
       return this.toMMS();
     }
 
@@ -102,7 +111,7 @@ export default class Message {
   private toSMS(): xml.XmlObject {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const attr: Record<string, any> = {
-      address: this.author,
+      address: this.target,
       body: Message.escapeText(this.text),
       date: this.unixTime,
       protocol: Message.DEFAULT_SMS_PROTOCOL,
@@ -115,8 +124,8 @@ export default class Message {
       type: this.type
     };
 
-    if (this.authorName) {
-      attr.contact_name = this.authorName;
+    if (this.targetName) {
+      attr.contact_name = this.targetName;
     }
 
     return {
@@ -129,7 +138,7 @@ export default class Message {
   }
 
   private toMMS(): xml.XmlObject {
-    const sentByMe = this.me && this.author == this.me;
+    const sentByMe = (this.me && this.sender == this.me) || !this.participants.includes(this.sender);
     const msgBox = sentByMe ? MessageType.Sent : MessageType.Received;
     const mType = sentByMe ? MMSMessageType.Sent : MMSMessageType.Received;
 
@@ -141,7 +150,7 @@ export default class Message {
             _attr: {
               address: participant,
               charset: Message.CHARSET_UTF8,
-              type: participant === this.author ? AddressType.From : AddressType.To
+              type: participant === this.sender || sentByMe ? AddressType.From : AddressType.To
             }
           }
         ]
@@ -202,10 +211,6 @@ export default class Message {
       sub_id: 1,
       text_only: 1
     };
-
-    if (this.authorName) {
-      attr.contact_name = this.authorName;
-    }
 
     return {
       mms: [

@@ -62,7 +62,7 @@ export default class HTMLEntry extends Entry {
 
     const timestamp = this.timestamp.format('YYYY-MM-DDTHH_mm_ss');
     let key: string;
-    if (this.action === EntryAction.GroupConversation) {
+    if (this.isGroupConversation()) {
       key = `${EntryAction.GroupConversation} ${++Entry.gcCount}`;
     } else {
       key = this.phoneNumbers.join(',');
@@ -110,7 +110,7 @@ export default class HTMLEntry extends Entry {
     }
 
     // Add a list of all participants
-    if (this.action === EntryAction.GroupConversation) {
+    if (this.isGroupConversation()) {
       const participants = this.querySelector('.participants');
       if (!participants) {
         throw new Error(`Unable to get the participants of entry "${this.name}"`);
@@ -322,14 +322,19 @@ export default class HTMLEntry extends Entry {
 
     const res = [];
 
-    const participants = this.phoneNumbers.map(
-      (phoneNumber) => Entry.phoneBook.get(phoneNumber as string).phoneBookNumber ?? phoneNumber
-    );
+    const participants = this.phoneNumbers;
+    let target: string | undefined;
+    let targetName: string | undefined;
+
+    if (!this.isGroupConversation()) {
+      target = this.phoneNumbers[0];
+      targetName = Entry.phoneBook.get(target).name;
+    }
 
     // Look for regular messages
     const msgs = this.querySelectorAll('.message');
     for (const msg of msgs) {
-      const { author, authorName, me } = this.parseSender(msg, '.sender.vcard a', participants);
+      const { sender, me } = this.parseSender(msg, '.sender.vcard a');
       const unixTime = this.parseDate(msg, '.dt');
 
       const content = msg.querySelector('q');
@@ -338,17 +343,18 @@ export default class HTMLEntry extends Entry {
       }
       const text = content.text;
 
-      const message = new Message(
-        me && me === author ? MessageType.Sent : MessageType.Received,
-        author,
+      const message = new Message({
+        type: me ? MessageType.Sent : MessageType.Received,
+        target,
+        targetName,
+        sender,
+        me: me ? sender : undefined,
         participants,
         unixTime,
         text,
-        ignoreMedia ? [] : this.parseMedia(msg),
-        this.action === EntryAction.GroupConversation,
-        authorName,
-        me
-      );
+        media: ignoreMedia ? [] : this.parseMedia(msg),
+        isGroupConversation: this.isGroupConversation()
+      });
 
       res.push(message);
     }
@@ -396,11 +402,12 @@ export default class HTMLEntry extends Entry {
         continue;
       }
 
-      const { author, authorName } = this.parseSender(callLog, '.contributor.vcard a', participants);
-      const unixTime = this.parseDate(callLog, '.published');
-      const authorDescription = authorName ? `${authorName} (${author})` : author;
+      const { sender, me } = this.parseSender(callLog, '.contributor.vcard a');
 
-      let text = `${description} ${authorDescription}`;
+      const unixTime = this.parseDate(callLog, '.published');
+      const targetDescription = targetName ? `${targetName} (${target})` : target;
+
+      let text = `${description} ${targetDescription}`;
 
       const duration = callLog.querySelector('abbr.duration');
       if (duration) {
@@ -408,16 +415,18 @@ export default class HTMLEntry extends Entry {
         text = `${text} (${durationText})`;
       }
 
-      const message = new Message(
+      const message = new Message({
         type,
-        author,
+        target,
+        targetName,
+        sender,
+        me: me ? sender : undefined,
         participants,
         unixTime,
         text,
-        ignoreMedia ? [] : this.parseMedia(callLog),
-        this.action === EntryAction.GroupConversation,
-        authorName
-      );
+        media: ignoreMedia ? [] : this.parseMedia(callLog),
+        isGroupConversation: this.isGroupConversation()
+      });
 
       res.push(message);
     }
@@ -460,29 +469,25 @@ export default class HTMLEntry extends Entry {
     return href?.split('tel:')[1].replace(/\+\+/g, '+') ?? href ?? '';
   }
 
-  private parseSender(message: HTMLElement, selector: string, participants: string[]) {
-    const sender = message.querySelector(selector);
-    if (!sender) {
+  private parseSender(message: HTMLElement, selector: string) {
+    const senderElement = message.querySelector(selector);
+    if (!senderElement) {
       throw new Error(`Unable to find the sender for message: ${message}`);
     }
 
-    const phoneNumber = HTMLEntry.hrefToPhoneNumber(sender.getAttribute('href'));
-    const authorInfo = Entry.phoneBook.get(phoneNumber as string);
-    let author = authorInfo.phoneBookNumber ?? phoneNumber;
+    const element = senderElement.querySelector('abbr') || senderElement.querySelector('span');
+    const me = element?.text === 'Me';
 
-    const authorName = authorInfo.name;
+    let sender = HTMLEntry.hrefToPhoneNumber(senderElement.getAttribute('href'));
+    if (!sender && !me) {
+      if (this.isGroupConversation()) {
+        throw new Error(`Unable to find the sender of a group conversation message: ${message}`);
+      }
 
-    let me;
-    const element = sender.querySelector('abbr') || sender.querySelector('span');
-    if (element?.text === 'Me' || (participants.length > 0 && !participants.includes(author))) {
-      me = author;
+      sender = this.phoneNumbers[0];
     }
 
-    if (!author) {
-      author = Entry.UNKNOWN_PHONE_NUMBER;
-    }
-
-    return { author, authorName, me };
+    return { sender, me };
   }
 
   private parseDate(message: HTMLElement, selector: string) {

@@ -83,6 +83,10 @@ export default abstract class Entry {
     );
   }
 
+  public isGroupConversation() {
+    return this.action == EntryAction.GroupConversation;
+  }
+
   public hasUnknownPhoneNumber() {
     return this.phoneNumbers.length === 1 && this.phoneNumbers[0] === Entry.UNKNOWN_PHONE_NUMBER;
   }
