@@ -24,3 +24,6 @@ node_modules
 
 # OS metadata
 .DS_Store
+
+/docs/samples/out/sms.xml
+/docs/samples/out/index.csv
