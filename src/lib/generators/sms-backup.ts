@@ -4,6 +4,7 @@ import Logger from '../utils/logger';
 import Generator from './generator';
 import fs from 'fs';
 import path from 'path';
+import { Transform } from 'stream';
 import xml from 'xml';
 
 export default class SMSBackup extends Generator {
@@ -11,6 +12,7 @@ export default class SMSBackup extends Generator {
   private ignoreCallLogs: boolean;
   private ignoreMedia: boolean;
 
+  public static TEMP_SMS_BACKUP_NAME = 'sms.xml.tmp';
   public static SMS_BACKUP_NAME = 'sms.xml';
 
   constructor(outputDir: string, { ignoreCallLogs, ignoreMedia }: MessageOptions) {
@@ -26,31 +28,57 @@ export default class SMSBackup extends Generator {
   // Saves all entries to an index
   public saveEntries(entries: Entry[]) {
     const smsPath = path.join(this.outputDir, SMSBackup.SMS_BACKUP_NAME);
+    const tempSmsPath = path.join(this.outputDir, SMSBackup.TEMP_SMS_BACKUP_NAME);
 
     fs.mkdirSync(this.outputDir, { recursive: true });
+    if (fs.existsSync(tempSmsPath)) {
+      fs.rmSync(tempSmsPath);
+    }
     if (fs.existsSync(smsPath)) {
       fs.rmSync(smsPath);
     }
 
     const smses = xml.element();
 
-    const writer = fs.createWriteStream(smsPath);
+    const xmlWriter = fs.createWriteStream(tempSmsPath);
     const xmlStream = xml(
       { smses },
       { stream: true, indent: '\t', declaration: { standalone: 'yes', encoding: 'UTF-8' } }
     );
-    xmlStream.pipe(writer);
+    xmlStream.pipe(xmlWriter);
 
-    writer.on('finish', () => {
-      // TODO:
-      // const data = fs.readFileSync(smsPath, 'utf-8');
-      // fs.writeFileSync(smsPath, data.replace('<smses>', `<smses count=${messageCount}>`), 'utf-8');
+    xmlWriter.on('finish', () => {
+      const readStream = fs.createReadStream(tempSmsPath);
+      const writeStream = fs.createWriteStream(smsPath);
+
+      let processed = false;
+      const transformStream = new Transform({
+        transform(chunk: Buffer, _encoding, callback) {
+          const data = chunk.toString();
+
+          if (processed || !chunk.includes('<smses>')) {
+            this.push(data);
+          } else {
+            processed = true;
+
+            this.push(chunk.toString().replace('<smses>', `<smses count="${messageCount}">`));
+          }
+          callback();
+        }
+      });
+
+      readStream
+        .pipe(transformStream)
+        .pipe(writeStream)
+        .on('finish', () => {
+          fs.rmSync(tempSmsPath);
+        });
     });
 
-    // TODO: let messageCount = 0;
+    let messageCount = 0;
     for (const entry of entries) {
       const messages = this.processEntry(entry as HTMLEntry);
-      // TODO:  messageCount += messages.length;
+      messageCount += messages.length;
 
       for (const message of messages) {
         smses.push(message);
