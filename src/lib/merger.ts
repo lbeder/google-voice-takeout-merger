@@ -160,8 +160,6 @@ export default class Merger {
         // Filter call logs that from phone numbers which do not have any other conversation
         const conversations = entries.filter((e) => !e.isCallLog());
         if (conversations.length === 0) {
-          console.log('AAAAA');
-
           continue;
         }
       }
