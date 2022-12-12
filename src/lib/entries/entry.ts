@@ -78,9 +78,7 @@ export default abstract class Entry {
   }
 
   public isCallLog() {
-    return (
-      this.action == EntryAction.Received || this.action == EntryAction.Placed || this.action == EntryAction.Missed
-    );
+    return [EntryAction.Recorded, EntryAction.Received, EntryAction.Placed, EntryAction.Missed].includes(this.action);
   }
 
   public isGroupConversation() {

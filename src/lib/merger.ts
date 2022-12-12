@@ -23,6 +23,7 @@ export default class Merger {
   private phoneBook: PhoneBook;
   private stats: Stats;
   private ignoreCallLogs: boolean;
+  private ignoreOrphanCallLogs: boolean;
   private ignoreMedia: boolean;
   private generateCsv: boolean;
   private generateXml: boolean;
@@ -37,6 +38,7 @@ export default class Merger {
     strategy?: MatchStrategy,
     strategyOptions: MatchStrategyOptions = {},
     ignoreCallLogs = false,
+    ignoreOrphanCallLogs = false,
     ignoreMedia = false,
     generateCsv = false,
     generateXml = false,
@@ -51,12 +53,17 @@ export default class Merger {
     this.logsDir = path.join(this.outputDir, Merger.LOGS_DIR);
     this.force = force;
     this.ignoreCallLogs = ignoreCallLogs;
+    this.ignoreOrphanCallLogs = ignoreOrphanCallLogs;
     this.ignoreMedia = ignoreMedia;
     this.generateCsv = generateCsv;
     this.generateXml = generateXml;
 
     if (this.ignoreCallLogs) {
       Logger.warning('Ignoring call logs...');
+    }
+
+    if (this.ignoreOrphanCallLogs) {
+      Logger.warning('Ignoring orphan call logs...');
     }
 
     if (this.ignoreMedia) {
@@ -147,7 +154,17 @@ export default class Merger {
 
     // Merge all entries belonging to the same phone number
     for (const [phoneNumbers, entries] of Object.entries(pendingEntries)) {
-      Logger.info(`Merging entries for ${phoneNumbers}`);
+      Logger.info(`Merging entries for ${phoneNumbers}s`);
+
+      if (!this.ignoreCallLogs && this.ignoreOrphanCallLogs) {
+        // Filter call logs that from phone numbers which do not have any other conversation
+        const conversations = entries.filter((e) => !e.isCallLog());
+        if (conversations.length === 0) {
+          console.log('AAAAA');
+
+          continue;
+        }
+      }
 
       mainEntries.push(Entry.merge(entries, this.outputDir));
     }
@@ -164,6 +181,7 @@ export default class Merger {
 
       const smsBackup = new SMSBackup(this.outputDir, {
         ignoreCallLogs: this.ignoreCallLogs,
+        ignoreOrphanCallLogs: this.ignoreOrphanCallLogs,
         ignoreMedia: this.ignoreMedia
       });
       smsBackup.saveEntries(mainEntries);

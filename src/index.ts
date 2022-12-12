@@ -58,6 +58,12 @@ const main = async () => {
         default: false,
         description: 'Ignore call logs (Missed, Received, Placed, etc.)'
       })
+      .option('ignore-orphan-call-logs', {
+        type: 'boolean',
+        default: false,
+        description:
+          'Ignore call logs (Missed, Received, Placed, etc.) from phone numbers which do not have any other conversations'
+      })
       .option('ignore-media', {
         type: 'boolean',
         default: false,
@@ -82,6 +88,7 @@ const main = async () => {
           contacts,
           suffixLength,
           ignoreCallLogs,
+          ignoreOrphanCallLogs,
           ignoreMedia,
           generateCsv,
           generateXml,
@@ -105,6 +112,7 @@ const main = async () => {
               matchingStrategy,
               strategyOptions,
               ignoreCallLogs,
+              ignoreOrphanCallLogs,
               ignoreMedia,
               generateCsv,
               generateXml,

@@ -10,16 +10,18 @@ import xml from 'xml';
 export default class SMSBackup extends Generator {
   private outputDir: string;
   private ignoreCallLogs: boolean;
+  private ignoreOrphanCallLogs: boolean;
   private ignoreMedia: boolean;
 
   public static TEMP_SMS_BACKUP_NAME = 'sms.xml.tmp';
   public static SMS_BACKUP_NAME = 'sms.xml';
 
-  constructor(outputDir: string, { ignoreCallLogs, ignoreMedia }: MessageOptions) {
+  constructor(outputDir: string, { ignoreCallLogs, ignoreOrphanCallLogs, ignoreMedia }: MessageOptions) {
     super();
 
     this.outputDir = outputDir;
     this.ignoreCallLogs = ignoreCallLogs;
+    this.ignoreOrphanCallLogs = ignoreOrphanCallLogs;
     this.ignoreMedia = ignoreMedia;
 
     fs.mkdirSync(this.outputDir, { recursive: true });
@@ -97,7 +99,11 @@ export default class SMSBackup extends Generator {
     }
 
     return entry
-      .messages({ ignoreCallLogs: this.ignoreCallLogs, ignoreMedia: this.ignoreMedia })
+      .messages({
+        ignoreCallLogs: this.ignoreCallLogs,
+        ignoreOrphanCallLogs: this.ignoreOrphanCallLogs,
+        ignoreMedia: this.ignoreMedia
+      })
       .map((m) => m.toSMSXML());
   }
 }

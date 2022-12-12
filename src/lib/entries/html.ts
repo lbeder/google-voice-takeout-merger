@@ -9,8 +9,17 @@ import { HTMLElement, parse } from 'node-html-parser';
 import path from 'path';
 
 export interface MessageOptions {
-  ignoreMedia: boolean;
   ignoreCallLogs: boolean;
+  ignoreOrphanCallLogs: boolean;
+  ignoreMedia: boolean;
+}
+
+enum CallLog {
+  Voicemail = 'Voicemail from',
+  Recorded = 'Recorded call with',
+  Received = 'Received call from',
+  Missed = 'Missed call from',
+  Placed = 'Placed call to'
 }
 
 export default class HTMLEntry extends Entry {
@@ -317,7 +326,7 @@ export default class HTMLEntry extends Entry {
     );
   }
 
-  public messages({ ignoreMedia, ignoreCallLogs }: MessageOptions): Message[] {
+  public messages({ ignoreCallLogs, ignoreOrphanCallLogs, ignoreMedia }: MessageOptions): Message[] {
     this.load();
 
     const res = [];
@@ -333,6 +342,8 @@ export default class HTMLEntry extends Entry {
       target = this.phoneNumbers[0];
       targetName = Entry.phoneBook.get(target).name;
     }
+
+    let foundConversation = false;
 
     // Look for regular messages
     const msgs = this.querySelectorAll('.message');
@@ -359,11 +370,28 @@ export default class HTMLEntry extends Entry {
         isGroupConversation: this.isGroupConversation()
       });
 
+      if (!foundConversation) {
+        foundConversation = true;
+      }
+
       res.push(message);
     }
 
-    // Looks of call logs
+    // Look for call log messages
     const callLogs = this.querySelectorAll('.haudio');
+
+    // If we haven't found any conversation yet, check if any voice mail messages exist
+    if (!foundConversation) {
+      for (const callLog of callLogs) {
+        const description = callLog.querySelector('.fn')?.text.trim();
+        if (description === CallLog.Voicemail) {
+          foundConversation = true;
+
+          break;
+        }
+      }
+    }
+
     for (const callLog of callLogs) {
       const description = callLog.querySelector('.fn')?.text.trim();
       if (!description) {
@@ -374,23 +402,33 @@ export default class HTMLEntry extends Entry {
       let isCallLog;
 
       switch (description) {
-        case 'Voicemail from':
-        case 'Recorded call with': {
+        case CallLog.Voicemail: {
+          type = MessageType.Received;
+          isCallLog = false;
+
+          if (!foundConversation) {
+            foundConversation = true;
+          }
+
+          break;
+        }
+
+        case CallLog.Recorded: {
           type = MessageType.Received;
           isCallLog = false;
 
           break;
         }
 
-        case 'Received call from':
-        case 'Missed call from': {
+        case CallLog.Received:
+        case CallLog.Missed: {
           type = MessageType.Received;
           isCallLog = true;
 
           break;
         }
 
-        case 'Placed call to': {
+        case CallLog.Placed: {
           type = MessageType.Sent;
           isCallLog = true;
 
@@ -401,7 +439,7 @@ export default class HTMLEntry extends Entry {
           throw new Error(`Unsupported description ${description} for call log: ${callLog}`);
       }
 
-      if (ignoreCallLogs && isCallLog) {
+      if (isCallLog && (ignoreCallLogs || (ignoreOrphanCallLogs && !foundConversation))) {
         continue;
       }
 
