@@ -141,7 +141,7 @@ export default class PhoneBook {
         .trim()
         .replace(/(\r\n|\n|\r)/g, ' ');
 
-      if (replaceContactQuotes) {
+      if (replaceContactQuotes !== undefined) {
         fullName = fullName.replace(/'/g, replaceContactQuotes);
       }
 
