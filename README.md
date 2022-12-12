@@ -37,26 +37,29 @@ Commands:
   index.ts merge  Merge all records
 
 Options:
-      --version                 Show version number                    [boolean]
-  -i, --input-dir               Input directory              [string] [required]
-  -o, --output-dir              Output directory             [string] [required]
-  -c, --contacts                Contacts file (in VCF format)           [string]
-      --suffix-length, --sl     Shortest suffix to use for the suffix-based
-                                matching strategy                       [number]
-      --generate-csv            Generate a CSV index of all conversations
+      --version                  Show version number                   [boolean]
+  -i, --input-dir                Input directory             [string] [required]
+  -o, --output-dir               Output directory            [string] [required]
+  -c, --contacts                 Contacts file (in VCF format)          [string]
+      --suffix-length, --sl      Shortest suffix to use for the suffix-based
+                                 matching strategy                      [number]
+      --generate-csv             Generate a CSV index of all conversations
                                                                        [boolean]
-      --generate-xml            Generate an XML of all conversations which is
-                                suitable for use with SMS Backup and Restore
+      --generate-xml             Generate an XML of all conversations which is
+                                 suitable for use with SMS Backup and Restore
                                                                        [boolean]
-  -v, --verbose                 Verbose mode          [boolean] [default: false]
-  -f, --force                   Overwrite output directory
+  -v, --verbose                  Verbose mode         [boolean] [default: false]
+  -f, --force                    Overwrite output directory
                                                       [boolean] [default: false]
-      --ignore-call-logs        Ignore call logs (Missed, Received, Placed,
-                                etc.)                 [boolean] [default: false]
-      --ignore-media            Ignore media attachments
+      --ignore-call-logs         Ignore call logs (Missed, Received, Placed,
+                                 etc.)                [boolean] [default: false]
+      --ignore-orphan-call-logs  Ignore call logs (Missed, Received, Placed,
+                                 etc.) from phone numbers which do not have any
+                                 other conversations  [boolean] [default: false]
+      --ignore-media             Ignore media attachments
                                                       [boolean] [default: false]
-      --replace-contact-quotes  Replace single quotes in contact names  [string]
-      --help                    Show help                              [boolean]
+      --replace-contact-quotes   Replace single quotes in contact names [string]
+      --help                     Show help                             [boolean]
 ```
 
 For example, you can merge the archive located in `~/in/Calls` to `~/out` like this:
