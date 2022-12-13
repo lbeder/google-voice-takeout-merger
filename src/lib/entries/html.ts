@@ -566,8 +566,8 @@ export default class HTMLEntry extends Entry {
 
   private parseVideos(message: HTMLElement) {
     return [
-      ...this.parseMediaAttachment(message, 'video', 'src', 'video', { '3gp': '3gpp' }),
-      ...this.parseMediaAttachment(message, '.video', 'href', 'video', { '3gp': '3gpp' })
+      ...this.parseMediaAttachment(message, 'video[src$=".mp4"]', 'src', 'video', { '3gp': '3gpp' }),
+      ...this.parseMediaAttachment(message, '.video[href$=".3gp"]', 'href', 'video', { '3gp': '3gpp' })
     ];
   }
 
