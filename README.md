@@ -76,9 +76,11 @@ yarn merge -i ~/in/Calls -o ~/out -v -f
 
 ## Contact Matching
 
-The tool supports receiving an optional contact VCF fie (for example, from your [Google Contacts](https://support.google.com/contacts/answer/7199294)) and uses it to match phone numbers to contact names using one of the following matching strategies:
+The tool supports receiving an optional contact VCF fie (for example, from your [Google Contacts](https://support.google.com/contacts/answer/7199294)) and uses it to match phone numbers to contact names using one of the following matching strategies.
 
-### Exact Match
+Please note that if you intend to export the conversations as an SMS Backup and Restore compatible XML and import it to your Android device, we recommend not to use this feature, since various Android SMS application handle contact names differently. If you plan  to use the export only with a web viewer (such as [Syntech View Backup Files](https://www.synctech.com.au/sms-backup-restore/view-backup/) web app), this feature is highly recommended.
+
+### Exact Matching Strategy
 
 The default behavior is to try an exact match between the phone number in the record and in the contacts file.
 
@@ -92,7 +94,7 @@ But the following numbers won't be matched:
 * `+15155550117` and `15155550117`
 * `12345678910` and `2345678910`
 
-### Suffix-based Match
+### Suffix-based Matching Strategy
 
 Unfortunately, we've noticed many discrepancies between phone numbers in the records and the contacts file (e.g., inconsistencies between international country calling code or just bugs). Therefore, we have provided an optional method to perform a suffix-based match instead.
 
