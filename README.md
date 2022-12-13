@@ -78,7 +78,7 @@ yarn merge -i ~/in/Calls -o ~/out -v -f
 
 The tool supports receiving an optional contact VCF fie (for example, from your [Google Contacts](https://support.google.com/contacts/answer/7199294)) and uses it to match phone numbers to contact names using one of the following matching strategies.
 
-Please note that if you intend to export the conversations as an SMS Backup and Restore compatible XML and import it to your Android device, we recommend not to use this feature, since various Android SMS application handle contact names differently. If you plan  to use the export only with a web viewer (such as [Syntech View Backup Files](https://www.synctech.com.au/sms-backup-restore/view-backup/) web app), this feature is highly recommended.
+Please note that if you intend to export the conversations as an SMS Backup and Restore compatible XML and import it to your Android device, we recommend not to use this feature, since various Android SMS application handle contact names differently and it's better to rely on local contacts. If you plan  to use the export only with a web viewer (such as [Syntech View Backup Files](https://www.synctech.com.au/sms-backup-restore/view-backup/) web app), this feature is highly recommended.
 
 ### Exact Matching Strategy
 
