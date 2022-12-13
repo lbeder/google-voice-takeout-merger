@@ -210,7 +210,10 @@ You can view the `--generate-xml` SMS Backup and Restore compatible export via [
   <img src="docs/images/Syntech%20-%20View%20Backup%20Files.png" alt="syntech"/>
 </kbd>
 
+#### Synctech Known Issues
+
 Please note that this tool currently has a few issues:
 
 1. Videos can't be viewed properly (due to a bug in `KXmlParser.js`)
-2. It's not possible to browse into conversations whose participants names contain the `'` (apostrophe) mark. In these cases, we recommend replacing the apostrophes using the `--replace-contact-quotes` flag (e.g., `--replace-contact-quotes=""`)
+1. Some video codecs (`amr` and some `mp4`) can't be played in some browsers.
+1. It's not possible to browse into conversations whose participants names contain the `'` (apostrophe) mark. In these cases, we recommend replacing the apostrophes using the `--replace-contact-quotes` flag (e.g., `--replace-contact-quotes=""`)
