@@ -82,7 +82,7 @@ The tool supports receiving an optional contact VCF fie (for example, from your 
 
 Please note that since there isn't a fully standardized way to add external names to SMS Backup and Restore compatible XML exports, adding them can produce some UX issues when importing it to your Android device. Therefore, contact names won't be added to SMS Backup and Restore compatible XML exports by default, unless the (experimental) `--add-contact-names-to-xml` flag is set.
 
-If you plan to use the export mostly/only with a web viewer (such as [Syntech View Backup Files](https://www.synctech.com.au/sms-backup-restore/view-backup/) web app), setting the `--add-contact-names-to-xml` flag is highly recommended.
+If you plan to use the export mostly/only with a web viewer (such as [Syntech View Backup Files](https://www.synctech.com.au/sms-backup-restore/view-backup/) web app), setting the `--add-contact-names-to-xml` flag is highly recommended, since it'll also add the names to group conversations.
 
 ### Exact Matching Strategy
 
