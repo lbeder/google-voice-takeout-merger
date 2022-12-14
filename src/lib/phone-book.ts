@@ -60,7 +60,6 @@ export default class PhoneBook {
   private suffixPhoneBook: Record<string, Suffix>;
   private strategy: MatchStrategy;
   private strategyOptions: MatchStrategyOptions;
-  private replaceContactQuotes?: string;
   public stats: Stats;
 
   private static UNKNOWN_LOG_NAME = 'unknown_numbers.csv';
@@ -79,8 +78,6 @@ export default class PhoneBook {
 
     this.strategy = strategy;
     this.strategyOptions = strategyOptions;
-
-    this.replaceContactQuotes = replaceContactQuotes;
 
     this.stats = {
       matched: {},

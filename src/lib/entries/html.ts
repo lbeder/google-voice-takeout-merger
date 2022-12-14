@@ -8,18 +8,19 @@ import moment, { Moment } from 'moment';
 import { HTMLElement, parse } from 'node-html-parser';
 import path from 'path';
 
-export interface MessageOptions {
-  ignoreCallLogs: boolean;
-  ignoreOrphanCallLogs: boolean;
-  ignoreMedia: boolean;
-}
-
 enum CallLog {
   Voicemail = 'Voicemail from',
   Recorded = 'Recorded call with',
   Received = 'Received call from',
   Missed = 'Missed call from',
   Placed = 'Placed call to'
+}
+
+export interface MessageOptions {
+  ignoreCallLogs: boolean;
+  ignoreOrphanCallLogs: boolean;
+  ignoreMedia: boolean;
+  addContactNamesToXml: boolean;
 }
 
 export default class HTMLEntry extends Entry {
@@ -326,21 +327,26 @@ export default class HTMLEntry extends Entry {
     );
   }
 
-  public messages({ ignoreCallLogs, ignoreOrphanCallLogs, ignoreMedia }: MessageOptions): Message[] {
+  public messages({
+    ignoreCallLogs,
+    ignoreOrphanCallLogs,
+    ignoreMedia,
+    addContactNamesToXml
+  }: MessageOptions): Message[] {
     this.load();
 
     const res = [];
 
     const participants = this.phoneNumbers.map((phoneNumber) => ({
       phoneNumber,
-      name: Entry.phoneBook.get(phoneNumber).name
+      name: addContactNamesToXml ? Entry.phoneBook.get(phoneNumber).name : undefined
     }));
     let target: string | undefined;
     let targetName: string | undefined;
 
     if (!this.isGroupConversation()) {
       target = this.phoneNumbers[0];
-      targetName = Entry.phoneBook.get(target).name;
+      targetName = addContactNamesToXml ? Entry.phoneBook.get(target).name : undefined;
     }
 
     let foundConversation = false;
