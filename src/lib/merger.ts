@@ -15,6 +15,22 @@ interface Stats {
   formats: Record<EntryFormat, number>;
 }
 
+export interface MergerOptions {
+  inputDir: string;
+  outputDir: string;
+  force: boolean;
+  contacts?: string;
+  strategy?: MatchStrategy;
+  strategyOptions?: MatchStrategyOptions;
+  ignoreCallLogs: boolean;
+  ignoreOrphanCallLogs: boolean;
+  ignoreMedia: boolean;
+  generateCsv: boolean;
+  generateXml: boolean;
+  addContactNamesToXml: boolean;
+  replaceContactQuotes?: string;
+}
+
 export default class Merger {
   private inputDir: string;
   private outputDir: string;
@@ -27,23 +43,25 @@ export default class Merger {
   private ignoreMedia: boolean;
   private generateCsv: boolean;
   private generateXml: boolean;
+  private addContactNamesToXml: boolean;
 
   private static LOGS_DIR = 'logs';
 
-  constructor(
-    inputDir: string,
-    outputDir: string,
-    force: boolean,
-    contacts?: string,
-    strategy?: MatchStrategy,
-    strategyOptions: MatchStrategyOptions = {},
-    ignoreCallLogs = false,
-    ignoreOrphanCallLogs = false,
-    ignoreMedia = false,
-    generateCsv = false,
-    generateXml = false,
-    replaceContactQuotes?: string
-  ) {
+  constructor({
+    inputDir,
+    outputDir,
+    force,
+    contacts,
+    strategy,
+    strategyOptions,
+    ignoreCallLogs,
+    ignoreOrphanCallLogs,
+    ignoreMedia,
+    generateCsv,
+    generateXml,
+    addContactNamesToXml,
+    replaceContactQuotes
+  }: MergerOptions) {
     if (!fs.existsSync(inputDir)) {
       throw new Error(`Input directory "${inputDir}" does not exist`);
     }
@@ -57,6 +75,7 @@ export default class Merger {
     this.ignoreMedia = ignoreMedia;
     this.generateCsv = generateCsv;
     this.generateXml = generateXml;
+    this.addContactNamesToXml = addContactNamesToXml;
 
     if (this.ignoreCallLogs) {
       Logger.warning('Ignoring call logs...');
@@ -180,7 +199,8 @@ export default class Merger {
       const smsBackup = new SMSBackup(this.outputDir, {
         ignoreCallLogs: this.ignoreCallLogs,
         ignoreOrphanCallLogs: this.ignoreOrphanCallLogs,
-        ignoreMedia: this.ignoreMedia
+        ignoreMedia: this.ignoreMedia,
+        addContactNamesToXml: this.addContactNamesToXml
       });
       smsBackup.saveEntries(mainEntries);
     }

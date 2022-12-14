@@ -37,29 +37,31 @@ Commands:
   index.ts merge  Merge all records
 
 Options:
-      --version                  Show version number                   [boolean]
-  -i, --input-dir                Input directory             [string] [required]
-  -o, --output-dir               Output directory            [string] [required]
-  -c, --contacts                 Contacts file (in VCF format)          [string]
-      --suffix-length, --sl      Shortest suffix to use for the suffix-based
-                                 matching strategy                      [number]
-      --generate-csv             Generate a CSV index of all conversations
-                                                                       [boolean]
-      --generate-xml             Generate an XML of all conversations which is
-                                 suitable for use with SMS Backup and Restore
-                                                                       [boolean]
-  -v, --verbose                  Verbose mode         [boolean] [default: false]
-  -f, --force                    Overwrite output directory
+      --version                   Show version number                  [boolean]
+  -i, --input-dir                 Input directory            [string] [required]
+  -o, --output-dir                Output directory           [string] [required]
+  -c, --contacts                  Contacts file (in VCF format)         [string]
+      --suffix-length, --sl       Shortest suffix to use for the suffix-based
+                                  matching strategy                     [number]
+      --generate-csv              Generate a CSV index of all conversations
                                                       [boolean] [default: false]
-      --ignore-call-logs         Ignore call logs (Missed, Received, Placed,
-                                 etc.)                [boolean] [default: false]
-      --ignore-orphan-call-logs  Ignore call logs (Missed, Received, Placed,
-                                 etc.) from phone numbers which do not have any
-                                 other conversations  [boolean] [default: false]
-      --ignore-media             Ignore media attachments
+      --generate-xml              Generate an XML of all conversations which is
+                                  suitable for use with SMS Backup and Restore
                                                       [boolean] [default: false]
-      --replace-contact-quotes   Replace single quotes in contact names [string]
-      --help                     Show help                             [boolean]
+  -v, --verbose                   Verbose mode        [boolean] [default: false]
+  -f, --force                     Overwrite output directory
+                                                      [boolean] [default: false]
+      --ignore-call-logs          Ignore call logs (Missed, Received, Placed,
+                                  etc.)               [boolean] [default: false]
+      --ignore-orphan-call-logs   Ignore call logs (Missed, Received, Placed,
+                                  etc.) from phone numbers which do not have any
+                                  other conversations [boolean] [default: false]
+      --ignore-media              Ignore media attachments
+                                                      [boolean] [default: false]
+      --add-contact-names-to-xml  Adds names (experimental) to SMS Backup and
+                                  Restore exports     [boolean] [default: false]
+      --replace-contact-quotes    Replace single quotes in contact names[string]
+      --help                      Show help                            [boolean]
 ```
 
 For example, you can merge the archive located in `~/in/Calls` to `~/out` like this:
@@ -78,7 +80,9 @@ yarn merge -i ~/in/Calls -o ~/out -v -f
 
 The tool supports receiving an optional contact VCF fie (for example, from your [Google Contacts](https://support.google.com/contacts/answer/7199294)) and uses it to match phone numbers to contact names using one of the following matching strategies.
 
-Please note that if you intend to export the conversations as an SMS Backup and Restore compatible XML and import it to your Android device, we recommend not to use this feature, since various Android SMS application handle contact names differently and it's better to rely on local contacts. If you plan  to use the export only with a web viewer (such as [Syntech View Backup Files](https://www.synctech.com.au/sms-backup-restore/view-backup/) web app), this feature is highly recommended.
+Please note that since there isn't a fully standardized way to add external names to SMS Backup and Restore compatible XML exports, adding them can produce some UX issues when importing it to your Android device. Therefore, contact names won't be added to SMS Backup and Restore compatible XML exports by default, unless the (experimental) `--add-contact-names-to-xml` flag is set.
+
+If you plan to use the export mostly/only with a web viewer (such as [Syntech View Backup Files](https://www.synctech.com.au/sms-backup-restore/view-backup/) web app), setting the `--add-contact-names-to-xml` flag is highly recommended.
 
 ### Exact Matching Strategy
 
@@ -212,7 +216,7 @@ You can view the `--generate-xml` SMS Backup and Restore compatible export via [
   <img src="docs/images/Syntech%20-%20View%20Backup%20Files.png" alt="syntech"/>
 </kbd>
 
-#### Synctech Known Issues
+#### Syntech Known Issues
 
 Please note that this tool currently has a few issues:
 

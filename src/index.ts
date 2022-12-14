@@ -34,11 +34,13 @@ const main = async () => {
       .option('generate-csv', {
         description: 'Generate a CSV index of all conversations',
         type: 'boolean',
+        default: false,
         required: false
       })
       .option('generate-xml', {
         description: 'Generate an XML of all conversations which is suitable for use with SMS Backup and Restore',
         type: 'boolean',
+        default: false,
         required: false
       })
       .option('verbose', {
@@ -69,6 +71,11 @@ const main = async () => {
         default: false,
         description: 'Ignore media attachments'
       })
+      .option('add-contact-names-to-xml', {
+        type: 'boolean',
+        default: false,
+        description: 'Adds names (experimental) to SMS Backup and Restore exports'
+      })
       .option('replace-contact-quotes', {
         type: 'string',
         description: 'Replace single quotes in contact names'
@@ -92,32 +99,34 @@ const main = async () => {
           ignoreMedia,
           generateCsv,
           generateXml,
+          addContactNamesToXml,
           replaceContactQuotes
         }) => {
           try {
             let strategyOptions = {};
-            let matchingStrategy: MatchStrategy;
+            let strategy: MatchStrategy;
             if (suffixLength && suffixLength > 0) {
-              matchingStrategy = MatchStrategy.Suffix;
+              strategy = MatchStrategy.Suffix;
               strategyOptions = { suffixLength };
             } else {
-              matchingStrategy = MatchStrategy.Exact;
+              strategy = MatchStrategy.Exact;
             }
 
-            const merger = new Merger(
+            const merger = new Merger({
               inputDir,
               outputDir,
               force,
               contacts,
-              matchingStrategy,
+              strategy,
               strategyOptions,
               ignoreCallLogs,
               ignoreOrphanCallLogs,
               ignoreMedia,
               generateCsv,
               generateXml,
+              addContactNamesToXml,
               replaceContactQuotes
-            );
+            });
 
             await merger.merge();
           } catch (e: unknown) {
