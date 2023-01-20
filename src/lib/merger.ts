@@ -124,7 +124,7 @@ export default class Merger {
 
   // Merges Google Voice export history and groups it by participants' phone numbers, as well as fixes various Google
   // Voice embedding and styling issues
-  public async merge() {
+  public merge() {
     Logger.info(`Merging Google Voice calls from "${this.inputDir}" to "${this.outputDir}"`);
 
     if (this.force) {
