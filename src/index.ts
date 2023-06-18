@@ -7,6 +7,10 @@ const main = async () => {
   try {
     await yargs(process.argv.slice(2))
       .parserConfiguration({ 'parse-numbers': false })
+      .demandCommand()
+      .help()
+      .showHelpOnFail(false)
+      .wrap(yargs.terminalWidth())
       .option('input-dir', {
         description: 'Input directory',
         type: 'string',
@@ -140,9 +144,6 @@ const main = async () => {
           }
         }
       )
-      .demandCommand()
-      .help()
-      .showHelpOnFail(false)
       .parse();
   } catch (e) {
     if (e instanceof Error) {
