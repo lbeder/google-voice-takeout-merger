@@ -106,7 +106,7 @@ We would recommend the following values:
 
 * `9`: extra safe and conservative
 * `8`: optimal (based on our observations)
-* `7`: relatively safe, but there is a change of false positives
+* `7`: relatively safe, but there is a chance of false positives
 * `6`: risky and usually with false positives
 
 In addition, please also note the `matched_numbers.csv` and the `unknown_numbers.csv` logs for additional matching information.
