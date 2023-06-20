@@ -11,78 +11,11 @@ const main = async () => {
       .help()
       .showHelpOnFail(false)
       .wrap(yargs.terminalWidth())
-      .option('input-dir', {
-        description: 'Input directory',
-        type: 'string',
-        alias: 'i',
-        required: true
-      })
-      .option('output-dir', {
-        description: 'Output directory',
-        type: 'string',
-        alias: 'o',
-        required: true
-      })
-      .option('contacts', {
-        description: 'Contacts file (in VCF format)',
-        type: 'string',
-        alias: 'c',
-        required: false
-      })
-      .option('suffix-length', {
-        description: 'Shortest suffix to use for the suffix-based matching strategy',
-        type: 'number',
-        alias: 'sl',
-        required: false
-      })
-      .option('generate-csv', {
-        description: 'Generate a CSV index of all conversations',
-        type: 'boolean',
-        default: false,
-        required: false
-      })
-      .option('generate-xml', {
-        description: 'Generate an XML of all conversations which is suitable for use with SMS Backup and Restore',
-        type: 'boolean',
-        default: false,
-        required: false
-      })
       .option('verbose', {
         type: 'boolean',
         alias: 'v',
         default: false,
         description: 'Verbose mode'
-      })
-      .option('force', {
-        type: 'boolean',
-        alias: 'f',
-        default: false,
-        description: 'Overwrite output directory'
-      })
-      .option('ignore-call-logs', {
-        type: 'boolean',
-        default: false,
-        description: 'Ignore call logs (Missed, Received, Placed, etc.)'
-      })
-      .option('ignore-orphan-call-logs', {
-        type: 'boolean',
-        default: false,
-        description:
-          'Ignore call logs (Missed, Received, Placed, etc.) from phone numbers which do not have any other conversations'
-      })
-      .option('ignore-media', {
-        type: 'boolean',
-        default: false,
-        description: 'Ignore media attachments'
-      })
-      .option('add-contact-names-to-xml', {
-        type: 'boolean',
-        default: false,
-        description: 'Adds names (experimental) to SMS Backup and Restore exports'
-      })
-      .option('replace-contact-quotes', {
-        type: 'string',
-        description: 'Replace single quotes in contact names'
       })
       .middleware(({ verbose }) => {
         Logger.init();
@@ -91,7 +24,75 @@ const main = async () => {
       .command(
         'merge',
         'Merge all records',
-        () => {},
+        {
+          'input-dir': {
+            description: 'Input directory',
+            type: 'string',
+            alias: 'i',
+            required: true
+          },
+          'output-dir': {
+            description: 'Output directory',
+            type: 'string',
+            alias: 'o',
+            required: true
+          },
+          contacts: {
+            description: 'Contacts file (in VCF format)',
+            type: 'string',
+            alias: 'c',
+            required: false
+          },
+          'suffix-length': {
+            description: 'Shortest suffix to use for the suffix-based matching strategy',
+            type: 'number',
+            alias: 'sl',
+            required: false
+          },
+          'generate-csv': {
+            description: 'Generate a CSV index of all conversations',
+            type: 'boolean',
+            default: false,
+            required: false
+          },
+          'generate-xml': {
+            description: 'Generate an XML of all conversations which is suitable for use with SMS Backup and Restore',
+            type: 'boolean',
+            default: false,
+            required: false
+          },
+          force: {
+            type: 'boolean',
+            alias: 'f',
+            default: false,
+            description: 'Overwrite output directory'
+          },
+          'ignore-call-logs': {
+            type: 'boolean',
+            default: false,
+            description: 'Ignore call logs (Missed, Received, Placed, etc.)'
+          },
+          'ignore-orphan-call-logs': {
+            type: 'boolean',
+            default: false,
+            description:
+              'Ignore call logs (Missed, Received, Placed, etc.) from phone numbers which do not have any other conversations'
+          },
+          'ignore-media': {
+            type: 'boolean',
+            default: false,
+            description: 'Ignore media attachments'
+          },
+          'add-contact-names-to-xml': {
+            type: 'boolean',
+            default: false,
+            description: 'Adds names to SMS Backup and Restore exports (experimental) '
+          },
+          'replace-contact-quotes': {
+            type: 'string',
+            description: 'Replace single quotes in contact names'
+          }
+        },
         async ({
           inputDir,
           outputDir,
