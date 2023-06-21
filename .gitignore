@@ -10,6 +10,8 @@ lib-cov
 pids
 results
 tmp
+dist
+build
 
 # API keys and secrets
 .env

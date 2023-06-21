@@ -7,10 +7,11 @@ const main = async () => {
   try {
     await yargs(process.argv.slice(2))
       .parserConfiguration({ 'parse-numbers': false })
+      .scriptName('google-voice-takeout-merger')
+      .wrap(120)
       .demandCommand()
       .help()
-      .showHelpOnFail(false)
-      .wrap(yargs.terminalWidth())
+      .version()
       .option('verbose', {
         type: 'boolean',
         alias: 'v',

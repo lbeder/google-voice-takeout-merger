@@ -31,21 +31,21 @@ yarn install
 ## Usage
 
 ```sh
-index.ts <command>
+google-voice-takeout-merger <command>
 
 Commands:
-  index.ts merge  Merge all records
+  google-voice-takeout-merger merge  Merge all records
 
 Options:
-      --version  Show version number                                                                                                                                            [boolean]
-      --help     Show help                                                                                                                                                      [boolean]
-  -v, --verbose  Verbose mode                                                                                                                                  [boolean] [default: false]
+      --help     Show help                                                                                     [boolean]
+      --version  Show version number                                                                           [boolean]
+  -v, --verbose  Verbose mode                                                                 [boolean] [default: false]
 ```
 
 ### Merge
 
 ```sh
-index.ts merge
+google-voice-takeout-merger merge
 
 Merge all records
 

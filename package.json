@@ -11,7 +11,12 @@
     "cli": "ts-node src/index.ts --help",
     "lint": "eslint -c .eslintrc --ext .ts src",
     "format": "prettier --check --write src/**/* --config .prettierrc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc && pkg dist/index.js",
+    "build:win-x64": "yarn build --t node16-win-x64 -o ./build/win-x64/google-voice-takeout-merger.exe",
+    "build:linux-x64": "yarn build --t node16-linux-x64 -o ./build/linux-x64/google-voice-takeout-merger",
+    "build:macos-x64": "yarn build --t node16-macos-x64 -o ./build/macos-x64/google-voice-takeout-merger",
+    "build:macos-arm64": "yarn build --t node16-macos-arm64 -o ./build/macos-arm64/google-voice-takeout-merger",
+    "build:all": "yarn build:win-x64 && yarn build:linux-x64 && yarn build:macos-x64 && yarn build:macos-arm64"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.1.1",
@@ -28,6 +33,7 @@
     "eslint": "^8.43.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prefer-arrow": "^1.2.3",
+    "pkg": "^5.8.1",
     "prettier": "^2.8.8",
     "prettier-package-json": "^2.8.0",
     "typescript": "^5.1.3"
