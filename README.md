@@ -224,5 +224,7 @@ You can view the `--generate-xml` SMS Backup and Restore compatible export via [
 Please note that this tool currently has a few issues:
 
 1. Videos can't be viewed properly (due to a bug in `KXmlParser.js`)
-1. Some video codecs (`amr` and some `mp4`) can't be played in some browsers.
-1. It's not possible to browse into conversations whose participants names contain the `'` (apostrophe) mark. In these cases, we recommend replacing the apostrophes using the `--replace-contact-quotes` flag (e.g., `--replace-contact-quotes=""`)
+2. Some video codecs (`amr` and some `mp4`) can't be played in some browsers.
+3. It's not possible to browse into conversations whose participants names contain the `'` (apostrophe) mark. In these cases, we recommend replacing the apostrophes using the `--replace-contact-apostrophes` flag. For example:
+    * `--replace-contact-apostrophes=""`: remove all apostrophes.
+    * `--replace-contact-apostrophes="'"`: replace all apostrophes with a single quote.
