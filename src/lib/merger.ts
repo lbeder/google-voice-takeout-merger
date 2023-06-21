@@ -28,7 +28,7 @@ export interface MergerOptions {
   generateCsv: boolean;
   generateXml: boolean;
   addContactNamesToXml: boolean;
-  replaceContactQuotes?: string;
+  replaceContactApostrophes?: string;
 }
 
 export default class Merger {
@@ -60,7 +60,7 @@ export default class Merger {
     generateCsv,
     generateXml,
     addContactNamesToXml,
-    replaceContactQuotes
+    replaceContactApostrophes
   }: MergerOptions) {
     if (!fs.existsSync(inputDir)) {
       throw new Error(`Input directory "${inputDir}" does not exist`);
@@ -89,7 +89,7 @@ export default class Merger {
       Logger.warning('Ignoring media attachments...');
     }
 
-    this.phoneBook = new PhoneBook(contacts, strategy, strategyOptions, replaceContactQuotes);
+    this.phoneBook = new PhoneBook(contacts, strategy, strategyOptions, replaceContactApostrophes);
 
     Entry.setPhoneBook(this.phoneBook);
 

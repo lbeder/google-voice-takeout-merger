@@ -88,9 +88,9 @@ const main = async () => {
             default: false,
             description: 'Adds names to SMS Backup and Restore exports (experimental) '
           },
-          'replace-contact-quotes': {
+          'replace-contact-apostrophes': {
             type: 'string',
-            description: 'Replace single quotes in contact names'
+            description: 'Replace apostrophes in contact names with this string'
           }
         },
         async ({
@@ -105,7 +105,7 @@ const main = async () => {
           generateCsv,
           generateXml,
           addContactNamesToXml,
-          replaceContactQuotes
+          replaceContactApostrophes
         }) => {
           try {
             let strategyOptions = {};
@@ -130,7 +130,7 @@ const main = async () => {
               generateCsv,
               generateXml,
               addContactNamesToXml,
-              replaceContactQuotes
+              replaceContactApostrophes
             });
 
             await merger.merge();
