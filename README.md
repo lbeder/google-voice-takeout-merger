@@ -138,7 +138,7 @@ Please see the provided example input and output in [docs/samples](docs/samples)
 We will execute the following command:
 
 ```sh
-yarn merge -f -i ./docs/samples/in/Calls -o ./docs/samples/out -c ./docs/samples/in/contacts.vcf --sl 8 --generate-index --generate-xml
+yarn merge -f -i ./docs/samples/in/Calls -o ./docs/samples/out -c ./docs/samples/in/contacts.vcf --sl 8 --generate-csv --generate-xml --add-contact-names-to-xml
 ```
 
 In the of the execution, you should expect the following summary:
