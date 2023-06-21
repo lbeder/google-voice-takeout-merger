@@ -2,6 +2,7 @@ import Logger from '../utils/logger';
 import Entry, { EntryAction, EntryFormat, EntryType } from './entry';
 import MediaEntry from './media';
 import Message, { MessageType } from './message';
+import { STYLE } from './templates/style';
 import fs from 'fs';
 import humanizeDuration from 'humanize-duration';
 import moment, { Moment } from 'moment';
@@ -113,10 +114,7 @@ export default class HTMLEntry extends Entry {
     // Override the existing style with a combine style of all the artifacts
     const style = this.querySelector('#custom-style');
     if (!style) {
-      body.insertAdjacentHTML(
-        'beforebegin',
-        fs.readFileSync(path.resolve(path.join(__dirname, './templates/style.html')), 'utf-8')
-      );
+      body.insertAdjacentHTML('beforebegin', STYLE);
     }
 
     // Add a list of all participants

@@ -1,4 +1,4 @@
-<style type="text/css" id="custom-style">
+export const STYLE = `<style type="text/css" id="custom-style">
   body {
     font-size: 13px;
     font-family: Arial, Helvectica, sans-serif;
@@ -113,3 +113,4 @@
     display: none;
   }
 </style>
+`;
