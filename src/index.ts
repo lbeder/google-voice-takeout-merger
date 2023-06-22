@@ -89,6 +89,11 @@ const main = async () => {
             default: false,
             description: 'Ignore voicemails'
           },
+          'ignore-orphan-voicemails': {
+            type: 'boolean',
+            default: false,
+            description: 'Ignore voicemails from phone numbers which do not have any other conversations'
+          },
           'add-contact-names-to-xml': {
             type: 'boolean',
             default: false,
@@ -109,6 +114,7 @@ const main = async () => {
           ignoreOrphanCallLogs,
           ignoreMedia,
           ignoreVoicemails,
+          ignoreOrphanVoicemails,
           generateCsv,
           generateXml,
           addContactNamesToXml,
@@ -135,6 +141,7 @@ const main = async () => {
               ignoreOrphanCallLogs,
               ignoreMedia,
               ignoreVoicemails,
+              ignoreOrphanVoicemails,
               generateCsv,
               generateXml,
               addContactNamesToXml,

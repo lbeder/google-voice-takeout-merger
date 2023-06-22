@@ -22,6 +22,7 @@ export interface MessageOptions {
   ignoreOrphanCallLogs: boolean;
   ignoreMedia: boolean;
   ignoreVoicemails: boolean;
+  ignoreOrphanVoicemails: boolean;
   addContactNamesToXml: boolean;
 }
 
@@ -331,6 +332,7 @@ export default class HTMLEntry extends Entry {
     ignoreOrphanCallLogs,
     ignoreMedia,
     ignoreVoicemails,
+    ignoreOrphanVoicemails,
     addContactNamesToXml
   }: MessageOptions): Message[] {
     this.load();
@@ -385,19 +387,6 @@ export default class HTMLEntry extends Entry {
 
     // Look for call log messages
     const callLogs = this.querySelectorAll('.haudio');
-
-    // If we haven't found any conversation yet, check if any voice mail messages exist
-    if (!foundConversation) {
-      for (const callLog of callLogs) {
-        const description = callLog.querySelector('.fn')?.text.trim();
-        if (description === CallLog.Voicemail) {
-          foundConversation = true;
-
-          break;
-        }
-      }
-    }
-
     for (const callLog of callLogs) {
       const description = callLog.querySelector('.fn')?.text.trim();
       if (!description) {
@@ -413,10 +402,6 @@ export default class HTMLEntry extends Entry {
           type = MessageType.Received;
           isCallLog = false;
           isVoiceMail = true;
-
-          if (!foundConversation) {
-            foundConversation = true;
-          }
 
           break;
         }
@@ -451,7 +436,7 @@ export default class HTMLEntry extends Entry {
         continue;
       }
 
-      if (isVoiceMail && ignoreVoicemails) {
+      if (isVoiceMail && (ignoreVoicemails || (ignoreOrphanVoicemails && !foundConversation))) {
         continue;
       }
 

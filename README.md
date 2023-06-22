@@ -64,6 +64,7 @@ Options:
       --ignore-orphan-call-logs      Ignore call logs (Missed, Received, Placed, etc.) from phone numbers which do not have any other conversations           [boolean] [default: false]
       --ignore-media                 Ignore media attachments                                                                                                 [boolean] [default: false]
       --ignore-voicemails            Ignore voicemails                                                                                                        [boolean] [default: false]
+      --ignore-orphan-voicemails     Ignore voicemails from phone numbers which do not have any other conversations                                           [boolean] [default: false]
       --add-contact-names-to-xml     Adds names to SMS Backup and Restore exports (experimental)                                                              [boolean] [default: false]
       --replace-contact-apostrophes  Replace apostrophes in contact names with this string                                                                                      [string]
 ```
