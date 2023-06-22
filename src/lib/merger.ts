@@ -25,6 +25,7 @@ export interface MergerOptions {
   ignoreCallLogs: boolean;
   ignoreOrphanCallLogs: boolean;
   ignoreMedia: boolean;
+  ignoreVoicemails: boolean;
   generateCsv: boolean;
   generateXml: boolean;
   addContactNamesToXml: boolean;
@@ -41,6 +42,7 @@ export default class Merger {
   private ignoreCallLogs: boolean;
   private ignoreOrphanCallLogs: boolean;
   private ignoreMedia: boolean;
+  private ignoreVoicemails: boolean;
   private generateCsv: boolean;
   private generateXml: boolean;
   private addContactNamesToXml: boolean;
@@ -57,6 +59,7 @@ export default class Merger {
     ignoreCallLogs,
     ignoreOrphanCallLogs,
     ignoreMedia,
+    ignoreVoicemails,
     generateCsv,
     generateXml,
     addContactNamesToXml,
@@ -73,6 +76,7 @@ export default class Merger {
     this.ignoreCallLogs = ignoreCallLogs;
     this.ignoreOrphanCallLogs = ignoreOrphanCallLogs;
     this.ignoreMedia = ignoreMedia;
+    this.ignoreVoicemails = ignoreVoicemails;
     this.generateCsv = generateCsv;
     this.generateXml = generateXml;
     this.addContactNamesToXml = addContactNamesToXml;
@@ -87,6 +91,10 @@ export default class Merger {
 
     if (this.ignoreMedia) {
       Logger.warning('Ignoring media attachments...');
+    }
+
+    if (this.ignoreVoicemails) {
+      Logger.warning('Ignoring voicemail logs...');
     }
 
     this.phoneBook = new PhoneBook(contacts, strategy, strategyOptions, replaceContactApostrophes);
@@ -156,6 +164,12 @@ export default class Merger {
         continue;
       }
 
+      if (this.ignoreVoicemails && entry.isVoiceMail()) {
+        Logger.warning(`Ignoring voicemail log "${entry.name}"`);
+
+        continue;
+      }
+
       this.stats.total++;
       this.stats.types[entry.type]++;
       this.stats.actions[entry.action]++;
@@ -176,7 +190,7 @@ export default class Merger {
       Logger.info(`Merging entries for ${phoneNumbers}s`);
 
       if (!this.ignoreCallLogs && this.ignoreOrphanCallLogs) {
-        // Filter call logs that from phone numbers which do not have any other conversation
+        // Filter call logs from phone numbers which do not have any other conversations
         const conversations = entries.filter((e) => !e.isCallLog());
         if (conversations.length === 0) {
           continue;
@@ -200,6 +214,7 @@ export default class Merger {
         ignoreCallLogs: this.ignoreCallLogs,
         ignoreOrphanCallLogs: this.ignoreOrphanCallLogs,
         ignoreMedia: this.ignoreMedia,
+        ignoreVoicemails: this.ignoreVoicemails,
         addContactNamesToXml: this.addContactNamesToXml
       });
       smsBackup.saveEntries(mainEntries);

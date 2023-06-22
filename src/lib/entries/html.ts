@@ -21,6 +21,7 @@ export interface MessageOptions {
   ignoreCallLogs: boolean;
   ignoreOrphanCallLogs: boolean;
   ignoreMedia: boolean;
+  ignoreVoicemails: boolean;
   addContactNamesToXml: boolean;
 }
 
@@ -329,6 +330,7 @@ export default class HTMLEntry extends Entry {
     ignoreCallLogs,
     ignoreOrphanCallLogs,
     ignoreMedia,
+    ignoreVoicemails,
     addContactNamesToXml
   }: MessageOptions): Message[] {
     this.load();
@@ -404,11 +406,13 @@ export default class HTMLEntry extends Entry {
 
       let type: MessageType;
       let isCallLog;
+      let isVoiceMail;
 
       switch (description) {
         case CallLog.Voicemail: {
           type = MessageType.Received;
           isCallLog = false;
+          isVoiceMail = true;
 
           if (!foundConversation) {
             foundConversation = true;
@@ -444,6 +448,10 @@ export default class HTMLEntry extends Entry {
       }
 
       if (isCallLog && (ignoreCallLogs || (ignoreOrphanCallLogs && !foundConversation))) {
+        continue;
+      }
+
+      if (isVoiceMail && ignoreVoicemails) {
         continue;
       }
 

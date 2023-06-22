@@ -81,6 +81,10 @@ export default abstract class Entry {
     return [EntryAction.Recorded, EntryAction.Received, EntryAction.Placed, EntryAction.Missed].includes(this.action);
   }
 
+  public isVoiceMail() {
+    return this.action === EntryAction.Voicemail;
+  }
+
   public isGroupConversation() {
     return this.action == EntryAction.GroupConversation;
   }

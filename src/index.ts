@@ -8,7 +8,7 @@ const main = async () => {
     await yargs(process.argv.slice(2))
       .parserConfiguration({ 'parse-numbers': false })
       .scriptName('google-voice-takeout-merger')
-      .wrap(120)
+      .wrap(yargs.terminalWidth())
       .demandCommand()
       .help()
       .version()
@@ -84,6 +84,11 @@ const main = async () => {
             default: false,
             description: 'Ignore media attachments'
           },
+          'ignore-voicemails': {
+            type: 'boolean',
+            default: false,
+            description: 'Ignore voicemails'
+          },
           'add-contact-names-to-xml': {
             type: 'boolean',
             default: false,
@@ -103,6 +108,7 @@ const main = async () => {
           ignoreCallLogs,
           ignoreOrphanCallLogs,
           ignoreMedia,
+          ignoreVoicemails,
           generateCsv,
           generateXml,
           addContactNamesToXml,
@@ -128,6 +134,7 @@ const main = async () => {
               ignoreCallLogs,
               ignoreOrphanCallLogs,
               ignoreMedia,
+              ignoreVoicemails,
               generateCsv,
               generateXml,
               addContactNamesToXml,
