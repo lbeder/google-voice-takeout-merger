@@ -153,11 +153,23 @@ export default class PhoneBook {
 
         switch (this.strategy) {
           case MatchStrategy.Exact:
+            if (this.phoneBook[phoneNumber]) {
+              Logger.warning(
+                `Found duplicate contact for: ${phoneNumber} with the full name of: ${fullName}. Using it instead.`
+              );
+            }
+
             this.phoneBook[phoneNumber] = fullName;
 
             break;
 
           case MatchStrategy.Suffix: {
+            if (this.phoneBook[phoneNumber]) {
+              Logger.warning(
+                `Found duplicate contact for: ${phoneNumber} with the full name of: ${fullName}. Using it instead.`
+              );
+            }
+
             this.phoneBook[phoneNumber] = fullName;
 
             // Add suffix entries to the phone book so that it'd be possible to match any phone number based on its
@@ -167,6 +179,12 @@ export default class PhoneBook {
               const suffix = phoneNumber.slice(phoneNumberLength - i, phoneNumberLength);
               if (!suffix) {
                 break;
+              }
+
+              if (this.suffixPhoneBook[suffix]) {
+                Logger.warning(
+                  `Found duplicate contact for suffix: ${suffix} with the full name of: ${fullName}. Using it instead.`
+                );
               }
 
               this.suffixPhoneBook[suffix] = { name: fullName, phoneBookNumber: phoneNumber };
