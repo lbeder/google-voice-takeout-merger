@@ -81,6 +81,16 @@ If you'd like the tool to overwrite the output folder and run in verbose mode, y
 yarn merge -i ~/in/Calls -o ~/out -v -f
 ```
 
+Please note that the input should be the "Calls" folder from the original Google Voice Takeout zip export. Prior to generating the Takeout export, ensure that you have temporarily removed all contacts from your [Google Contacts](contacts.google.com) account. If contacts are not removed, the Takeout export will have phone numbers replaced with contact names in both the file names and the records themselves. This replacement will cause catastrophic filename truncation, and also the parsing and matching process of the tool will fail.
+
+To easily remove all contacts, you can follow these steps:
+
+1. Back up all your contacts through [Google Takeout](takeout.google.com). It also recommended to use the [Google Contacts](contacts.google.com) export function for each one of the individual contact folders. Both methods support CSV and VCF exports.
+2. Delete all of your contacts through [Google Contacts](contacts.google.com) (including in the "Frequent" and "Other" folders).
+3. Perform the Google Voice Takeout export and wait for it to finish.
+4. After downloading the Google Voice Takeout export, in order to recover the contacts it is recommended to restore the contacts from the "Trash" folder on [Google Contacts](contacts.google.com).
+5. Alternatively you can restore by importing either the [Google Takeout](takeout.google.com) export or the [Google Contacts](contacts.google.com) export, or use the built-in rollback option on [Google Contacts](contacts.google.com) which can restore your account to any state in the past 30 days.
+
 ## Contact Matching
 
 The tool supports receiving an optional contact VCF file (for example, from your [Google Contacts](https://support.google.com/contacts/answer/7199294)) and uses it to match phone numbers to contact names using one of the following matching strategies. If there are multiple contacts, in the VCF file, with an identical phone number, a warning message will be displayed. When a contact match is found its full name will be replaced in all threads (merged threads, CSV index, and XML export).
