@@ -146,7 +146,7 @@ export default class PhoneBook {
         const telValue = tel.valueOf();
         const phoneNumber = PhoneBook.sanitizePhoneNumber(telValue);
         if (!phoneNumber) {
-          Logger.warning(`Unable to parse the phone number for: "${fullName}"`);
+          Logger.warning(`Unable to parse the phone number of ${tel} for: "${fullName}"`);
 
           continue;
         }
