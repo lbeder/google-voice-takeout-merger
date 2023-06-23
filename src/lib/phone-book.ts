@@ -41,6 +41,7 @@ class MatchSet<T extends MatchData> extends Set<T> {
 export interface Stats {
   matched: Record<string, MatchSet<MatchData>>;
   unknown: Set<string>;
+  all: Set<string>;
 }
 
 interface Suffix {
@@ -81,7 +82,8 @@ export default class PhoneBook {
 
     this.stats = {
       matched: {},
-      unknown: new Set()
+      unknown: new Set(),
+      all: new Set()
     };
 
     if (!contacts) {
@@ -273,6 +275,8 @@ export default class PhoneBook {
     } else {
       this.stats.unknown.add(phoneNumber);
     }
+
+    this.stats.all.add(phoneNumber);
 
     return { name, phoneBookNumber };
   }

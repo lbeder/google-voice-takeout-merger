@@ -182,6 +182,7 @@ In the of the execution, you should expect the following summary:
 [2023/06/23 12:30:13.403]     Total VCF contacts matched: 13
 [2023/06/23 12:30:13.403]     Total unique record numbers matched: 13
 [2023/06/23 12:30:13.403]     Total unknown numbers: 22
+[2023/06/23 12:30:13.403]     Total numbers: 35
 [2023/06/23 12:30:13.403]
 [2023/06/23 12:30:13.403] Generated CSV index at: ~/google-voice-takeout-merger/docs/samples/out/index.csv
 [2023/06/23 12:30:13.403] Generated SMS Backup and Restore XML export: ~/google-voice-takeout-merger/docs/samples/out/sms.xml

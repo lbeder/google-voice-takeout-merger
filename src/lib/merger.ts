@@ -274,9 +274,11 @@ export default class Merger {
     const totalMatchedVCF = Object.keys(this.phoneBook.stats.matched).length;
     const totalMatched = Object.values(this.phoneBook.stats.matched).reduce((res, s) => res + s.size, 0);
     const totalUnknown = this.phoneBook.stats.unknown.size;
+    const totalNumbers = this.phoneBook.stats.all.size;
     Logger.notice(`    Total VCF contacts matched: ${totalMatchedVCF}`);
-    Logger.notice(`    Total unique record numbers matched: ${totalMatched}`);
+    Logger.notice(`    Total numbers matched: ${totalMatched}`);
     Logger.notice(`    Total unknown numbers: ${totalUnknown}`);
+    Logger.notice(`    Total numbers: ${totalNumbers}`);
     Logger.notice();
 
     if (this.generateCsv) {
