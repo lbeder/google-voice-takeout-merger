@@ -17,7 +17,7 @@ The main features of this tool include:
 * Generating an XML file (named `sms.xml`) compatible with SMS Backup and Restore, which can be imported into an Android device. You can also view it using the web app Syntech View Backup Files (accessible at [Syntech View Backup Files](https://www.synctech.com.au/sms-backup-restore/view-backup/)).
 * Reorganizing all media and metadata in a structured manner.
 * Adding a list of participants to every record.
-* Displaying contact names (if an optional contacts VCF file is provided).
+* Displaying contact names in the SMS Backup and Restore export.
 * Properly merging records associated with unknown phone numbers into a single record.
 
 Please see the [Samples](#samples) section below:
