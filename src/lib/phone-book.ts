@@ -70,7 +70,7 @@ export default class PhoneBook {
     contacts?: string,
     strategy: MatchStrategy = MatchStrategy.Exact,
     strategyOptions: MatchStrategyOptions = {},
-    replaceContactQuotes?: string
+    replaceContactApostrophes?: string
   ) {
     this.phoneBook = {};
     this.cache = {};
@@ -138,8 +138,8 @@ export default class PhoneBook {
         .trim()
         .replace(/(\r\n|\n|\r)/g, ' ');
 
-      if (replaceContactQuotes !== undefined) {
-        fullName = fullName.replace(/'/g, replaceContactQuotes);
+      if (replaceContactApostrophes !== undefined) {
+        fullName = fullName.replace(/'/g, replaceContactApostrophes);
       }
 
       for (const tel of Array.isArray(tels) ? tels : [tels]) {
