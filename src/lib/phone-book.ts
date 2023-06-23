@@ -186,7 +186,7 @@ export default class PhoneBook {
               const previousSuffixEntry = this.suffixPhoneBook[suffix];
               if (previousSuffixEntry) {
                 Logger.warning(
-                  `Found duplicate phone number for suffix: ${suffix} with an existing entry: "${previousSuffixEntry.name}". Using "${fullName}" instead.`
+                  `Found duplicate phone number for suffix: ${suffix} (${suffix.length}) with an existing entry: "${previousSuffixEntry.name}". Using "${fullName}" instead.`
                 );
               }
 
