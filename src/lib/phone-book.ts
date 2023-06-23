@@ -157,7 +157,7 @@ export default class PhoneBook {
           case MatchStrategy.Exact:
             if (previousEntry) {
               Logger.warning(
-                `Found identical duplicate phone number: ${phoneNumber} with an existing entry: ${previousEntry}`
+                `Found identical duplicate phone number: ${phoneNumber} with an existing entry: ${previousEntry}. Using ${fullName} instead.`
               );
             }
 
@@ -168,7 +168,7 @@ export default class PhoneBook {
           case MatchStrategy.Suffix: {
             if (previousEntry) {
               Logger.warning(
-                `Found identical duplicate phone number: ${phoneNumber} with an existing entry: ${previousEntry}`
+                `Found identical duplicate phone number: ${phoneNumber} with an existing entry: ${previousEntry}. Using ${fullName} instead.`
               );
             }
 
@@ -186,7 +186,7 @@ export default class PhoneBook {
               const previousSuffixEntry = this.suffixPhoneBook[suffix];
               if (previousSuffixEntry) {
                 Logger.warning(
-                  `Found duplicate phone number for suffix: ${suffix} with an existing entry: ${previousSuffixEntry}.`
+                  `Found duplicate phone number for suffix: ${suffix} with an existing entry: ${previousSuffixEntry.name}. Using ${fullName} instead.`
                 );
               }
 
