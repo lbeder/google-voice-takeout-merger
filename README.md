@@ -150,43 +150,45 @@ yarn merge -f -i ./docs/samples/in/Calls -o ./docs/samples/out -c ./docs/samples
 In the of the execution, you should expect the following summary:
 
 ```sh
-[2022/12/09 14:00:38.167] Summary:
-[2022/12/09 14:00:38.167] ¯¯¯¯¯¯¯¯
-[2022/12/09 14:00:38.167] Total entries: 45
-[2022/12/09 14:00:38.167]
-[2022/12/09 14:00:38.167] Types:
-[2022/12/09 14:00:38.167]     HTML: 30
-[2022/12/09 14:00:38.167]     Media: 15
-[2022/12/09 14:00:38.167]
-[2022/12/09 14:00:38.167] Actions:
-[2022/12/09 14:00:38.167]     Received: 5
-[2022/12/09 14:00:38.167]     Placed: 2
-[2022/12/09 14:00:38.167]     Missed: 5
-[2022/12/09 14:00:38.167]     Text: 17
-[2022/12/09 14:00:38.167]     Voicemail: 8
-[2022/12/09 14:00:38.167]     Recorded: 0
-[2022/12/09 14:00:38.170]     Group Conversation: 8
-[2022/12/09 14:00:38.170]     Unknown: 0
-[2022/12/09 14:00:38.170]
-[2022/12/09 14:00:38.170] Formats:
-[2022/12/09 14:00:38.170]     JPG: 5
-[2022/12/09 14:00:38.170]     GIF: 1
-[2022/12/09 14:00:38.170]     MP3: 4
-[2022/12/09 14:00:38.171]     MP4: 2
-[2022/12/09 14:00:38.171]     3GP: 1
-[2022/12/09 14:00:38.171]     AMR: 1
-[2022/12/09 14:00:38.171]     VCF: 1
-[2022/12/09 14:00:38.171]     HTML: 30
-[2022/12/09 14:00:38.171]
-[2022/12/09 14:00:38.171] Phone number matching:
-[2022/12/09 14:00:38.171]     Total matched VCF contacts: 13
-[2022/12/09 14:00:38.171]     Total matched numbers: 13
-[2022/12/09 14:00:38.171]     Total unknown numbers: 21
-[2022/12/09 14:00:38.171]
-[2022/12/09 14:00:38.171] Generated CSV index at: ~/google-voice-takeout-merger/docs/samples/out/index.csv
-[2022/12/09 14:00:38.171] Generated SMS Backup and Restore XML export: ~/google-voice-takeout-merger/docs/samples/out/sms.xml
-[2022/12/09 14:00:38.171]
-[2022/12/09 14:00:38.171] See the logs directory ~/google-voice-takeout-merger/docs/samples/out/logs for lists of known/unknown numbers
+[2023/06/23 12:30:13.401] Summary:
+[2023/06/23 12:30:13.401] ¯¯¯¯¯¯¯¯
+[2023/06/23 12:30:13.402] Total entries: 46
+[2023/06/23 12:30:13.402]
+[2023/06/23 12:30:13.402] Types:
+[2023/06/23 12:30:13.402]     HTML: 31
+[2023/06/23 12:30:13.402]     Media: 15
+[2023/06/23 12:30:13.402]
+[2023/06/23 12:30:13.402] Actions:
+[2023/06/23 12:30:13.402]     Received: 5
+[2023/06/23 12:30:13.402]     Placed: 3
+[2023/06/23 12:30:13.402]     Missed: 5
+[2023/06/23 12:30:13.402]     Text: 17
+[2023/06/23 12:30:13.402]     Voicemail: 8
+[2023/06/23 12:30:13.402]     Recorded: 0
+[2023/06/23 12:30:13.402]     Group Conversation: 8
+[2023/06/23 12:30:13.402]     Unknown: 0
+[2023/06/23 12:30:13.402]
+[2023/06/23 12:30:13.402] Formats:
+[2023/06/23 12:30:13.402]     JPG: 5
+[2023/06/23 12:30:13.403]     GIF: 1
+[2023/06/23 12:30:13.403]     MP3: 4
+[2023/06/23 12:30:13.403]     MP4: 2
+[2023/06/23 12:30:13.403]     3GP: 1
+[2023/06/23 12:30:13.403]     AMR: 1
+[2023/06/23 12:30:13.403]     VCF: 1
+[2023/06/23 12:30:13.403]     HTML: 31
+[2023/06/23 12:30:13.403]
+[2023/06/23 12:30:13.403] Phone number matching:
+[2023/06/23 12:30:13.403]     Total VCF contacts matched: 13
+[2023/06/23 12:30:13.403]     Total unique record numbers matched: 13
+[2023/06/23 12:30:13.403]     Total unknown numbers: 22
+[2023/06/23 12:30:13.403]
+[2023/06/23 12:30:13.403] Generated CSV index at: ~/google-voice-takeout-merger/docs/samples/out/index.csv
+[2023/06/23 12:30:13.403] Generated SMS Backup and Restore XML export: ~/google-voice-takeout-merger/docs/samples/out/sms.xml
+[2023/06/23 12:30:13.403]
+[2023/06/23 12:30:13.403] See the logs directory ~/google-voice-takeout-merger/docs/samples/out/logs for lists of known/unknown numbers
+[2023/06/23 12:30:13.403]
+[2023/06/23 12:30:13.403] Please let the tool a few moments to finish
 ```
 
 For example, you could see that all the records for `+17015550147`:
