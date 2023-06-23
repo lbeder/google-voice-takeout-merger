@@ -234,4 +234,3 @@ Please note that this tool currently has a few issues:
 3. It's not possible to browse into conversations whose participants names contain the `'` (apostrophe/single quote) mark. In these cases, we recommend replacing the apostrophes using the `--replace-contact-apostrophes` flag. For example:
     * `--replace-contact-apostrophes=""`: remove all apostrophes.
     * `--replace-contact-apostrophes="""`: replace all apostrophes with double quotes.
-    * `--replace-contact-apostrophes="`` ` ``"`: replace all apostrophes with backticks.
