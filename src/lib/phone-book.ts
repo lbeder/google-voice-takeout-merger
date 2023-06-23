@@ -151,11 +151,13 @@ export default class PhoneBook {
           continue;
         }
 
+        const previousEntry = this.phoneBook[phoneNumber];
+
         switch (this.strategy) {
           case MatchStrategy.Exact:
-            if (this.phoneBook[phoneNumber]) {
+            if (previousEntry) {
               Logger.warning(
-                `Found duplicate contact for: ${phoneNumber} with the full name of: ${fullName}. Using it instead.`
+                `Found identical duplicate phone number: ${phoneNumber} with an existing entry: ${previousEntry}`
               );
             }
 
@@ -164,9 +166,9 @@ export default class PhoneBook {
             break;
 
           case MatchStrategy.Suffix: {
-            if (this.phoneBook[phoneNumber]) {
+            if (previousEntry) {
               Logger.warning(
-                `Found duplicate contact for: ${phoneNumber} with the full name of: ${fullName}. Using it instead.`
+                `Found identical duplicate phone number: ${phoneNumber} with an existing entry: ${previousEntry}`
               );
             }
 
@@ -181,9 +183,10 @@ export default class PhoneBook {
                 break;
               }
 
-              if (this.suffixPhoneBook[suffix]) {
+              const previousSuffixEntry = this.suffixPhoneBook[suffix];
+              if (previousSuffixEntry) {
                 Logger.warning(
-                  `Found duplicate contact for suffix: ${suffix} with the full name of: ${fullName}. Using it instead.`
+                  `Found duplicate phone number for suffix: ${suffix} with an existing entry: ${previousSuffixEntry}.`
                 );
               }
 
