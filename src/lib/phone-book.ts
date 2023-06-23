@@ -300,9 +300,13 @@ export default class PhoneBook {
 
     for (const [phoneBookNumber, originalPhoneNumbers] of Object.entries(this.stats.matched)) {
       for (const { phoneNumber: originalPhoneNumber, matchLength } of originalPhoneNumbers) {
+        const name = this.get(phoneBookNumber).name;
+
         fs.appendFileSync(
           matchedLogPath,
-          `${[originalPhoneNumber, phoneBookNumber, matchLength, `"${this.get(phoneBookNumber).name}"`].join(',')}\n`
+          `${[originalPhoneNumber, phoneBookNumber, matchLength, name ? `"${name.replace(/"/g, '""')}"` : ''].join(
+            ','
+          )}\n`
         );
       }
     }
