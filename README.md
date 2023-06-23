@@ -126,7 +126,7 @@ We would recommend the following values:
 * `7`: relatively safe, but there is a chance of false positives
 * `6`: risky and usually with false positives
 
-The shorter the suffix length the more likely the merging of unrelated threads is to occur.
+The shorter the suffix length the more likely the false positive of merging of unrelated threads and false positive matching is to occur.
 
 In addition, please also note the `matched_numbers.csv` and the `unknown_numbers.csv` logs for additional matching information.
 
