@@ -4,21 +4,21 @@
 [![Test](https://github.com/lbeder/google-voice-takeout-merger/actions/workflows/ci.yml/badge.svg)](https://github.com/lbeder/google-voice-takeout-merger/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/lbeder/google-voice-takeout-merger?style=flat-square)](https://github.com/lbeder/google-voice-takeout-merger/blob/master/LICENSE)
 
-Currently, Google Voice breaks every call/conversation into a single record, which can result in thousands of records for each participant/phone number, making the export very hard to use. Using this tool, it's possible to merge all these records into a single time-sorted record per participant.
+Currently, Google Voice breaks down each call/conversation into individual records, resulting in thousands of records for each participant/phone number. This can make exporting and using the data quite challenging. However, with the use of this tool, it becomes possible to merge all these records into a single, time-sorted record per participant.
 
-The main features of the tool are:
+The main features of this tool include:
 
-* Merges and groups Google Voice takeout records by participants:
-  * A conversation/call record with the same participant (or number of participants) appears in the same entry (similar to how it's done by other services).
-  * All records are sorted by timestamps, and the resulting filename includes the timestamp of the earliest record.
-* Receives an optional contacts VCF file. See the [Contact Matching](#contact-matching) section below.
-* Fixes all media and metadata issues (broken links, style issues, converts video and audio attachments into proper HTML5 controls, etc.).
-* Generates a CSV index (as `index.csv`) which can be separately used with the [Google Voice Takeout Viewer](https://github.com/lbeder/google-voice-takeout-viewer) indexing app.
-* Generates an SMS Backup and Restore compatible XML (as `sms.xml`) which can be imported to an Android device. You can also view it via [Syntech View Backup Files](https://www.synctech.com.au/sms-backup-restore/view-backup/) web app.
-* Reorganizes all media and metadata.
-* Adds a list of participants to every record.
-* Displays contact names (if an optional contacts VCF file is provided).
-* Properly merges unknown phone number records into a single record.
+* Merging and grouping Google Voice takeout records by participants:
+  * Conversation/call records involving the same participant (or number of participants) are combined into a single entry, similar to how other services handle it.
+  * All records are sorted based on timestamps, and the resulting filename includes the timestamp of the earliest record.
+* Optional integration with a contacts VCF file for contact matching. See the  [Contact Matching](#contact-matching) section below for more details.
+* Addressing media and metadata issues, such as broken links and style inconsistencies. It also converts video and audio attachments into proper HTML5 controls.
+* Generating a CSV index file (named `index.csv`) that can be used separately with the Google Voice Takeout Viewer indexing app (available at[Google Voice Takeout Viewer](https://github.com/lbeder/google-voice-takeout-viewer)).
+* Generating an XML file (named `sms.xml`) compatible with SMS Backup and Restore, which can be imported into an Android device. You can also view it using the web app Syntech View Backup Files (accessible at [Syntech View Backup Files](https://www.synctech.com.au/sms-backup-restore/view-backup/)).
+* Reorganizing all media and metadata in a structured manner.
+* Adding a list of participants to every record.
+* Displaying contact names (if an optional contacts VCF file is provided).
+* Properly merging records associated with unknown phone numbers into a single record.
 
 Please see the [Samples](#samples) section below:
 
