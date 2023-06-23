@@ -89,7 +89,7 @@ Please note that since there isn't a fully standardized way to add external name
 
 If you plan to use the export mostly/only with a web viewer (such as [Syntech View Backup Files](https://www.synctech.com.au/sms-backup-restore/view-backup/) web app), setting the `--add-contact-names-to-xml` flag is highly recommended, since it'll also add the names to group conversations.
 
-Please also note that these matching strategies are only applied when a contact VCF file is provided and there is a match with one of its contact records. If there are multiple identical matches, the latest one will be given priority, and a warning message will be displayed.
+Please also note that these matching strategies are only applied when a contact VCF file is provided and there is a match with one of its contact records. If there are multiple suffix matches, the last one will be given priority, and a warning message will be displayed.
 
 ### Exact Matching Strategy
 
