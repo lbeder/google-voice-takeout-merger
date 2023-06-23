@@ -13,7 +13,7 @@ The main features of this tool include:
   * All records are sorted based on timestamps, and the resulting filename includes the timestamp of the earliest record.
 * Optional integration with a contacts VCF file for contact matching. See the  [Contact Matching](#contact-matching) section below for more details.
 * Addressing media and metadata issues, such as broken links and style inconsistencies. It also converts video and audio attachments into proper HTML5 controls.
-* Generating a CSV index file (named `index.csv`) that can be used separately with the Google Voice Takeout Viewer indexing app (available at[Google Voice Takeout Viewer](https://github.com/lbeder/google-voice-takeout-viewer)).
+* Generating a CSV index file (named `index.csv`) that can be used separately with the Google Voice Takeout Viewer indexing app (available at [Google Voice Takeout Viewer](https://github.com/lbeder/google-voice-takeout-viewer)).
 * Generating an XML file (named `sms.xml`) compatible with SMS Backup and Restore, which can be imported into an Android device. You can also view it using the web app Syntech View Backup Files (accessible at [Syntech View Backup Files](https://www.synctech.com.au/sms-backup-restore/view-backup/)).
 * Reorganizing all media and metadata in a structured manner.
 * Adding a list of participants to every record.
