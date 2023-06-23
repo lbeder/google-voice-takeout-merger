@@ -93,7 +93,7 @@ To easily remove all contacts, you can follow these steps:
 
 ## Contact Matching
 
-The tool supports receiving an optional contact VCF file (for example, from your [Google Contacts](https://support.google.com/contacts/answer/7199294)) and uses it to match phone numbers to contact names using one of the following matching strategies. If there are multiple contacts, in the VCF file, with an identical phone number, a warning message will be displayed. When a contact match is found its full name will be replaced in all threads (merged threads, CSV index, and XML export).
+The tool supports receiving an optional contact VCF file (for example, from your [Google Contacts](https://support.google.com/contacts/answer/7199294)) and uses it to match phone numbers to contact names using one of the following matching strategies. If there are multiple contacts, in the VCF file, with an identical phone number, a warning message will be displayed. When a contact match is found its full name will be inserted in all matched threads (merged threads, CSV index, and XML export).
 
 Please note that since there isn't a fully standardized way to add external names to SMS Backup and Restore compatible XML exports, adding them can produce some UX issues when importing it to your Android device. Therefore, contact names won't be added to SMS Backup and Restore compatible XML exports by default, unless the (experimental) `--add-contact-names-to-xml` flag is set.
 
