@@ -83,7 +83,7 @@ yarn merge -i ~/in/Calls -o ~/out -v -f
 
 ## Contact Matching
 
-The tool supports receiving an optional contact VCF file (for example, from your [Google Contacts](https://support.google.com/contacts/answer/7199294)) and uses it to match phone numbers to contact names using one of the following matching strategies. If there are multiple contacts with identical phone number, a warning message will be displayed.
+The tool supports receiving an optional contact VCF file (for example, from your [Google Contacts](https://support.google.com/contacts/answer/7199294)) and uses it to match phone numbers to contact names using one of the following matching strategies. If there are multiple contacts with an identical phone number, a warning message will be displayed. When a contact match is found its phone number will be used instead of the original phone number in the record, which might result in merging of separate threads.
 
 Please note that since there isn't a fully standardized way to add external names to SMS Backup and Restore compatible XML exports, adding them can produce some UX issues when importing it to your Android device. Therefore, contact names won't be added to SMS Backup and Restore compatible XML exports by default, unless the (experimental) `--add-contact-names-to-xml` flag is set.
 
