@@ -83,7 +83,7 @@ yarn merge -i ~/in/Calls -o ~/out -v -f
 
 ## Contact Matching
 
-The tool supports receiving an optional contact VCF file (for example, from your [Google Contacts](https://support.google.com/contacts/answer/7199294)) and uses it to match phone numbers to contact names using one of the following matching strategies. If there are multiple contacts, in the VCF file, with an identical phone number, a warning message will be displayed. When a contact match is found its phone number in the VCF file will be used instead of the thread's original phone number, which might result in merging of separate threads.
+The tool supports receiving an optional contact VCF file (for example, from your [Google Contacts](https://support.google.com/contacts/answer/7199294)) and uses it to match phone numbers to contact names using one of the following matching strategies. If there are multiple contacts, in the VCF file, with an identical phone number, a warning message will be displayed. When a contact match is found its full name will be replaced in all threads (merged threads, CSV index, and XML export).
 
 Please note that since there isn't a fully standardized way to add external names to SMS Backup and Restore compatible XML exports, adding them can produce some UX issues when importing it to your Android device. Therefore, contact names won't be added to SMS Backup and Restore compatible XML exports by default, unless the (experimental) `--add-contact-names-to-xml` flag is set.
 
@@ -126,7 +126,7 @@ We would recommend the following values:
 * `7`: relatively safe, but there is a chance of false positives
 * `6`: risky and usually with false positives
 
-The shorter the suffix length the more likely the merging of unrelated threads and false positive matching is to occur.
+The likelihood of a wrong contact name matching increases as the suffix length becomes shorter.
 
 In addition, please also note the `matched_numbers.csv` and the `unknown_numbers.csv` logs for additional matching information.
 
