@@ -298,7 +298,7 @@ export default class PhoneBook {
       for (const { phoneNumber: originalPhoneNumber, matchLength } of originalPhoneNumbers) {
         fs.appendFileSync(
           matchedLogPath,
-          `${[originalPhoneNumber, phoneBookNumber, matchLength, this.get(phoneBookNumber).name].join(',')}\n`
+          `${[originalPhoneNumber, phoneBookNumber, matchLength, `"${this.get(phoneBookNumber).name}"`].join(',')}\n`
         );
       }
     }
