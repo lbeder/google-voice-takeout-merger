@@ -4,6 +4,9 @@ import Logger from './lib/utils/logger';
 import yargs from 'yargs';
 
 const main = async () => {
+  Logger.info(`Google Voice Takeout Merger v${process.env.npm_package_version}`);
+  Logger.info();
+
   try {
     await yargs(process.argv.slice(2))
       .parserConfiguration({ 'parse-numbers': false })
