@@ -14,7 +14,6 @@ const main = async () => {
       .wrap(yargs.terminalWidth())
       .demandCommand()
       .help()
-      .version()
       .option('verbose', {
         type: 'boolean',
         alias: 'v',
