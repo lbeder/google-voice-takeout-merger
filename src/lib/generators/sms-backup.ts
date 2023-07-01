@@ -3,6 +3,7 @@ import HTMLEntry, { MessageOptions } from '../entries/html';
 import Logger from '../utils/logger';
 import Generator from './generator';
 import fs from 'fs';
+import { isEmpty } from 'lodash';
 import path from 'path';
 import { Transform } from 'stream';
 import xml from 'xml';
@@ -114,15 +115,25 @@ export default class SMSBackup extends Generator {
       throw new Error('Unable to save non-HTML entry to the index');
     }
 
-    return entry
-      .messages({
-        ignoreCallLogs: this.ignoreCallLogs,
-        ignoreOrphanCallLogs: this.ignoreOrphanCallLogs,
-        ignoreMedia: this.ignoreMedia,
-        ignoreVoicemails: this.ignoreVoicemails,
-        ignoreOrphanVoicemails: this.ignoreOrphanVoicemails,
-        addContactNamesToXml: this.addContactNamesToXml
-      })
-      .map((m) => m.toSMSXML());
+    const res = entry.messages({
+      ignoreCallLogs: this.ignoreCallLogs,
+      ignoreOrphanCallLogs: this.ignoreOrphanCallLogs,
+      ignoreMedia: this.ignoreMedia,
+      ignoreVoicemails: this.ignoreVoicemails,
+      ignoreOrphanVoicemails: this.ignoreOrphanVoicemails,
+      addContactNamesToXml: this.addContactNamesToXml
+    });
+
+    const { callLogs, voicemails } = res.filtered;
+
+    if (!isEmpty(callLogs)) {
+      throw new Error(`Unexpected unfiltered call logs: ${callLogs}`);
+    }
+
+    if (!isEmpty(callLogs)) {
+      throw new Error(`Unexpected unfiltered voicemails: ${voicemails}`);
+    }
+
+    return res.messages.map((m) => m.toSMSXML());
   }
 }

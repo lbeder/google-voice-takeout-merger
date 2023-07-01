@@ -26,6 +26,16 @@ export interface MessageOptions {
   addContactNamesToXml: boolean;
 }
 
+export interface Filtered {
+  callLogs: HTMLElement[];
+  voicemails: HTMLElement[];
+}
+
+export interface Messages {
+  messages: Message[];
+  filtered: Filtered;
+}
+
 export default class HTMLEntry extends Entry {
   public media: MediaEntry[] = [];
 
@@ -334,10 +344,16 @@ export default class HTMLEntry extends Entry {
     ignoreVoicemails,
     ignoreOrphanVoicemails,
     addContactNamesToXml
-  }: MessageOptions): Message[] {
+  }: MessageOptions): Messages {
     this.load();
 
-    const res = [];
+    const res: Messages = {
+      messages: [],
+      filtered: {
+        callLogs: [],
+        voicemails: []
+      }
+    };
 
     const participants = this.phoneNumbers.map((phoneNumber) => ({
       phoneNumber,
@@ -382,7 +398,7 @@ export default class HTMLEntry extends Entry {
         foundConversation = true;
       }
 
-      res.push(message);
+      res.messages.push(message);
     }
 
     // Look for call log messages
@@ -433,10 +449,14 @@ export default class HTMLEntry extends Entry {
       }
 
       if (isCallLog && (ignoreCallLogs || (ignoreOrphanCallLogs && !foundConversation))) {
+        res.filtered.callLogs.push(callLog);
+
         continue;
       }
 
       if (isVoiceMail && (ignoreVoicemails || (ignoreOrphanVoicemails && !foundConversation))) {
+        res.filtered.voicemails.push(callLog);
+
         continue;
       }
 
@@ -471,7 +491,7 @@ export default class HTMLEntry extends Entry {
         isGroupConversation: this.isGroupConversation()
       });
 
-      res.push(message);
+      res.messages.push(message);
     }
 
     return res;
