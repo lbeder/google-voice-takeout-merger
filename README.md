@@ -240,6 +240,8 @@ You can view the `--generate-xml` SMS Backup and Restore compatible export via [
   <img src="docs/images/Syntech%20-%20View%20Backup%20Files.png" alt="syntech"/>
 </kbd>
 
+Please note that contact matching and "total numbers" counts include phone numbers belonging to the Google Voice account itself (usually just the main account number but may include others if the Google Voice number was changed and includes historic activity from those previous phone numbers).
+
 #### Syntech Known Issues
 
 Please note that this tool currently has a few issues:
