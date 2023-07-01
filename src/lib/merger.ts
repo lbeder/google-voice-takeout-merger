@@ -207,7 +207,7 @@ export default class Merger {
 
       if (!this.ignoreVoicemails && this.ignoreOrphanVoicemails) {
         // Filter voicemails from phone numbers which do not have any other non-call log conversations
-        const conversations = entries.filter((e) => !e.isVoiceMail() || !e.isCallLog());
+        const conversations = entries.filter((e) => !e.isVoiceMail() && !e.isCallLog());
         if (conversations.length === 0) {
           continue;
         }
