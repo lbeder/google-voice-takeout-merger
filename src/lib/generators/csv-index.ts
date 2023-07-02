@@ -48,7 +48,11 @@ export default class CSVIndex extends Generator {
 
   // Saves an entries to an index
   private saveEntry(entry: Entry, indexPath: string) {
-    Logger.info(`Saving entry "${entry.name}" to the csv index`);
+    Logger.info(
+      `Saving entry "[${entry.phoneNumbers.join(',')}] ${entry.timestamp.toISOString()} (${
+        entry.action
+      }) to the csv index"`
+    );
 
     if (entry.format !== EntryFormat.HTML) {
       throw new Error('Unable to save non-HTML entry to the index');
