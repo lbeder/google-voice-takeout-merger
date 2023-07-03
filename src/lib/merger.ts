@@ -295,6 +295,6 @@ export default class Merger {
     Logger.notice(`See the logs directory ${this.logsDir} for lists of known/unknown numbers`);
     Logger.notice();
 
-    Logger.notice('Please let the tool a few moments to finish');
+    Logger.notice('Please allow the tool a few moments to finish');
   }
 }
