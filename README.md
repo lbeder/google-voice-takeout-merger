@@ -173,16 +173,12 @@ Please see the provided example input and output in [docs/samples](docs/samples)
 
 **All the phone numbers, contacts, media, and data uses fake and sample data.**
 
-### Input
-
-* [docs/samples/in/contacts.vcf](docs/samples/in/contacts.vcf): sample contacts VCF file.
-* [docs/samples/in/Calls](docs/samples/in/Calls): sample Google Voice takeout.
+### Regular
 
 We will execute the following command:
 
 ```sh
-yarn merge -f -i ./docs/samples/in/Calls -o ./docs/samples/out -c ./docs/samples/in/contacts.vcf --sl 8 --generate-csv --generate-xml --add-contact-names-to-xml
-```
+yarn merge -f -i ./docs/samples/regular/in/Calls -o ./docs/samples/regular/out -c ./docs/samples/regular/in/contacts.vcf --sl 8 --generate-csv --generate-xml --add-contact-names-to-xml
 
 In the of the execution, you should expect the following summary:
 
@@ -266,6 +262,36 @@ You can view the `--generate-xml` SMS Backup and Restore compatible export via [
 </kbd>
 
 Please note that contact matching and "total numbers" counts include phone numbers belonging to the Google Voice account itself (usually just the main account number but may include others if the Google Voice number was changed and includes historic activity from those previous phone numbers).
+
+### Filter: Call Logs
+
+```sh
+yarn merge -f -i ./docs/samples/filter-call-logs/in/Calls -o ./docs/samples/filter-call-logs/out -c ./docs/samples/filter-call-logs/in/contacts.vcf --sl 8 --generate-csv --generate-xml --add-contact-names-to-xml --ignore-call-logs
+```
+
+### Filter: Orphan Call Logs
+
+```sh
+yarn merge -f -i ./docs/samples/filter-orphan-call-logs/in/Calls -o ./docs/samples/filter-orphan-call-logs/out -c ./docs/samples/filter-orphan-call-logs/in/contacts.vcf --sl 8 --generate-csv --generate-xml --add-contact-names-to-xml --ignore-orphan-call-logs
+```
+
+### Filter: Voicemails
+
+```sh
+yarn merge -f -i ./docs/samples/filter-voicemails/in/Calls -o ./docs/samples/filter-voicemails/out -c ./docs/samples/filter-voicemails/in/contacts.vcf --sl 8 --generate-csv --generate-xml --add-contact-names-to-xml --ignore-voicemails
+```
+
+### Filter: Orphan Voicemails
+
+```sh
+yarn merge -f -i ./docs/samples/filter-orphan-voicemails/in/Calls -o ./docs/samples/filter-orphan-voicemails/out -c ./docs/samples/filter-orphan-voicemails/in/contacts.vcf --sl 8 --generate-csv --generate-xml --add-contact-names-to-xml --ignore-orphan-call-logs
+```
+
+### Filter: Media
+
+```sh
+yarn merge -f -i ./docs/samples/filter-media/in/Calls -o ./docs/samples/filter-media/out -c ./docs/samples/filter-media/in/contacts.vcf --sl 8 --generate-csv --generate-xml --add-contact-names-to-xml --ignore-media
+```
 
 #### Syntech Known Issues
 

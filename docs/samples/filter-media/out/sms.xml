@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<smses count="55">	<sms address="174074978" body="Missed call from Candice Cremin (174074978)" date="1617222737000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1" contact_name="Candice Cremin">
+	</sms>	<sms address="+00000000000" body="Missed call from +00000000000" date="1319753256000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1">
+	</sms>	<sms address="+00000000000" body="Missed call from +00000000000" date="1319817502000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1">
+	</sms>	<sms address="+00000000000" body="Received call from +00000000000 (5 seconds)" date="1319817866000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1">
+	</sms>	<sms address="+00000000000" body="Missed call from +00000000000" date="1320515241000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1">
+	</sms>	<sms address="+00000000000" body="Received call from +00000000000 (14 seconds)" date="1320624463000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1">
+	</sms>	<sms address="+00000000000" body="Received call from +00000000000 (16 minutes, 50 seconds)" date="1322489063000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1">
+	</sms>	<sms address="+00000000000" body="Voicemail from +00000000000 (6 seconds): Unable to transcribe this message." date="1323549835000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1">
+	</sms>	<sms address="+00000000000" body="Voicemail from +00000000000 (3 seconds): Unable to transcribe this message." date="1332008192000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1">
+	</sms>	<sms address="+12025550130" body="Received call from Charity Murray (+12025550130) (5 seconds)" date="1639246831000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1" contact_name="Charity Murray">
+	</sms>	<sms address="+12025550149" body="Hello World" date="1594251846000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1" contact_name="Jesse Hilll">
+	</sms>	<sms address="+12025550149" body="MMS Received" date="1594251870000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1" contact_name="Jesse Hilll">
+	</sms>	<sms address="+13035550192" body="Joseph" date="1572953663000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1" contact_name="Anne Hartmann&apos;s Shop">
+	</sms>	<sms address="+13035550192" body="MMS Received" date="1572953695000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1" contact_name="Anne Hartmann&apos;s Shop">
+	</sms>	<sms address="+14016660192" body="Placed call to +14016660192 (42 seconds)" date="1522600099000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="2">
+	</sms>	<sms address="+14045550102" body="Ho" date="1620164585000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1">
+	</sms>	<sms address="+14045550102" body="Hey" date="1620164612000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="2">
+	</sms>	<sms address="+14045550102" body="MMS Received" date="1620176482000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1">
+	</sms>	<sms address="+14045550102" body="Bye" date="1620178323000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1">
+	</sms>	<sms address="+14045550102" body="Placed call to +14045550102 (42 seconds)" date="1551457699000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="2">
+	</sms>	<sms address="+14065550172" body="Missed call from +14065550172" date="1603773956000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1">
+	</sms>	<sms address="+15185550143" body="MMS Received" date="1598102397000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1" contact_name="Lloyd Gusikowski">
+	</sms>	<sms address="+16055550153" body="Test" date="1646813609000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1">
+	</sms>	<sms address="+16055550153" body="Test 2" date="1646813630000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1">
+	</sms>	<sms address="+16055550153" body="MMS Received" date="1646813728000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1">
+	</sms>	<sms address="+17015550147" body="Testing 1" date="1646812832000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1" contact_name="Damian Monahan">
+	</sms>	<sms address="+17015550147" body="MMS Received" date="1646812868000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1" contact_name="Damian Monahan">
+	</sms>	<sms address="+17015550147" body="Very cool" date="1646812876000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="2" contact_name="Damian Monahan">
+	</sms>	<sms address="+17015550147" body="Voicemail from Damian Monahan (+17015550147) (22 seconds)" date="1646812910000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1" contact_name="Damian Monahan">
+	</sms>	<sms address="+17015550147" body="Voicemail from Damian Monahan (+17015550147) (27 seconds): Hello World" date="1646812980000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1" contact_name="Damian Monahan">
+	</sms>	<sms address="+17015550194" body="Received call from Mariela Roberts (+17015550194) (5 seconds)" date="1639246831000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1" contact_name="Mariela Roberts">
+	</sms>	<sms address="+17855550115" body="Test" date="1617294475000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="2">
+	</sms>	<sms address="+17855550115" body="Test" date="1617294476000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1">
+	</sms>	<sms address="+17855550115" body="New test" date="1646814865000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="2">
+	</sms>	<sms address="+17855550115" body="New test" date="1646814866000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1">
+	</sms>	<sms address="+17855550115" body="New test" date="1646814865000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="2">
+	</sms>	<sms address="+17855550115" body="New test" date="1646814866000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1">
+	</sms>	<sms address="+17855550115" body="New test" date="1646814865000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="2">
+	</sms>	<sms address="+17855550115" body="New &quot;test&quot;" date="1646814866000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="1">
+	</sms>	<sms address="+18085550103" body="Placed call to +18085550103 (42 seconds)" date="1617294499000" protocol="0" read="1" sc_toa="null" service_center="null" status="0" subject="null" toa="null" type="2">
+	</sms>	<mms address="+12075550182~+12085550145~+12255550160~+13025550173~+13035550182~+13075550162~Angie Mueller IV (+14045550167)~Cheyanne Auer (+14105550126)~+15025550108~+15125550120~Beatrice Ruecker (+15155550117)~Lloyd Gusikowski (+15185550143)~+16035550142~+16145550177~+16175550151~Mariela Roberts (+17015550194)~+17755550174~John Doe (+18035550193)~Royal Jones (+18435550199)" ct_t="application/vnd.wap.multipart.relate" date="1486233616000" m_type="132" msg_box="1" read="1" rr="129" seen="1" sub_id="1" text_only="1">
+		<parts>
+			<part ct="text/plain" seq="0" text="">
+			</part>
+		</parts>
+		<addrs>
+			<addr address="+12075550182" charset="106" type="151">
+			</addr>
+			<addr address="+12085550145" charset="106" type="151">
+			</addr>
+			<addr address="+12255550160" charset="106" type="151">
+			</addr>
+			<addr address="+13025550173" charset="106" type="151">
+			</addr>
+			<addr address="+13035550182" charset="106" type="151">
+			</addr>
+			<addr address="+13075550162" charset="106" type="151">
+			</addr>
+			<addr address="+14045550167" charset="106" type="151">
+			</addr>
+			<addr address="+14105550126" charset="106" type="151">
+			</addr>
+			<addr address="+15025550108" charset="106" type="151">
+			</addr>
+			<addr address="+15125550120" charset="106" type="151">
+			</addr>
+			<addr address="+15155550117" charset="106" type="151">
+			</addr>
+			<addr address="+15185550143" charset="106" type="151">
+			</addr>
+			<addr address="+16035550142" charset="106" type="151">
+			</addr>
+			<addr address="+16145550177" charset="106" type="151">
+			</addr>
+			<addr address="+16175550151" charset="106" type="151">
+			</addr>
+			<addr address="+17015550194" charset="106" type="137">
+			</addr>
+			<addr address="+17755550174" charset="106" type="151">
+			</addr>
+			<addr address="+18035550193" charset="106" type="151">
+			</addr>
+			<addr address="+18435550199" charset="106" type="151">
+			</addr>
+		</addrs>
+	</mms>	<mms address="+12075550182~+12085550145~+12255550160~+13025550173~+13035550182~+13075550162~Angie Mueller IV (+14045550167)~Cheyanne Auer (+14105550126)~+15025550108~+15125550120~Beatrice Ruecker (+15155550117)~Lloyd Gusikowski (+15185550143)~+16035550142~+16145550177~+16175550151~Mariela Roberts (+17015550194)~+17755550174~John Doe (+18035550193)~Royal Jones (+18435550199)" ct_t="application/vnd.wap.multipart.relate" date="1486192718000" m_type="132" msg_box="1" read="1" rr="129" seen="1" sub_id="1" text_only="1">
+		<parts>
+			<part ct="text/plain" seq="0" text="Hi">
+			</part>
+		</parts>
+		<addrs>
+			<addr address="+12075550182" charset="106" type="151">
+			</addr>
+			<addr address="+12085550145" charset="106" type="151">
+			</addr>
+			<addr address="+12255550160" charset="106" type="151">
+			</addr>
+			<addr address="+13025550173" charset="106" type="151">
+			</addr>
+			<addr address="+13035550182" charset="106" type="137">
+			</addr>
+			<addr address="+13075550162" charset="106" type="151">
+			</addr>
+			<addr address="+14045550167" charset="106" type="151">
+			</addr>
+			<addr address="+14105550126" charset="106" type="151">
+			</addr>
+			<addr address="+15025550108" charset="106" type="151">
+			</addr>
+			<addr address="+15125550120" charset="106" type="151">
+			</addr>
+			<addr address="+15155550117" charset="106" type="151">
+			</addr>
+			<addr address="+15185550143" charset="106" type="151">
+			</addr>
+			<addr address="+16035550142" charset="106" type="151">
+			</addr>
+			<addr address="+16145550177" charset="106" type="151">
+			</addr>
+			<addr address="+16175550151" charset="106" type="151">
+			</addr>
+			<addr address="+17015550194" charset="106" type="151">
+			</addr>
+			<addr address="+17755550174" charset="106" type="151">
+			</addr>
+			<addr address="+18035550193" charset="106" type="151">
+			</addr>
+			<addr address="+18435550199" charset="106" type="151">
+			</addr>
+		</addrs>
+	</mms>	<mms address="+12075550182~+12085550145~+12255550160~+13025550173~+13035550182~+13075550162~Angie Mueller IV (+14045550167)~Cheyanne Auer (+14105550126)~+15025550108~+15125550120~Beatrice Ruecker (+15155550117)~Lloyd Gusikowski (+15185550143)~+16035550142~+16145550177~+16175550151~Mariela Roberts (+17015550194)~+17755550174~John Doe (+18035550193)~Royal Jones (+18435550199)" ct_t="application/vnd.wap.multipart.relate" date="1486192720000" m_type="132" msg_box="1" read="1" rr="129" seen="1" sub_id="1" text_only="1">
+		<parts>
+			<part ct="text/plain" seq="0" text="Hi">
+			</part>
+		</parts>
+		<addrs>
+			<addr address="+12075550182" charset="106" type="151">
+			</addr>
+			<addr address="+12085550145" charset="106" type="151">
+			</addr>
+			<addr address="+12255550160" charset="106" type="151">
+			</addr>
+			<addr address="+13025550173" charset="106" type="151">
+			</addr>
+			<addr address="+13035550182" charset="106" type="151">
+			</addr>
+			<addr address="+13075550162" charset="106" type="151">
+			</addr>
+			<addr address="+14045550167" charset="106" type="151">
+			</addr>
+			<addr address="+14105550126" charset="106" type="151">
+			</addr>
+			<addr address="+15025550108" charset="106" type="151">
+			</addr>
+			<addr address="+15125550120" charset="106" type="151">
+			</addr>
+			<addr address="+15155550117" charset="106" type="151">
+			</addr>
+			<addr address="+15185550143" charset="106" type="151">
+			</addr>
+			<addr address="+16035550142" charset="106" type="151">
+			</addr>
+			<addr address="+16145550177" charset="106" type="151">
+			</addr>
+			<addr address="+16175550151" charset="106" type="151">
+			</addr>
+			<addr address="+17015550194" charset="106" type="151">
+			</addr>
+			<addr address="+17755550174" charset="106" type="151">
+			</addr>
+			<addr address="+18035550193" charset="106" type="151">
+			</addr>
+			<addr address="+18435550199" charset="106" type="137">
+			</addr>
+		</addrs>
+	</mms>	<mms address="+12075550182~+12085550145~+12255550160~+13025550173~+13035550182~+13075550162~Angie Mueller IV (+14045550167)~Cheyanne Auer (+14105550126)~+15025550108~+15125550120~Beatrice Ruecker (+15155550117)~Lloyd Gusikowski (+15185550143)~+16035550142~+16145550177~+16175550151~Mariela Roberts (+17015550194)~+17755550174~John Doe (+18035550193)~Royal Jones (+18435550199)" ct_t="application/vnd.wap.multipart.relate" date="1486192725000" m_type="132" msg_box="1" read="1" rr="129" seen="1" sub_id="1" text_only="1">
+		<parts>
+			<part ct="text/plain" seq="0" text="What&apos;s up?">
+			</part>
+		</parts>
+		<addrs>
+			<addr address="+12075550182" charset="106" type="151">
+			</addr>
+			<addr address="+12085550145" charset="106" type="151">
+			</addr>
+			<addr address="+12255550160" charset="106" type="151">
+			</addr>
+			<addr address="+13025550173" charset="106" type="151">
+			</addr>
+			<addr address="+13035550182" charset="106" type="151">
+			</addr>
+			<addr address="+13075550162" charset="106" type="151">
+			</addr>
+			<addr address="+14045550167" charset="106" type="151">
+			</addr>
+			<addr address="+14105550126" charset="106" type="151">
+			</addr>
+			<addr address="+15025550108" charset="106" type="151">
+			</addr>
+			<addr address="+15125550120" charset="106" type="151">
+			</addr>
+			<addr address="+15155550117" charset="106" type="151">
+			</addr>
+			<addr address="+15185550143" charset="106" type="137">
+			</addr>
+			<addr address="+16035550142" charset="106" type="151">
+			</addr>
+			<addr address="+16145550177" charset="106" type="151">
+			</addr>
+			<addr address="+16175550151" charset="106" type="151">
+			</addr>
+			<addr address="+17015550194" charset="106" type="151">
+			</addr>
+			<addr address="+17755550174" charset="106" type="151">
+			</addr>
+			<addr address="+18035550193" charset="106" type="151">
+			</addr>
+			<addr address="+18435550199" charset="106" type="151">
+			</addr>
+		</addrs>
+	</mms>	<mms address="Garnett Tremblay (+17175550148)~+18605550137" ct_t="application/vnd.wap.multipart.relate" date="1488611900000" m_type="132" msg_box="1" read="1" rr="129" seen="1" sub_id="1" text_only="1">
+		<parts>
+			<part ct="text/plain" seq="0" text="Hello">
+			</part>
+		</parts>
+		<addrs>
+			<addr address="+17175550148" charset="106" type="137">
+			</addr>
+			<addr address="+18605550137" charset="106" type="151">
+			</addr>
+		</addrs>
+	</mms>	<mms address="Garnett Tremblay (+17175550148)~+18605550137" ct_t="application/vnd.wap.multipart.relate" date="1488611905000" m_type="132" msg_box="1" read="1" rr="129" seen="1" sub_id="1" text_only="1">
+		<parts>
+			<part ct="text/plain" seq="0" text="">
+			</part>
+		</parts>
+		<addrs>
+			<addr address="+17175550148" charset="106" type="137">
+			</addr>
+			<addr address="+18605550137" charset="106" type="151">
+			</addr>
+		</addrs>
+	</mms>	<mms address="Garnett Tremblay (+17175550148)~+18605550137" ct_t="application/vnd.wap.multipart.relate" date="1488611910000" m_type="128" msg_box="2" read="1" rr="129" seen="1" sub_id="1" text_only="1">
+		<parts>
+			<part ct="text/plain" seq="0" text="Hello to you too">
+			</part>
+		</parts>
+		<addrs>
+			<addr address="+17175550148" charset="106" type="137">
+			</addr>
+			<addr address="+18605550137" charset="106" type="137">
+			</addr>
+		</addrs>
+	</mms>	<mms address="Garnett Tremblay (+17175550148)~+18605550137" ct_t="application/vnd.wap.multipart.relate" date="1488611918000" m_type="132" msg_box="1" read="1" rr="129" seen="1" sub_id="1" text_only="1">
+		<parts>
+			<part ct="text/plain" seq="0" text="Goodbye">
+			</part>
+		</parts>
+		<addrs>
+			<addr address="+17175550148" charset="106" type="137">
+			</addr>
+			<addr address="+18605550137" charset="106" type="151">
+			</addr>
+		</addrs>
+	</mms>	<mms address="Garnett Tremblay (+17175550148)~+18605550137" ct_t="application/vnd.wap.multipart.relate" date="1488611919000" m_type="128" msg_box="2" read="1" rr="129" seen="1" sub_id="1" text_only="1">
+		<parts>
+			<part ct="text/plain" seq="0" text="Goodbye to you too">
+			</part>
+		</parts>
+		<addrs>
+			<addr address="+17175550148" charset="106" type="137">
+			</addr>
+			<addr address="+18605550137" charset="106" type="137">
+			</addr>
+		</addrs>
+	</mms>	<mms address="Garnett Tremblay (+17175550148)~+18605550137" ct_t="application/vnd.wap.multipart.relate" date="1490339907000" m_type="132" msg_box="1" read="1" rr="129" seen="1" sub_id="1" text_only="1">
+		<parts>
+			<part ct="text/plain" seq="0" text="Hello 2">
+			</part>
+		</parts>
+		<addrs>
+			<addr address="+17175550148" charset="106" type="137">
+			</addr>
+			<addr address="+18605550137" charset="106" type="151">
+			</addr>
+		</addrs>
+	</mms>	<mms address="Garnett Tremblay (+17175550148)~+18605550137" ct_t="application/vnd.wap.multipart.relate" date="1490339909000" m_type="132" msg_box="1" read="1" rr="129" seen="1" sub_id="1" text_only="1">
+		<parts>
+			<part ct="text/plain" seq="0" text="">
+			</part>
+		</parts>
+		<addrs>
+			<addr address="+17175550148" charset="106" type="137">
+			</addr>
+			<addr address="+18605550137" charset="106" type="151">
+			</addr>
+		</addrs>
+	</mms>	<mms address="Garnett Tremblay (+17175550148)~+18605550137" ct_t="application/vnd.wap.multipart.relate" date="1490339918000" m_type="132" msg_box="1" read="1" rr="129" seen="1" sub_id="1" text_only="1">
+		<parts>
+			<part ct="text/plain" seq="0" text="Goodbye 2">
+			</part>
+		</parts>
+		<addrs>
+			<addr address="+17175550148" charset="106" type="137">
+			</addr>
+			<addr address="+18605550137" charset="106" type="151">
+			</addr>
+		</addrs>
+	</mms>	<mms address="Garnett Tremblay (+17175550148)~+18605550137~john@example.com" ct_t="application/vnd.wap.multipart.relate" date="1585034307000" m_type="132" msg_box="1" read="1" rr="129" seen="1" sub_id="1" text_only="1">
+		<parts>
+			<part ct="text/plain" seq="0" text="Hello">
+			</part>
+		</parts>
+		<addrs>
+			<addr address="+17175550148" charset="106" type="137">
+			</addr>
+			<addr address="+18605550137" charset="106" type="151">
+			</addr>
+			<addr address="john@example.com" charset="106" type="151">
+			</addr>
+		</addrs>
+	</mms>	<mms address="Garnett Tremblay (+17175550148)~+18605550137~john@example.com" ct_t="application/vnd.wap.multipart.relate" date="1585034309000" m_type="132" msg_box="1" read="1" rr="129" seen="1" sub_id="1" text_only="1">
+		<parts>
+			<part ct="text/plain" seq="0" text="">
+			</part>
+		</parts>
+		<addrs>
+			<addr address="+17175550148" charset="106" type="137">
+			</addr>
+			<addr address="+18605550137" charset="106" type="151">
+			</addr>
+			<addr address="john@example.com" charset="106" type="151">
+			</addr>
+		</addrs>
+	</mms>	<mms address="Garnett Tremblay (+17175550148)~+18605550137~john@example.com" ct_t="application/vnd.wap.multipart.relate" date="1585034318000" m_type="132" msg_box="1" read="1" rr="129" seen="1" sub_id="1" text_only="1">
+		<parts>
+			<part ct="text/plain" seq="0" text="Goodbye">
+			</part>
+		</parts>
+		<addrs>
+			<addr address="+17175550148" charset="106" type="137">
+			</addr>
+			<addr address="+18605550137" charset="106" type="151">
+			</addr>
+			<addr address="john@example.com" charset="106" type="151">
+			</addr>
+		</addrs>
+	</mms></smses>
