@@ -3,42 +3,23 @@ import HTMLEntry, { MessageOptions } from '../entries/html';
 import Logger from '../utils/logger';
 import Generator from './generator';
 import fs from 'fs';
-import { isEmpty } from 'lodash';
 import path from 'path';
 import { Transform } from 'stream';
 import xml from 'xml';
 
 export default class SMSBackup extends Generator {
   private outputDir: string;
-  private ignoreCallLogs: boolean;
-  private ignoreOrphanCallLogs: boolean;
   private ignoreMedia: boolean;
-  private ignoreVoicemails: boolean;
-  private ignoreOrphanVoicemails: boolean;
   private addContactNamesToXml: boolean;
 
   public static TEMP_SMS_BACKUP_NAME = 'sms.xml.tmp';
   public static SMS_BACKUP_NAME = 'sms.xml';
 
-  constructor(
-    outputDir: string,
-    {
-      ignoreCallLogs,
-      ignoreOrphanCallLogs,
-      ignoreMedia,
-      ignoreVoicemails,
-      ignoreOrphanVoicemails,
-      addContactNamesToXml
-    }: MessageOptions
-  ) {
+  constructor(outputDir: string, { ignoreMedia, addContactNamesToXml }: MessageOptions) {
     super();
 
     this.outputDir = outputDir;
-    this.ignoreCallLogs = ignoreCallLogs;
-    this.ignoreOrphanCallLogs = ignoreOrphanCallLogs;
     this.ignoreMedia = ignoreMedia;
-    this.ignoreVoicemails = ignoreVoicemails;
-    this.ignoreOrphanVoicemails = ignoreOrphanVoicemails;
     this.addContactNamesToXml = addContactNamesToXml;
 
     fs.mkdirSync(this.outputDir, { recursive: true });
@@ -119,25 +100,11 @@ export default class SMSBackup extends Generator {
       throw new Error('Unable to save non-HTML entry to the index');
     }
 
-    const res = entry.messages({
-      ignoreCallLogs: this.ignoreCallLogs,
-      ignoreOrphanCallLogs: this.ignoreOrphanCallLogs,
-      ignoreMedia: this.ignoreMedia,
-      ignoreVoicemails: this.ignoreVoicemails,
-      ignoreOrphanVoicemails: this.ignoreOrphanVoicemails,
-      addContactNamesToXml: this.addContactNamesToXml
-    });
-
-    const { callLogs, voicemails } = res.filtered;
-
-    if (!isEmpty(callLogs)) {
-      throw new Error(`Unexpected unfiltered call logs: ${callLogs}`);
-    }
-
-    if (!isEmpty(callLogs)) {
-      throw new Error(`Unexpected unfiltered voicemails: ${voicemails}`);
-    }
-
-    return res.messages.map((m) => m.toSMSXML());
+    return entry
+      .messages({
+        ignoreMedia: this.ignoreMedia,
+        addContactNamesToXml: this.addContactNamesToXml
+      })
+      .map((m) => m.toSMSXML());
   }
 }

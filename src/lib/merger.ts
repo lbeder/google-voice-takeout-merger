@@ -227,11 +227,7 @@ export default class Merger {
       Logger.info('Generating SMS Backup and Restore XML export...');
 
       const smsBackup = new SMSBackup(this.outputDir, {
-        ignoreCallLogs: this.ignoreCallLogs,
-        ignoreOrphanCallLogs: this.ignoreOrphanCallLogs,
         ignoreMedia: this.ignoreMedia,
-        ignoreVoicemails: this.ignoreVoicemails,
-        ignoreOrphanVoicemails: this.ignoreOrphanVoicemails,
         addContactNamesToXml: this.addContactNamesToXml
       });
       smsBackup.saveEntries(mainEntries);

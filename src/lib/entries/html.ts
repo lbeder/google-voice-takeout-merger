@@ -18,22 +18,8 @@ enum CallLog {
 }
 
 export interface MessageOptions {
-  ignoreCallLogs: boolean;
-  ignoreOrphanCallLogs: boolean;
   ignoreMedia: boolean;
-  ignoreVoicemails: boolean;
-  ignoreOrphanVoicemails: boolean;
   addContactNamesToXml: boolean;
-}
-
-export interface Filtered {
-  callLogs: HTMLElement[];
-  voicemails: HTMLElement[];
-}
-
-export interface Messages {
-  messages: Message[];
-  filtered: Filtered;
 }
 
 export default class HTMLEntry extends Entry {
@@ -337,23 +323,10 @@ export default class HTMLEntry extends Entry {
     );
   }
 
-  public messages({
-    ignoreCallLogs,
-    ignoreOrphanCallLogs,
-    ignoreMedia,
-    ignoreVoicemails,
-    ignoreOrphanVoicemails,
-    addContactNamesToXml
-  }: MessageOptions): Messages {
+  public messages({ ignoreMedia, addContactNamesToXml }: MessageOptions): Message[] {
     this.load();
 
-    const res: Messages = {
-      messages: [],
-      filtered: {
-        callLogs: [],
-        voicemails: []
-      }
-    };
+    const res: Message[] = [];
 
     const participants = this.phoneNumbers.map((phoneNumber) => ({
       phoneNumber,
@@ -398,7 +371,7 @@ export default class HTMLEntry extends Entry {
         foundConversation = true;
       }
 
-      res.messages.push(message);
+      res.push(message);
     }
 
     // Look for call log messages
@@ -410,21 +383,16 @@ export default class HTMLEntry extends Entry {
       }
 
       let type: MessageType;
-      let isCallLog;
-      let isVoiceMail;
 
       switch (description) {
         case CallLog.Voicemail: {
           type = MessageType.Received;
-          isCallLog = false;
-          isVoiceMail = true;
 
           break;
         }
 
         case CallLog.Recorded: {
           type = MessageType.Received;
-          isCallLog = false;
 
           break;
         }
@@ -432,32 +400,18 @@ export default class HTMLEntry extends Entry {
         case CallLog.Received:
         case CallLog.Missed: {
           type = MessageType.Received;
-          isCallLog = true;
 
           break;
         }
 
         case CallLog.Placed: {
           type = MessageType.Sent;
-          isCallLog = true;
 
           break;
         }
 
         default:
           throw new Error(`Unsupported description ${description} for call log: ${callLog}`);
-      }
-
-      if (isCallLog && (ignoreCallLogs || (ignoreOrphanCallLogs && !foundConversation))) {
-        res.filtered.callLogs.push(callLog);
-
-        continue;
-      }
-
-      if (isVoiceMail && (ignoreVoicemails || (ignoreOrphanVoicemails && !foundConversation))) {
-        res.filtered.voicemails.push(callLog);
-
-        continue;
       }
 
       const { sender, me } = this.parseSender(callLog, '.contributor.vcard a');
@@ -491,7 +445,7 @@ export default class HTMLEntry extends Entry {
         isGroupConversation: this.isGroupConversation()
       });
 
-      res.messages.push(message);
+      res.push(message);
     }
 
     return res;
