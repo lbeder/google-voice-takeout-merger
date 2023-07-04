@@ -34,6 +34,19 @@ export default class HTMLEntry extends Entry {
 
     // If this is a group conversation entry, make sure to parse (and sort) the phone numbers of all of its participants
     this.load();
+
+    // Retrieve the timestamp of the last conversation
+    const timestamps = this.querySelectorAll('abbr.published, abbr.dt');
+    if (timestamps.length === 0) {
+      throw new Error(`Unable to get the timestamps for entry "${this.name}"`);
+    }
+
+    const lastTimestamp = timestamps[timestamps.length - 1].getAttribute('title');
+    if (!lastTimestamp) {
+      throw new Error(`Unable to get the last timestamp for entry "${this.name}"`);
+    }
+
+    this.lastTimestamp = moment(lastTimestamp, 'YYYY-MM-DDTHH:mm:ss.SSSSZ');
   }
 
   public isGroupConversation() {
