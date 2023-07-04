@@ -1,5 +1,5 @@
 import Logger from '../utils/logger';
-import Entry, { EntryAction, EntryFormat, EntryType } from './entry';
+import Entry, { EntryAction, EntryFormat, EntryType, SaveOptions } from './entry';
 import MediaEntry from './media';
 import Message, { MessageType } from './message';
 import { STYLE } from './templates/style';
@@ -79,10 +79,9 @@ export default class HTMLEntry extends Entry {
   }
 
   // Saves the entry in the specified output directory
-  public save(outputDir: string) {
+  public save(options: SaveOptions) {
     this.fix();
 
-    const timestamp = this.timestamp.format('YYYY-MM-DDTHH_mm_ss');
     let key: string;
     if (this.isGroupConversation()) {
       key = `${EntryAction.GroupConversation} ${++Entry.gcCount}`;
@@ -90,7 +89,9 @@ export default class HTMLEntry extends Entry {
       key = this.phoneNumbers.join(',');
     }
 
-    const outputHTMLDir = path.join(outputDir, key);
+    const timestamp = (options.useLastTimestamp ? this.lastTimestamp : this.timestamp).format('YYYY-MM-DDTHH_mm_ss');
+
+    const outputHTMLDir = path.join(options.outputDir, key);
     const outputPath = path.join(outputHTMLDir, `${timestamp} ${key}.html`);
 
     Logger.debug(`Saving entry "${this.name}" to "${outputPath}"`);

@@ -31,6 +31,7 @@ export interface MergerOptions {
   generateXml: boolean;
   addContactNamesToXml: boolean;
   replaceContactApostrophes?: string;
+  useLastTimestamp: boolean;
 }
 
 export default class Merger {
@@ -48,6 +49,7 @@ export default class Merger {
   private generateCsv: boolean;
   private generateXml: boolean;
   private addContactNamesToXml: boolean;
+  private useLastTimestamp: boolean;
 
   private static LOGS_DIR = 'logs';
 
@@ -66,7 +68,8 @@ export default class Merger {
     generateCsv,
     generateXml,
     addContactNamesToXml,
-    replaceContactApostrophes
+    replaceContactApostrophes,
+    useLastTimestamp
   }: MergerOptions) {
     if (!fs.existsSync(inputDir)) {
       throw new Error(`Input directory "${inputDir}" does not exist`);
@@ -84,6 +87,7 @@ export default class Merger {
     this.generateCsv = generateCsv;
     this.generateXml = generateXml;
     this.addContactNamesToXml = addContactNamesToXml;
+    this.useLastTimestamp = useLastTimestamp;
 
     if (this.ignoreCallLogs) {
       Logger.warning('Ignoring call logs...');
@@ -166,14 +170,14 @@ export default class Merger {
         continue;
       }
 
-      if (this.ignoreMedia && entry.isMedia()) {
-        Logger.warning(`Ignoring media "${entry.name}"`);
+      if (this.ignoreVoicemails && entry.isVoiceMail()) {
+        Logger.warning(`Ignoring voicemail log "${entry.name}"`);
 
         continue;
       }
 
-      if (this.ignoreVoicemails && entry.isVoiceMail()) {
-        Logger.warning(`Ignoring voicemail log "${entry.name}"`);
+      if (this.ignoreMedia && entry.isMedia()) {
+        Logger.warning(`Ignoring media "${entry.name}"`);
 
         continue;
       }
@@ -213,7 +217,7 @@ export default class Merger {
         }
       }
 
-      mainEntries.push(Entry.merge(entries, this.outputDir));
+      mainEntries.push(Entry.merge(entries, { outputDir: this.outputDir, useLastTimestamp: this.useLastTimestamp }));
     }
 
     if (this.generateCsv) {

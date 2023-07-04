@@ -293,6 +293,12 @@ yarn merge -f -i ./docs/samples/filter-orphan-voicemails/in/Calls -o ./docs/samp
 yarn merge -f -i ./docs/samples/filter-media/in/Calls -o ./docs/samples/filter-media/out -c ./docs/samples/filter-media/in/contacts.vcf --sl 8 --generate-csv --generate-xml --add-contact-names-to-xml --ignore-media
 ```
 
+### Filter: Use the Timestamp of the Last Conversation In Output Names
+
+```sh
+yarn merge -f -i ./docs/samples/use-last-timestamp/in/Calls -o ./docs/samples/use-last-timestamp/out -c ./docs/samples/use-last-timestamp/in/contacts.vcf --sl 8 --generate-csv --generate-xml --add-contact-names-to-xml --use-last-timestamp
+```
+
 #### Syntech Known Issues
 
 Please note that this tool currently has a few issues:

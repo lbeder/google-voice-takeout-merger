@@ -104,6 +104,12 @@ const main = async () => {
           'replace-contact-apostrophes': {
             type: 'string',
             description: 'Replace apostrophes in contact names with this string'
+          },
+          'use-last-timestamp': {
+            type: 'boolean',
+            default: false,
+            description:
+              'Use the timestamp of the last conversation in the name of the output file instead of the timestamp of the first conversation by default'
           }
         },
         async ({
@@ -120,7 +126,8 @@ const main = async () => {
           generateCsv,
           generateXml,
           addContactNamesToXml,
-          replaceContactApostrophes
+          replaceContactApostrophes,
+          useLastTimestamp
         }) => {
           try {
             let strategyOptions = {};
@@ -147,7 +154,8 @@ const main = async () => {
               generateCsv,
               generateXml,
               addContactNamesToXml,
-              replaceContactApostrophes
+              replaceContactApostrophes,
+              useLastTimestamp
             });
 
             await merger.merge();

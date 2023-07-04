@@ -34,6 +34,11 @@ export enum EntryAction {
 }
 export const EntryActions = { ...EntryAction };
 
+export interface SaveOptions {
+  outputDir: string;
+  useLastTimestamp: boolean;
+}
+
 export default abstract class Entry {
   public action: EntryAction;
   public type: EntryType;
@@ -99,7 +104,7 @@ export default abstract class Entry {
 
   // Merges multiple entries and saves them in the provided output directory. Please note that this method requires all
   // the entries to belong to the same set of phone numbers (and will gracefully terminate if this isn't the case)
-  public static merge(entries: Entry[], outputDir: string) {
+  public static merge(entries: Entry[], options: SaveOptions) {
     const sortedEntries = sortBy(entries, [(r) => r.timestamp.unix()]);
 
     let found = false;
@@ -147,19 +152,19 @@ export default abstract class Entry {
     // Merge all media entries full entry
     for (const mediaEntry of mediaEntries) {
       // Save the media entry and merge it to the final entry
-      mediaEntry.save(outputDir);
+      mediaEntry.save(options);
 
       firstEntry.merge(mediaEntry);
     }
 
     // Save the final entry
-    firstEntry.save(outputDir);
+    firstEntry.save(options);
 
     return firstEntry;
   }
 
   // Saves the entry in the specified output directory
-  abstract save(_outputDir: string): void;
+  abstract save(options: SaveOptions): void;
 
   // Lazily loads the contents of the entry (if supported)
   abstract load(): void;
