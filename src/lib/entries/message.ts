@@ -229,9 +229,6 @@ export default class Message {
       elements.push({ addrs: participants });
     }
 
-    console.log('this.participants', this.participants);
-    console.log('senderPhoneNumber', senderPhoneNumber);
-
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const attr: Record<string, any> = {
       address: this.participants
