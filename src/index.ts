@@ -99,17 +99,22 @@ const main = async () => {
           'add-contact-names-to-xml': {
             type: 'boolean',
             default: false,
-            description: 'Adds names to SMS Backup and Restore exports (experimental) '
+            description: 'Add names to SMS Backup and Restore exports (experimental)'
+          },
+          'phone-number-padding-in-xml': {
+            type: 'string',
+            description:
+              'Append this string to contact phone numbers in the SMS Backup and Restore exports (experimental)'
           },
           'replace-contact-apostrophes': {
             type: 'string',
-            description: 'Replace apostrophes in contact names with this string'
+            description: 'Replace apostrophes in contact names with this string (experimental)'
           },
           'use-last-timestamp': {
             type: 'boolean',
             default: false,
             description:
-              'Use the timestamp of the last conversation in the name of the output file instead of the timestamp of the first conversation by default'
+              'Use the timestamp of the last conversation in output file names instead of the timestamp of the first conversation by default'
           }
         },
         async ({
@@ -126,6 +131,7 @@ const main = async () => {
           generateCsv,
           generateXml,
           addContactNamesToXml,
+          phoneNumberPaddingInXml,
           replaceContactApostrophes,
           useLastTimestamp
         }) => {
@@ -154,6 +160,7 @@ const main = async () => {
               generateCsv,
               generateXml,
               addContactNamesToXml,
+              phoneNumberPaddingInXml,
               replaceContactApostrophes,
               useLastTimestamp
             });

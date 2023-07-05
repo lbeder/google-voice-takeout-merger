@@ -20,6 +20,7 @@ enum CallLog {
 export interface MessageOptions {
   ignoreMedia: boolean;
   addContactNamesToXml: boolean;
+  phoneNumberPaddingInXml?: string;
 }
 
 export default class HTMLEntry extends Entry {
@@ -337,7 +338,7 @@ export default class HTMLEntry extends Entry {
     );
   }
 
-  public messages({ ignoreMedia, addContactNamesToXml }: MessageOptions): Message[] {
+  public messages({ ignoreMedia, addContactNamesToXml, phoneNumberPaddingInXml }: MessageOptions): Message[] {
     this.load();
 
     const res: Message[] = [];
@@ -378,7 +379,8 @@ export default class HTMLEntry extends Entry {
         unixTime,
         text,
         media: ignoreMedia ? [] : this.parseMedia(msg),
-        isGroupConversation: this.isGroupConversation()
+        isGroupConversation: this.isGroupConversation(),
+        phoneNumberPaddingInXml
       });
 
       if (!foundConversation) {
@@ -456,7 +458,8 @@ export default class HTMLEntry extends Entry {
         unixTime,
         text,
         media: ignoreMedia ? [] : this.parseMedia(callLog),
-        isGroupConversation: this.isGroupConversation()
+        isGroupConversation: this.isGroupConversation(),
+        phoneNumberPaddingInXml
       });
 
       res.push(message);

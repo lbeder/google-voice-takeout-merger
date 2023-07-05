@@ -68,6 +68,7 @@ export interface MessageParams {
   text: string;
   media: Media[];
   isGroupConversation: boolean;
+  phoneNumberPaddingInXml?: string;
 }
 
 export default class Message {
@@ -81,6 +82,7 @@ export default class Message {
   private text: string;
   private isGroupConversation: boolean;
   private media: Media[];
+  private phoneNumberPaddingInXml: string;
 
   private static NULL = 'null';
   private static DEFAULT_SMS_PROTOCOL = 0;
@@ -88,21 +90,34 @@ export default class Message {
   private static MMS_CONTENT_TYPE = 'application/vnd.wap.multipart.relate';
   private static READ_REPORT = 129;
 
-  constructor(params: MessageParams) {
-    if (!params.target && !params.isGroupConversation) {
-      throw new Error(`Missing target from: ${params}`);
+  constructor({
+    type,
+    target,
+    targetName,
+    sender,
+    me,
+    participants,
+    unixTime,
+    text,
+    media,
+    isGroupConversation,
+    phoneNumberPaddingInXml
+  }: MessageParams) {
+    if (!target && !isGroupConversation) {
+      throw new Error('Missing target');
     }
 
-    this.type = params.type;
-    this.target = params.target;
-    this.targetName = params.targetName;
-    this.sender = params.sender;
-    this.me = params.me;
-    this.participants = params.participants;
-    this.unixTime = params.unixTime;
-    this.text = params.text;
-    this.media = params.media;
-    this.isGroupConversation = params.isGroupConversation;
+    this.type = type;
+    this.target = target;
+    this.targetName = targetName;
+    this.sender = sender;
+    this.me = me;
+    this.participants = participants;
+    this.unixTime = unixTime;
+    this.text = text;
+    this.media = media;
+    this.isGroupConversation = isGroupConversation;
+    this.phoneNumberPaddingInXml = phoneNumberPaddingInXml ?? '';
   }
 
   public toSMSXML(): xml.XmlObject {
@@ -116,7 +131,7 @@ export default class Message {
   private toSMS(): xml.XmlObject {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const attr: Record<string, any> = {
-      address: this.target,
+      address: `${this.target}${this.phoneNumberPaddingInXml}`,
       body: this.text,
       date: this.unixTime,
       protocol: Message.DEFAULT_SMS_PROTOCOL,
@@ -149,14 +164,24 @@ export default class Message {
     const mType = sentByMe ? MMSMessageType.Sent : MMSMessageType.Received;
 
     const participants = [];
+    let senderPhoneNumber: string | undefined;
     for (const { phoneNumber } of this.participants) {
+      const isSender = this.sender === phoneNumber;
+      if (isSender) {
+        if (senderPhoneNumber) {
+          throw new Error(`Multiple senders detected in: ${this.participants}`);
+        }
+
+        senderPhoneNumber = phoneNumber;
+      }
+
       participants.push({
         addr: [
           {
             _attr: {
-              address: phoneNumber,
+              address: isSender ? phoneNumber : `${phoneNumber}${this.phoneNumberPaddingInXml}`,
               charset: Message.CHARSET_UTF8,
-              type: phoneNumber === this.sender || sentByMe ? AddressType.From : AddressType.To
+              type: isSender || sentByMe ? AddressType.From : AddressType.To
             }
           }
         ]
@@ -204,10 +229,17 @@ export default class Message {
       elements.push({ addrs: participants });
     }
 
+    console.log('this.participants', this.participants);
+    console.log('senderPhoneNumber', senderPhoneNumber);
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const attr: Record<string, any> = {
       address: this.participants
-        .map(({ phoneNumber, name }) => (name ? `${name} (${phoneNumber})` : phoneNumber))
+        .map(({ phoneNumber, name }) => {
+          const displayPhoneNumber =
+            senderPhoneNumber === phoneNumber ? senderPhoneNumber : `${phoneNumber}${this.phoneNumberPaddingInXml}`;
+          return name ? `${name} (${displayPhoneNumber})` : displayPhoneNumber;
+        })
         .join('~'),
       ct_t: Message.MMS_CONTENT_TYPE,
       date: this.unixTime,

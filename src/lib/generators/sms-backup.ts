@@ -11,16 +11,18 @@ export default class SMSBackup extends Generator {
   private outputDir: string;
   private ignoreMedia: boolean;
   private addContactNamesToXml: boolean;
+  private phoneNumberPaddingInXml?: string;
 
   public static TEMP_SMS_BACKUP_NAME = 'sms.xml.tmp';
   public static SMS_BACKUP_NAME = 'sms.xml';
 
-  constructor(outputDir: string, { ignoreMedia, addContactNamesToXml }: MessageOptions) {
+  constructor(outputDir: string, { ignoreMedia, addContactNamesToXml, phoneNumberPaddingInXml }: MessageOptions) {
     super();
 
     this.outputDir = outputDir;
     this.ignoreMedia = ignoreMedia;
     this.addContactNamesToXml = addContactNamesToXml;
+    this.phoneNumberPaddingInXml = phoneNumberPaddingInXml;
 
     fs.mkdirSync(this.outputDir, { recursive: true });
   }
@@ -103,7 +105,8 @@ export default class SMSBackup extends Generator {
     return entry
       .messages({
         ignoreMedia: this.ignoreMedia,
-        addContactNamesToXml: this.addContactNamesToXml
+        addContactNamesToXml: this.addContactNamesToXml,
+        phoneNumberPaddingInXml: this.phoneNumberPaddingInXml
       })
       .map((m) => m.toSMSXML());
   }
