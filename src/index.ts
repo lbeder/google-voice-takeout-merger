@@ -114,7 +114,7 @@ const main = async () => {
             type: 'boolean',
             default: false,
             description:
-              'Use the timestamp of the last conversation in output file names instead of the timestamp of the first conversation by default'
+              'Use the timestamp of the last conversation file in output file names instead of the timestamp of the first conversation by default'
           }
         },
         async ({
