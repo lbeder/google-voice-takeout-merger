@@ -164,15 +164,16 @@ export default class Message {
     const mType = sentByMe ? MMSMessageType.Sent : MMSMessageType.Received;
 
     const participants = [];
-    let senderPhoneNumber: string | undefined;
+    let mePhoneNumber: string | undefined;
     for (const { phoneNumber } of this.participants) {
       const isSender = this.sender === phoneNumber;
-      if (isSender) {
-        if (senderPhoneNumber) {
-          throw new Error(`Multiple senders detected in: ${this.participants}`);
+      const isMe = this.me == phoneNumber;
+      if (isMe) {
+        if (mePhoneNumber) {
+          throw new Error(`Multiple owners detected in: ${this.participants}`);
         }
 
-        senderPhoneNumber = phoneNumber;
+        mePhoneNumber = phoneNumber;
       }
 
       participants.push({
@@ -181,7 +182,7 @@ export default class Message {
             _attr: {
               address: isSender ? phoneNumber : `${phoneNumber}${this.phoneNumberPaddingInXml}`,
               charset: Message.CHARSET_UTF8,
-              type: isSender || sentByMe ? AddressType.From : AddressType.To
+              type: isSender || isMe || sentByMe ? AddressType.From : AddressType.To
             }
           }
         ]
@@ -234,7 +235,7 @@ export default class Message {
       address: this.participants
         .map(({ phoneNumber, name }) => {
           const displayPhoneNumber =
-            senderPhoneNumber === phoneNumber ? senderPhoneNumber : `${phoneNumber}${this.phoneNumberPaddingInXml}`;
+            mePhoneNumber === phoneNumber ? mePhoneNumber : `${phoneNumber}${this.phoneNumberPaddingInXml}`;
           return name ? `${name} (${displayPhoneNumber})` : displayPhoneNumber;
         })
         .join('~'),
