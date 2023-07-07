@@ -73,6 +73,8 @@ Options:
                                                                                                                                                       [boolean] [default: false]
 ```
 
+Please note that the `--replace-contact-apostrophes` and `--phone-number-padding-in-xml` require a string input (e.g., `--replace-contact-apostrophes="""` or `--replace-contact-apostrophes """` and `--phone-number-padding-in-xml=000` or `--phone-number-padding-in-xml 000`).
+
 For example, you can merge the archive located in `~/in/Calls` to `~/out` like this:
 
 ```sh
