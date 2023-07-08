@@ -101,10 +101,15 @@ const main = async () => {
             default: false,
             description: 'Add names to SMS Backup and Restore exports (experimental)'
           },
-          'phone-number-padding-in-xml': {
+          'append-phone-numbers-in-xml': {
             type: 'string',
             description:
               'Append this string to contact phone numbers in the SMS Backup and Restore exports (experimental)'
+          },
+          'prepend-phone-numbers-in-xml': {
+            type: 'string',
+            description:
+              'Prepend this string to contact phone numbers in the SMS Backup and Restore exports (experimental)'
           },
           'replace-contact-apostrophes': {
             type: 'string',
@@ -131,7 +136,8 @@ const main = async () => {
           generateCsv,
           generateXml,
           addContactNamesToXml,
-          phoneNumberPaddingInXml,
+          appendPhoneNumbersInXml,
+          prependPhoneNumbersInXml,
           replaceContactApostrophes,
           useLastTimestamp
         }) => {
@@ -160,7 +166,8 @@ const main = async () => {
               generateCsv,
               generateXml,
               addContactNamesToXml,
-              phoneNumberPaddingInXml,
+              appendPhoneNumbersInXml,
+              prependPhoneNumbersInXml,
               replaceContactApostrophes,
               useLastTimestamp
             });

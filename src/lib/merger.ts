@@ -30,7 +30,8 @@ export interface MergerOptions {
   generateCsv: boolean;
   generateXml: boolean;
   addContactNamesToXml: boolean;
-  phoneNumberPaddingInXml?: string;
+  appendPhoneNumbersInXml?: string;
+  prependPhoneNumbersInXml?: string;
   replaceContactApostrophes?: string;
   useLastTimestamp: boolean;
 }
@@ -50,7 +51,8 @@ export default class Merger {
   private generateCsv: boolean;
   private generateXml: boolean;
   private addContactNamesToXml: boolean;
-  private phoneNumberPaddingInXml?: string;
+  private appendPhoneNumbersInXml?: string;
+  private prependPhoneNumbersInXml?: string;
   private useLastTimestamp: boolean;
 
   private static LOGS_DIR = 'logs';
@@ -70,7 +72,8 @@ export default class Merger {
     generateCsv,
     generateXml,
     addContactNamesToXml,
-    phoneNumberPaddingInXml,
+    appendPhoneNumbersInXml,
+    prependPhoneNumbersInXml,
     replaceContactApostrophes,
     useLastTimestamp
   }: MergerOptions) {
@@ -90,7 +93,8 @@ export default class Merger {
     this.generateCsv = generateCsv;
     this.generateXml = generateXml;
     this.addContactNamesToXml = addContactNamesToXml;
-    this.phoneNumberPaddingInXml = phoneNumberPaddingInXml;
+    this.appendPhoneNumbersInXml = appendPhoneNumbersInXml;
+    this.prependPhoneNumbersInXml = prependPhoneNumbersInXml;
     this.useLastTimestamp = useLastTimestamp;
 
     if (this.ignoreCallLogs) {
@@ -237,7 +241,8 @@ export default class Merger {
       const smsBackup = new SMSBackup(this.outputDir, {
         ignoreMedia: this.ignoreMedia,
         addContactNamesToXml: this.addContactNamesToXml,
-        phoneNumberPaddingInXml: this.phoneNumberPaddingInXml
+        appendPhoneNumbersInXml: this.appendPhoneNumbersInXml,
+        prependPhoneNumbersInXml: this.prependPhoneNumbersInXml
       });
       smsBackup.saveEntries(mainEntries);
     }

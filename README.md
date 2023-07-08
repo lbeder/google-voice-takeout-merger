@@ -18,8 +18,8 @@ The main features of this tool include:
 * Reorganizing all media and metadata in a structured manner.
 * Adding a list of participants to every record.
 * Displaying contact names in the SMS Backup and Restore export.
-* Padding phone numbers in the SMS Backup and Restore export. This is useful when you plan to import multiple exports to the same user. This allows for visual differentiation between conversations you had with the same contacts using different phone numbers.
 * Properly merging records associated with unknown phone numbers into a single record.
+* Experimental: Append or prepend a label to phone numbers in the SMS Backup and Restore export. This is useful when you plan to import multiple exports to the same user. This allows for visual differentiation between conversations you had with the same contacts using different phone numbers.
 
 Please see the [Samples](#samples) section below:
 
@@ -51,26 +51,27 @@ google-voice-takeout-merger merge
 Merge all records
 
 Options:
-      --version                      Show version number                                                                                                               [boolean]
-      --help                         Show help                                                                                                                         [boolean]
-  -v, --verbose                      Verbose mode                                                                                                     [boolean] [default: false]
-  -i, --input-dir                    Input directory                                                                                                         [string] [required]
-  -o, --output-dir                   Output directory                                                                                                        [string] [required]
-  -c, --contacts                     Contacts file (in VCF format)                                                                                                      [string]
-      --suffix-length, --sl          Shortest suffix to use for the suffix-based matching strategy                                                                      [number]
-      --generate-csv                 Generate a CSV index of all conversations                                                                        [boolean] [default: false]
-      --generate-xml                 Generate an XML of all conversations which is suitable for use with SMS Backup and Restore                       [boolean] [default: false]
-  -f, --force                        Overwrite output directory                                                                                       [boolean] [default: false]
-      --ignore-call-logs             Ignore call logs (Missed, Received, Placed, etc.)                                                                [boolean] [default: false]
-      --ignore-orphan-call-logs      Ignore call logs (Missed, Received, Placed, etc.) from phone numbers which do not have any other conversations   [boolean] [default: false]
-      --ignore-media                 Ignore media attachments                                                                                         [boolean] [default: false]
-      --ignore-voicemails            Ignore voicemails                                                                                                [boolean] [default: false]
-      --ignore-orphan-voicemails     Ignore voicemails from phone numbers which do not have any other conversations                                   [boolean] [default: false]
-      --add-contact-names-to-xml     Add names to SMS Backup and Restore exports (experimental)                                                       [boolean] [default: false]
-      --phone-number-padding-in-xml  Append this string to contact phone numbers in the SMS Backup and Restore exports (experimental)                                   [string]
-      --replace-contact-apostrophes  Replace apostrophes in contact names with this string                                                                              [string]
-      --use-last-timestamp           Use the timestamp of the last conversation file in output file names instead of the timestamp of the first conversation by default
-                                                                                                                                                      [boolean] [default: false]
+      --version                       Show version number                                                                                                              [boolean]
+      --help                          Show help                                                                                                                        [boolean]
+  -v, --verbose                       Verbose mode                                                                                                    [boolean] [default: false]
+  -i, --input-dir                     Input directory                                                                                                        [string] [required]
+  -o, --output-dir                    Output directory                                                                                                       [string] [required]
+  -c, --contacts                      Contacts file (in VCF format)                                                                                                     [string]
+      --suffix-length, --sl           Shortest suffix to use for the suffix-based matching strategy                                                                     [number]
+      --generate-csv                  Generate a CSV index of all conversations                                                                       [boolean] [default: false]
+      --generate-xml                  Generate an XML of all conversations which is suitable for use with SMS Backup and Restore                      [boolean] [default: false]
+  -f, --force                         Overwrite output directory                                                                                      [boolean] [default: false]
+      --ignore-call-logs              Ignore call logs (Missed, Received, Placed, etc.)                                                               [boolean] [default: false]
+      --ignore-orphan-call-logs       Ignore call logs (Missed, Received, Placed, etc.) from phone numbers which do not have any other conversations  [boolean] [default: false]
+      --ignore-media                  Ignore media attachments                                                                                        [boolean] [default: false]
+      --ignore-voicemails             Ignore voicemails                                                                                               [boolean] [default: false]
+      --ignore-orphan-voicemails      Ignore voicemails from phone numbers which do not have any other conversations                                  [boolean] [default: false]
+      --add-contact-names-to-xml      Add names to SMS Backup and Restore exports (experimental)                                                      [boolean] [default: false]
+      --append-phone-numbers-in-xml   Append this string to contact phone numbers in the SMS Backup and Restore exports (experimental)                                  [string]
+      --prepend-phone-numbers-in-xml  Prepend this string to contact phone numbers in the SMS Backup and Restore exports (experimental)                                 [string]
+      --replace-contact-apostrophes   Replace apostrophes in contact names with this string (experimental)                                                              [string]
+      --use-last-timestamp            Use the timestamp of the last conversation file in output file names instead of the timestamp of the first conversation by default
+                                                                                                                                                      [boolean] [default: false
 ```
 
 Please note that the `--replace-contact-apostrophes` and `--phone-number-padding-in-xml` require a string input (e.g., `--replace-contact-apostrophes="""` or `--replace-contact-apostrophes """` and `--phone-number-padding-in-xml=000` or `--phone-number-padding-in-xml 000`).
@@ -303,7 +304,7 @@ yarn merge -f -i ./docs/samples/filter-media/in/Calls -o ./docs/samples/filter-m
 yarn merge -f -i ./docs/samples/use-last-timestamp/in/Calls -o ./docs/samples/use-last-timestamp/out -c ./docs/samples/use-last-timestamp/in/contacts.vcf --sl 8 --generate-csv --generate-xml --add-contact-names-to-xml --use-last-timestamp
 ```
 
-#### Syntech Known Issues
+#### Syntech  View Backup Files Known Issues
 
 Please note that this tool currently has a few issues:
 
@@ -312,3 +313,4 @@ Please note that this tool currently has a few issues:
 3. It's not possible to browse into conversations whose participants names contain the `'` (apostrophe/single quote) mark. In these cases, we recommend replacing the apostrophes using the `--replace-contact-apostrophes` flag. For example:
     * `--replace-contact-apostrophes=""`: remove all apostrophes.
     * `--replace-contact-apostrophes="""`: replace all apostrophes with double quotes.
+4. It seems to be merging conversations whose phone numbers end with the same 8-digits suffix, therefore using the `--append-phone-numbers-in-xml` option may result in merging of unrelated conversations

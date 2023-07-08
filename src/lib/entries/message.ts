@@ -68,7 +68,8 @@ export interface MessageParams {
   text: string;
   media: Media[];
   isGroupConversation: boolean;
-  phoneNumberPaddingInXml?: string;
+  appendPhoneNumbersInXml?: string;
+  prependPhoneNumbersInXml?: string;
 }
 
 export default class Message {
@@ -82,7 +83,8 @@ export default class Message {
   private text: string;
   private isGroupConversation: boolean;
   private media: Media[];
-  private phoneNumberPaddingInXml: string;
+  private appendPhoneNumbersInXml: string;
+  private prependPhoneNumbersInXml: string;
 
   private static NULL = 'null';
   private static DEFAULT_SMS_PROTOCOL = 0;
@@ -101,7 +103,8 @@ export default class Message {
     text,
     media,
     isGroupConversation,
-    phoneNumberPaddingInXml
+    appendPhoneNumbersInXml,
+    prependPhoneNumbersInXml
   }: MessageParams) {
     if (!target && !isGroupConversation) {
       throw new Error('Missing target');
@@ -117,7 +120,8 @@ export default class Message {
     this.text = text;
     this.media = media;
     this.isGroupConversation = isGroupConversation;
-    this.phoneNumberPaddingInXml = phoneNumberPaddingInXml ?? '';
+    this.appendPhoneNumbersInXml = appendPhoneNumbersInXml ?? '';
+    this.prependPhoneNumbersInXml = prependPhoneNumbersInXml ?? '';
   }
 
   public toSMSXML(): xml.XmlObject {
@@ -131,7 +135,7 @@ export default class Message {
   private toSMS(): xml.XmlObject {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const attr: Record<string, any> = {
-      address: `${this.target}${this.phoneNumberPaddingInXml}`,
+      address: `${this.prependPhoneNumbersInXml}${this.target}${this.appendPhoneNumbersInXml}`,
       body: this.text,
       date: this.unixTime,
       protocol: Message.DEFAULT_SMS_PROTOCOL,
@@ -180,7 +184,9 @@ export default class Message {
         addr: [
           {
             _attr: {
-              address: isSender ? phoneNumber : `${phoneNumber}${this.phoneNumberPaddingInXml}`,
+              address: isSender
+                ? phoneNumber
+                : `${this.prependPhoneNumbersInXml}${phoneNumber}${this.appendPhoneNumbersInXml}`,
               charset: Message.CHARSET_UTF8,
               type: isSender || isMe || sentByMe ? AddressType.From : AddressType.To
             }
@@ -235,7 +241,9 @@ export default class Message {
       address: this.participants
         .map(({ phoneNumber, name }) => {
           const displayPhoneNumber =
-            mePhoneNumber === phoneNumber ? mePhoneNumber : `${phoneNumber}${this.phoneNumberPaddingInXml}`;
+            mePhoneNumber === phoneNumber
+              ? mePhoneNumber
+              : `${this.prependPhoneNumbersInXml}${phoneNumber}${this.appendPhoneNumbersInXml}`;
           return name ? `${name} (${displayPhoneNumber})` : displayPhoneNumber;
         })
         .join('~'),
