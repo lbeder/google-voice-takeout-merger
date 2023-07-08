@@ -119,6 +119,12 @@ export default class HTMLEntry extends Entry {
   private fix() {
     this.load();
 
+    // Remove the unnecessary title from the head
+    const titles = this.querySelectorAll('title');
+    for (const title of titles) {
+      title.remove();
+    }
+
     const body = this.querySelector('body');
     if (!body) {
       throw new Error(`Unable to get the body of entry "${this.name}"`);
