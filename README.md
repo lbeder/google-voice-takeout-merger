@@ -313,4 +313,4 @@ Please note that this tool currently has a few issues:
 3. It's not possible to browse into conversations whose participants names contain the `'` (apostrophe/single quote) mark. In these cases, we recommend replacing the apostrophes using the `--replace-contact-apostrophes` flag. For example:
     * `--replace-contact-apostrophes=""`: remove all apostrophes.
     * `--replace-contact-apostrophes="""`: replace all apostrophes with double quotes.
-4. It seems to be merging conversations whose phone numbers end with the same 8-digits suffix, therefore using the `--append-phone-numbers-in-xml` option may result in merging of unrelated conversations
+4. It seems to be merging conversations whose phone numbers end with the same 8-digits/characters suffix, therefore using the `--append-phone-numbers-in-xml` option may result in merging of unrelated conversations
