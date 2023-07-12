@@ -26,7 +26,7 @@ Please see the [Samples](#samples) section below:
 ## Installation
 
 ```sh
-yarn install
+pnpm install
 ```
 
 ## Usage
@@ -79,13 +79,13 @@ Please note that the `--replace-contact-apostrophes` and `--phone-number-padding
 For example, you can merge the archive located in `~/in/Calls` to `~/out` like this:
 
 ```sh
-yarn merge -i ~/in/Calls -o ~/out
+pnpm merge -i ~/in/Calls -o ~/out
 ```
 
 If you'd like the tool to overwrite the output folder and run in verbose mode, you can add the `-f` and `-v` flags respectively:
 
 ```sh
-yarn merge -i ~/in/Calls -o ~/out -v -f
+pnpm merge -i ~/in/Calls -o ~/out -v -f
 ```
 
 Please note that the input should be the "Calls" folder from the original Google Voice Takeout zip export. Prior to generating the Takeout export, ensure that you have temporarily removed all contacts from your [Google Contacts](contacts.google.com) account. If contacts are not removed, the Takeout export will have phone numbers replaced with contact names in both the file names and the records themselves. This replacement will cause catastrophic filename truncation, and also the parsing and matching process of the tool will fail.
@@ -110,17 +110,17 @@ O Linux/Mac OS systems:
 
 ```sh
 export NODE_OPTIONS="--max-old-space-size=8192"
-yarn merge
+pnpm merge
 
 # OR
-NODE_OPTIONS="--max-old-space-size=8192" yarn merge
+NODE_OPTIONS="--max-old-space-size=8192" pnpm merge
 ```
 
 On Windows systems:
 
 ```sh
 set NODE_OPTIONS="--max-old-space-size=8192"
-yarn merge
+pnpm merge
 ```
 
 ## Contact Matching
@@ -183,7 +183,7 @@ Please see the provided example input and output in [docs/samples](docs/samples)
 We will execute the following command:
 
 ```sh
-yarn merge -f -i ./docs/samples/regular/in/Calls -o ./docs/samples/regular/out -c ./docs/samples/regular/in/contacts.vcf --sl 8 --generate-csv --generate-xml --add-contact-names-to-xml
+pnpm merge -f -i ./docs/samples/regular/in/Calls -o ./docs/samples/regular/out -c ./docs/samples/regular/in/contacts.vcf --sl 8 --generate-csv --generate-xml --add-contact-names-to-xml
 
 In the of the execution, you should expect the following summary:
 
@@ -271,37 +271,37 @@ Please note that contact matching and "total numbers" counts include phone numbe
 ### Filter: Call Logs
 
 ```sh
-yarn merge -f -i ./docs/samples/filter-call-logs/in/Calls -o ./docs/samples/filter-call-logs/out -c ./docs/samples/filter-call-logs/in/contacts.vcf --sl 8 --generate-csv --generate-xml --add-contact-names-to-xml --ignore-call-logs
+pnpm merge -f -i ./docs/samples/filter-call-logs/in/Calls -o ./docs/samples/filter-call-logs/out -c ./docs/samples/filter-call-logs/in/contacts.vcf --sl 8 --generate-csv --generate-xml --add-contact-names-to-xml --ignore-call-logs
 ```
 
 ### Filter: Orphan Call Logs
 
 ```sh
-yarn merge -f -i ./docs/samples/filter-orphan-call-logs/in/Calls -o ./docs/samples/filter-orphan-call-logs/out -c ./docs/samples/filter-orphan-call-logs/in/contacts.vcf --sl 8 --generate-csv --generate-xml --add-contact-names-to-xml --ignore-orphan-call-logs
+pnpm merge -f -i ./docs/samples/filter-orphan-call-logs/in/Calls -o ./docs/samples/filter-orphan-call-logs/out -c ./docs/samples/filter-orphan-call-logs/in/contacts.vcf --sl 8 --generate-csv --generate-xml --add-contact-names-to-xml --ignore-orphan-call-logs
 ```
 
 ### Filter: Voicemails
 
 ```sh
-yarn merge -f -i ./docs/samples/filter-voicemails/in/Calls -o ./docs/samples/filter-voicemails/out -c ./docs/samples/filter-voicemails/in/contacts.vcf --sl 8 --generate-csv --generate-xml --add-contact-names-to-xml --ignore-voicemails
+pnpm merge -f -i ./docs/samples/filter-voicemails/in/Calls -o ./docs/samples/filter-voicemails/out -c ./docs/samples/filter-voicemails/in/contacts.vcf --sl 8 --generate-csv --generate-xml --add-contact-names-to-xml --ignore-voicemails
 ```
 
 ### Filter: Orphan Voicemails
 
 ```sh
-yarn merge -f -i ./docs/samples/filter-orphan-voicemails/in/Calls -o ./docs/samples/filter-orphan-voicemails/out -c ./docs/samples/filter-orphan-voicemails/in/contacts.vcf --sl 8 --generate-csv --generate-xml --add-contact-names-to-xml --ignore-orphan-call-logs
+pnpm merge -f -i ./docs/samples/filter-orphan-voicemails/in/Calls -o ./docs/samples/filter-orphan-voicemails/out -c ./docs/samples/filter-orphan-voicemails/in/contacts.vcf --sl 8 --generate-csv --generate-xml --add-contact-names-to-xml --ignore-orphan-call-logs
 ```
 
 ### Filter: Media
 
 ```sh
-yarn merge -f -i ./docs/samples/filter-media/in/Calls -o ./docs/samples/filter-media/out -c ./docs/samples/filter-media/in/contacts.vcf --sl 8 --generate-csv --generate-xml --add-contact-names-to-xml --ignore-media
+pnpm merge -f -i ./docs/samples/filter-media/in/Calls -o ./docs/samples/filter-media/out -c ./docs/samples/filter-media/in/contacts.vcf --sl 8 --generate-csv --generate-xml --add-contact-names-to-xml --ignore-media
 ```
 
 ### Filter: Use the Timestamp of the Last Conversation File In Output File Names
 
 ```sh
-yarn merge -f -i ./docs/samples/use-last-timestamp/in/Calls -o ./docs/samples/use-last-timestamp/out -c ./docs/samples/use-last-timestamp/in/contacts.vcf --sl 8 --generate-csv --generate-xml --add-contact-names-to-xml --use-last-timestamp
+pnpm merge -f -i ./docs/samples/use-last-timestamp/in/Calls -o ./docs/samples/use-last-timestamp/out -c ./docs/samples/use-last-timestamp/in/contacts.vcf --sl 8 --generate-csv --generate-xml --add-contact-names-to-xml --use-last-timestamp
 ```
 
 #### Syntech  View Backup Files Known Issues
