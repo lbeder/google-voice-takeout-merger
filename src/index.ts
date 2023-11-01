@@ -1,7 +1,7 @@
+import yargs from 'yargs';
 import Merger from './lib/merger';
 import { MatchStrategy } from './lib/phone-book';
 import Logger from './lib/utils/logger';
-import yargs from 'yargs';
 
 const main = async () => {
   Logger.info(`Google Voice Takeout Merger v${process.env.npm_package_version}`);
@@ -122,25 +122,27 @@ const main = async () => {
               'Use the timestamp of the last conversation file in output file names instead of the timestamp of the first conversation by default'
           }
         },
-        async ({
-          inputDir,
-          outputDir,
-          force,
-          contacts,
-          suffixLength,
-          ignoreCallLogs,
-          ignoreOrphanCallLogs,
-          ignoreMedia,
-          ignoreVoicemails,
-          ignoreOrphanVoicemails,
-          generateCsv,
-          generateXml,
-          addContactNamesToXml,
-          appendPhoneNumbersInXml,
-          prependPhoneNumbersInXml,
-          replaceContactApostrophes,
-          useLastTimestamp
-        }) => {
+        async (
+          {
+            inputDir,
+            outputDir,
+            force,
+            contacts,
+            suffixLength,
+            ignoreCallLogs,
+            ignoreOrphanCallLogs,
+            ignoreMedia,
+            ignoreVoicemails,
+            ignoreOrphanVoicemails,
+            generateCsv,
+            generateXml,
+            addContactNamesToXml,
+            appendPhoneNumbersInXml,
+            prependPhoneNumbersInXml,
+            replaceContactApostrophes,
+            useLastTimestamp
+          }
+        ) => {
           try {
             let strategyOptions = {};
             let strategy: MatchStrategy;
