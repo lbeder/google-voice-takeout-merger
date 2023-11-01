@@ -1,12 +1,12 @@
+import fs from 'fs';
+import path from 'path';
+import glob from 'glob';
 import Entry, { EntryAction, EntryFormat, EntryType } from './entries/entry';
 import Factory from './entries/factory';
 import CSVIndex from './generators/csv-index';
 import SMSBackup from './generators/sms-backup';
 import PhoneBook, { MatchStrategy, MatchStrategyOptions } from './phone-book';
 import Logger from './utils/logger';
-import fs from 'fs';
-import glob from 'glob';
-import path from 'path';
 
 interface Stats {
   total: number;
@@ -252,7 +252,6 @@ export default class Merger {
     this.printSummary();
   }
 
-  // Prints the summary
   private printSummary() {
     Logger.notice();
     Logger.notice('Summary:');

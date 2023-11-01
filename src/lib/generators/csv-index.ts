@@ -1,10 +1,10 @@
+import fs from 'fs';
+import path from 'path';
 import Entry, { EntryFormat } from '../entries/entry';
 import HTMLEntry from '../entries/html';
 import PhoneBook from '../phone-book';
 import Logger from '../utils/logger';
 import Generator from './generator';
-import fs from 'fs';
-import path from 'path';
 
 export default class CSVIndex extends Generator {
   private outputDir: string;

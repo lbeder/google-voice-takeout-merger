@@ -1,8 +1,8 @@
-import PhoneBook from '../phone-book';
-import Logger from '../utils/logger';
 import { sortBy } from 'lodash';
 import { Moment } from 'moment';
 import { HTMLElement } from 'node-html-parser';
+import PhoneBook from '../phone-book';
+import Logger from '../utils/logger';
 
 export enum EntryFormat {
   JPG = 'JPG',

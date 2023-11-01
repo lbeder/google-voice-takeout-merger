@@ -1,13 +1,13 @@
+import fs from 'fs';
+import path from 'path';
+import humanizeDuration from 'humanize-duration';
+import moment, { Moment } from 'moment';
+import { HTMLElement, parse } from 'node-html-parser';
 import Logger from '../utils/logger';
 import Entry, { EntryAction, EntryFormat, EntryType, SaveOptions } from './entry';
 import MediaEntry from './media';
 import Message, { MessageType } from './message';
 import { STYLE } from './templates/style';
-import fs from 'fs';
-import humanizeDuration from 'humanize-duration';
-import moment, { Moment } from 'moment';
-import { HTMLElement, parse } from 'node-html-parser';
-import path from 'path';
 
 enum CallLog {
   Voicemail = 'Voicemail from',

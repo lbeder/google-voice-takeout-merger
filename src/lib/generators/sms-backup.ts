@@ -1,11 +1,11 @@
-import Entry, { EntryFormat } from '../entries/entry';
-import HTMLEntry, { MessageOptions } from '../entries/html';
-import Logger from '../utils/logger';
-import Generator from './generator';
 import fs from 'fs';
 import path from 'path';
 import { Transform } from 'stream';
 import xml from 'xml';
+import Entry, { EntryFormat } from '../entries/entry';
+import HTMLEntry, { MessageOptions } from '../entries/html';
+import Logger from '../utils/logger';
+import Generator from './generator';
 
 export default class SMSBackup extends Generator {
   private outputDir: string;

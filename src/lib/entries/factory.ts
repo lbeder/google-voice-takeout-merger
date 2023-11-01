@@ -1,9 +1,9 @@
+import path from 'path';
+import moment from 'moment';
 import Logger from '../utils/logger';
 import Entry, { EntryAction, EntryActions, EntryFormat } from './entry';
 import HTMLEntry from './html';
 import MediaEntry from './media';
-import moment from 'moment';
-import path from 'path';
 
 export default class Factory {
   // Processes and constructors an entry from the specified file

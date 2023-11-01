@@ -1,8 +1,8 @@
+import fs from 'fs';
+import path from 'path';
+import { Moment } from 'moment';
 import Logger from '../utils/logger';
 import Entry, { EntryAction, EntryFormat, EntryType, SaveOptions } from './entry';
-import fs from 'fs';
-import { Moment } from 'moment';
-import path from 'path';
 
 export default class MediaEntry extends Entry {
   public relativePath?: string;

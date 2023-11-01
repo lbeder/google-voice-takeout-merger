@@ -1,7 +1,7 @@
-import Logger from './utils/logger';
 import fs from 'fs';
 import path from 'path';
 import vCard from 'vcf';
+import Logger from './utils/logger';
 
 export enum MatchStrategy {
   Exact = 'exact',
