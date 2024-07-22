@@ -12,11 +12,11 @@
     "lint": "eslint -c .eslintrc --ext .ts src",
     "format": "prettier --check --write src/**/* --config .prettierrc",
     "build": "tsc && pkg dist/index.js",
-    "build:win-x64": "yarn build -t node16-win-x64 -o ./build/win-x64/google-voice-takeout-merger.exe",
-    "build:linux-x64": "yarn build -t node16-linux-x64 -o ./build/linux-x64/google-voice-takeout-merger",
-    "build:macos-x64": "yarn build -t node16-macos-x64 -o ./build/macos-x64/google-voice-takeout-merger",
-    "build:macos-arm64": "yarn build -t node16-macos-arm64 -o ./build/macos-arm64/google-voice-takeout-merger",
-    "build:all": "yarn build:win-x64 && yarn build:linux-x64 && yarn build:macos-x64 && yarn build:macos-arm64"
+    "build:win-x64": "pnpm build -t node16-win-x64 -o ./build/win-x64/google-voice-takeout-merger.exe",
+    "build:linux-x64": "pnpm build -t node16-linux-x64 -o ./build/linux-x64/google-voice-takeout-merger",
+    "build:macos-x64": "pnpm build -t node16-macos-x64 -o ./build/macos-x64/google-voice-takeout-merger",
+    "build:macos-arm64": "pnpm build -t node16-macos-arm64 -o ./build/macos-arm64/google-voice-takeout-merger",
+    "build:all": "pnpm build:win-x64 && pnpm build:linux-x64 && pnpm build:macos-x64 && pnpm build:macos-arm64"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
